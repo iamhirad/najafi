@@ -1,0 +1,431 @@
+% ===============================================================
+%  جلسه بیست‌ویکم
+% ===============================================================
+\chapter{تخمین‌گر بیشینه درست‌نمایی \lr{(MLE)}}
+
+در جلسه قبل مفهوم تخمین نقطه‌ای و معیارهای کیفیت یک تخمین‌گر (گرایش، واریانس، سازگاری و \lr{MSE}) را دیدیم و با انواع تخمین‌گرها آشنا شدیم. در این جلسه، پس از یک مرور کوتاه، به مهم‌ترین و پرکاربردترین روش ساختن تخمین‌گر می‌پردازیم: \textbf{تخمین‌گر بیشینه درست‌نمایی} \lr{(Maximum Likelihood Estimator)}.
+
+\section{مرور: تخمین نقطه‌ای و معیارهای کیفیت}
+
+\begin{summarybox}[مرور جلسه قبل]
+\begin{itemize}
+\item متغیر تصادفی $X\sim f_X(x;\theta)$ از توزیعی با پارامتر(های) نامعلوم $\theta\in\Theta$ حاصل شده و نمونه‌های $X_1,\ldots,X_n$ (معمولاً \lr{i.i.d.}) از آن در دست است. هر تابع $\hat\theta=\hat\theta(X_{1:n})$ از نمونه‌ها که مقداری در $\Theta$ بدهد یک \textbf{تخمین‌گر نقطه‌ای} است؛ $\hat\theta$ خود یک \textbf{متغیر تصادفی} است.
+\item \textbf{گرایش:} $\mathrm{Bias}(\hat\theta,\theta)=\E_{X_{1:n}|\theta}\{\theta-\hat\theta(X_{1:n})\}$؛ تخمین‌گر با گرایش صفر را \textbf{بی‌گرایش} \lr{(Unbiased)} می‌نامیم.
+\item \textbf{واریانس:} $\Var(\hat\theta)=\E\{(\hat\theta-\E\hat\theta)^2\}$.
+\item \textbf{سازگاری:} $\hat\theta$ سازگار است اگر $\lim_{n\to\infty}\hat\theta(X_{1:n})=\theta$ (در اسلایدها این حد به صورت تقریباً حتمی \lr{(a.s.)} نوشته شده است؛ تعریف رایج‌تر، همگرایی در احتمال است. در مثال‌های این درس هر دو برقرارند).
+\item این سه ویژگی ارتباط مستقیمی با یکدیگر ندارند: بی‌گرایش بودن، سازگاری را تضمین نمی‌کند و بالعکس؛ کاهش گرایش هم لزوماً واریانس را کم نمی‌کند.
+\item \textbf{مصالحه گرایش--واریانس:} $\ \mathrm{MSE}(\hat\theta)=\E[(\hat\theta-\theta)^2]=\mathrm{Bias}^2+\Var$. گاهی برای کاهش واریانس، تحمل مقداری گرایش به صرفه است.
+\item \textbf{انواع تخمین‌گرها:} \lr{MVUE}، \lr{MMSE}، \lr{MLE}، \lr{MoME} و\ldots
+\end{itemize}
+\end{summarybox}
+
+\begin{example}[سه ویژگی مستقل از هم]
+برای نمونه‌های \lr{i.i.d.} از توزیعی با میانگین $\mu$ و واریانس $\sigma^2$، چهار ترکیب ممکن را نشان دهید.
+\begin{solution}
+\begin{center}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{c|c|c}
+تخمین‌گر & بی‌گرایش؟ & سازگار؟\\\hline
+$\bar X_n=\frac1n\sum_iX_i$ & بله & بله (قانون اعداد بزرگ)\\
+$X_1$ & بله ($\E X_1=\mu$) & خیر (توزیعش با $n$ تغییر نمی‌کند)\\
+$\bar X_n+\frac1n$ & خیر (گرایش $-\frac1n$) & بله\\
+$X_1+1$ & خیر & خیر
+\end{tabular}
+\end{center}
+\end{solution}
+\end{example}
+
+\section{ایده درست‌نمایی}
+
+\subsection{یک مثال شهودی}
+سکه‌ای با احتمال شیر نامعلوم $p$ را سه بار پرتاب کرده‌ایم و نتیجه «شیر، شیر، خط» شده است. کدام مقدار $p$ «باورپذیرتر» است؟ احتمال مشاهده همین داده‌ها به ازای هر $p$ برابر است با
+\[
+L(p)=\Prob(\text{\lr{H,H,T}};p)=p\cdot p\cdot(1-p)=p^2(1-p).
+\]
+اگر $p=0.1$ باشد این احتمال $0.009$ است، اگر $p=0.5$ باشد $0.125$، و اگر $p=0.9$ باشد $0.081$. طبیعی است مقداری از $p$ را برگزینیم که \textbf{داده‌های مشاهده‌شده را محتمل‌ترین} کند:
+\[
+\frac{\dd}{\dd p}\big(p^2-p^3\big)=2p-3p^2=0\ \Rightarrow\ \hat p=\frac23,\qquad L\Big(\frac23\Big)=\frac{4}{27}\approx0.148 .
+\]
+این همان نسبت شیرها در داده‌هاست! این ایده ساده، اساس تخمین‌گر بیشینه درست‌نمایی است.
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[width=10cm,height=5.5cm,xmin=0,xmax=1,ymin=0,ymax=0.19,
+  xlabel={$p$},ylabel={$L(p)=p^2(1-p)$},grid=major,grid style={gray!20},
+  xtick={0,0.2,0.4,0.6,0.8,1},ytick={0,0.05,0.1,0.15}]
+\addplot[very thick,excol,domain=0:1,samples=120]{x^2*(1-x)};
+\draw[dashed,thmcol,thick] (axis cs:0.6667,0) -- (axis cs:0.6667,0.1481);
+\fill[thmcol] (axis cs:0.6667,0.1481) circle (2.2pt);
+\node[thmcol,above] at (axis cs:0.6667,0.1481) {$\hat p=\frac23$};
+\end{axis}
+\end{tikzpicture}\\
+{\small تابع درست‌نمایی برای مشاهده «شیر، شیر، خط»؛ بیشینه در $\hat p=2/3$ رخ می‌دهد.}
+\end{center}
+
+\subsection{تابع درست‌نمایی}
+\begin{definition}[تابع درست‌نمایی]
+فرض کنید نمونه‌های \lr{i.i.d.} $X_1,\ldots,X_n$ از توزیع $f_X(x;\theta)$ (یا $P_X(x;\theta)$ در حالت گسسته) مشاهده شده باشند. تابع
+\[
+L(\theta;X_{1:n})\triangleq\prod_{i=1}^nf_X(X_i;\theta)\qquad\Big(\text{گسسته:}\ \ \prod_{i=1}^nP_X(X_i;\theta)\Big)
+\]
+که در آن داده‌ها \textbf{ثابت} و $\theta$ \textbf{متغیر} در نظر گرفته می‌شود، \textbf{تابع درست‌نمایی} \lr{(Likelihood Function)} نامیده می‌شود.
+\end{definition}
+
+\begin{warning}
+\warntitle درست‌نمایی، یک «چگالی احتمال برای $\theta$» \textbf{نیست}: $\theta$ در این چارچوب کمیتی \textbf{غیرتصادفی} (اما نامعلوم) است و انتگرال $L$ روی $\theta$ لزوماً یک نمی‌شود (مثلاً در مثال سکه $\int_0^1p^2(1-p)\dd p=\frac1{12}$). عبارت $f_X(x;\theta)$ به عنوان تابعی از $x$ چگالی است؛ همان عبارت به عنوان تابعی از $\theta$ (با $x$ ثابت)، درست‌نمایی است.
+\end{warning}
+
+\section{تعریف تخمین‌گر بیشینه درست‌نمایی}
+
+\subsection{حالت گسسته (بیشینه احتمال)}
+\begin{itemize}
+\item فرض کنید متغیر تصادفی گسسته $X$ دارای تابع جرم احتمال \lr{(PMF)} پارامتریزه‌شده $P_X(x;\theta)$ باشد که عدد (یا بردار) $\theta\in\Theta$ بیانگر پارامتر(های) توزیع است. همچنین فرض کنید نمونه‌های $X_1,X_2,\ldots,X_n$ به صورت \lr{i.i.d.} از توزیع به دست آمده باشند.
+\item در اینجا، پارامتر(های) $\theta$ خود ماهیتی \textcolor{red!70!black}{\textbf{غیرتصادفی}} دارند، اما برای ما \textbf{دانسته شده نیستند}.
+\item تخمین‌گر بیشینه درست‌نمایی \lr{(MLE)} به صورت حل مسئله بهینه‌سازی زیر تعریف می‌گردد:
+\end{itemize}
+\begin{definition}[\lr{MLE} --- حالت گسسته]
+\[
+\boxed{\ \hat\theta_\ML=\hat\theta_\ML(X_1,X_2,\ldots,X_n)=\argmax_{\theta\in\Theta}\ \prod_{i=1}^nP_X(X_i;\theta)\ }
+\]
+\end{definition}
+در حالت گسسته، $\prod_iP_X(X_i;\theta)=\Prob(X_1=x_1,\ldots,X_n=x_n;\theta)$ دقیقاً \textbf{احتمال مشاهده همین داده‌ها} است (به دلیل استقلال). پس \lr{MLE} مقداری از پارامتر است که احتمال رخ دادن داده‌های مشاهده‌شده را بیشینه می‌کند.
+
+\subsection{حالت پیوسته (بیشینه چگالی احتمال)}
+\begin{itemize}
+\item فرض کنید متغیر تصادفی پیوسته $X$ دارای تابع چگالی احتمال \lr{(PDF)} پارامتریزه‌شده $f_X(x;\theta)$ باشد که $\theta\in\Theta$ بیانگر پارامتر(های) توزیع است و نمونه‌های $X_1,\ldots,X_n$ به صورت \lr{i.i.d.} از توزیع به دست آمده باشند.
+\item مشابه قبل، $\theta$ غیرتصادفی ولی نامعلوم است. تخمین‌گر بیشینه درست‌نمایی به صورت زیر تعریف می‌گردد:
+\end{itemize}
+\begin{definition}[\lr{MLE} --- حالت پیوسته]
+\[
+\boxed{\ \hat\theta_\ML=\hat\theta_\ML(X_1,X_2,\ldots,X_n)=\argmax_{\theta\in\Theta}\ \prod_{i=1}^nf_X(X_i;\theta)\ }
+\]
+\end{definition}
+
+\begin{note}
+\notetitle \textbf{چرا در حالت پیوسته چگالی را بیشینه می‌کنیم؟} احتمال مشاهده دقیقاً یک نقطه صفر است، اما احتمال افتادن هر نمونه در همسایگی کوچکی به طول $\Delta$ حول مقدار مشاهده‌شده تقریباً $f_X(x_i;\theta)\Delta$ است. پس
+\[
+\Prob\big(X_i\in[x_i,x_i+\Delta],\ i=1..n;\theta\big)\approx\Delta^n\prod_{i=1}^nf_X(x_i;\theta),
+\]
+و چون $\Delta^n$ به $\theta$ بستگی ندارد، بیشینه کردن این احتمال با بیشینه کردن حاصل‌ضرب چگالی‌ها معادل است.
+\end{note}
+
+\subsection{تابع \lr{Log-Likelihood (LL)}}
+معادلاً، می‌توان به جای بیشینه‌سازی تابع درست‌نمایی، لگاریتم آن را بیشینه نمود. به لگاریتم تابع درست‌نمایی، \lr{LL} یا \lr{\mbox{Log-Likelihood}} اطلاق می‌گردد:
+\begin{definition}[تابع لگاریتم درست‌نمایی]
+\[
+\boxed{\ LL(\theta;X_{1:n})=\sum_{i=1}^nLL(\theta;X_i)\triangleq\sum_{i=1}^n\log f_X(X_i;\theta)\ }
+\]
+\[
+\Rightarrow\qquad
+\hat\theta_\ML=\argmax_{\theta\in\Theta}\ LL(\theta;X_{1:n}).
+\]
+\end{definition}
+تنها تفاوت در این است که در تابع \lr{LL} به جای ضرب، \textbf{جمع} ظاهر می‌شود. دلایل استفاده از \lr{LL}:
+\begin{enumerate}
+\item \textbf{هم‌ارزی:} $\log$ تابعی اکیداً صعودی است؛ پس نقطه بیشینه $L$ و $\log L$ یکسان است (مقدار بیشینه متفاوت است، اما محل آن نه).
+\item \textbf{سادگی مشتق‌گیری:} مشتق یک جمع، جمع مشتق‌هاست؛ در حالی که مشتق حاصل‌ضرب $n$ جمله بسیار پیچیده است. همچنین برای خانواده‌های نمایی (گاوسی، نمایی، پواسون، \ldots) لگاریتم، تابع نمایی را حذف می‌کند.
+\item \textbf{پایداری عددی:} حاصل‌ضرب $n$ عدد کوچک (مثلاً $n=1000$ چگالی از مرتبه $0.1$) برابر $10^{-1000}$ است که در کامپیوتر به صفر گرد می‌شود؛ اما جمع لگاریتم‌ها ($\approx-2303$) مشکلی ندارد.
+\end{enumerate}
+
+\begin{summarybox}[دستورالعمل کلی محاسبه \lr{MLE} (حالت مشتق‌پذیر)]
+\begin{enumerate}
+\item تابع درست‌نمایی $L(\theta)=\prod_if_X(X_i;\theta)$ را بنویسید.
+\item لگاریتم بگیرید: $LL(\theta)=\sum_i\log f_X(X_i;\theta)$ و جملات مستقل از $\theta$ را در یک ثابت جمع کنید.
+\item معادله \textbf{نقطه بحرانی} (معادله امتیاز، \lr{score equation}) را حل کنید: $\frac{\partial}{\partial\theta}LL(\theta)=0$.
+\item بررسی کنید که جواب واقعاً \textbf{بیشینه} است (مثلاً $\frac{\partial^2}{\partial\theta^2}LL<0$، یا رفتار $LL$ در مرزهای $\Theta$) و در فضای پارامتر $\Theta$ قرار دارد.
+\end{enumerate}
+اگر $LL$ مشتق‌پذیر نباشد (مثلاً وقتی تکیه‌گاه توزیع به $\theta$ وابسته است)، باید مستقیماً شکل تابع را بررسی کرد (جلسه بعد).
+\end{summarybox}
+
+\section{خواص و ویژگی‌ها}
+\begin{itemize}
+\item تخمین‌گر بیشینه درست‌نمایی از حیث \textbf{بیشینه‌سازی احتمال مشاهده دادگان}، \textbf{بهینه \lr{(optimal)}} است (این تعریف آن است!).
+\item تخمین‌گر \lr{MLE} (تحت شرایط نظم معمول) \textcolor{blue!70!black}{\textbf{سازگار}} است؛ یعنی با افزایش $n\to\infty$، تخمین‌گر به مقدار واقعی $\theta$ میل خواهد کرد.
+\item اما لزوماً \textcolor{red!70!black}{\textbf{بی‌گرایش} \lr{(unbiased)}} نبوده و لزوماً \textcolor{red!70!black}{\textbf{کمینه خطا (واریانس)}} را دارا نیست.
+\item همان‌گونه که مشاهده شد، \lr{MLE} از حل یک \textbf{مسئله بهینه‌سازی} حاصل خواهد شد. این دسته مسائل:
+\begin{itemize}
+\item خیلی اوقات حل تحلیلی دارند، ولی خیلی اوقات هم به صورت تحلیلی حل نمی‌شوند (و باید از روش‌های عددی مانند گرادیان کاهشی یا نیوتن استفاده کرد).
+\item حصول به حل عددی ممکن است در زمان بسیار طولانی نسبت به تعداد دادگان $n$ (یا ابعاد مسئله) اتفاق بیافتد \lr{(NP-hardness)}؛ نمونه‌ای از این وضعیت را در جلسه بعد (رمزگشایی کانال نویزی) خواهیم دید.
+\end{itemize}
+\end{itemize}
+
+\begin{note}
+\notetitle \textbf{درباره «همواره سازگار».} سازگاری \lr{MLE} یک قضیه است که تحت \textbf{شرایط نظم} \lr{(regularity conditions)} برقرار است: مثلاً تعداد پارامترها ثابت بماند و با $n$ رشد نکند، مدل \textbf{شناسه‌پذیر} باشد (مقادیر متفاوت $\theta$ توزیع‌های متفاوت بدهند) و درست‌نمایی به اندازه کافی هموار باشد. مثال نقض مشهور (مسئله نیمن--اسکات): اگر $n$ جفت نمونه $(X_{i1},X_{i2})\sim\mathcal N(\mu_i,\sigma^2)$ با میانگین‌های \textbf{متفاوت} $\mu_i$ داشته باشیم، تعداد پارامترها همراه با $n$ رشد می‌کند و \lr{MLE} واریانس به $\sigma^2/2$ (و نه $\sigma^2$) همگرا می‌شود. در تمام مثال‌های این درس، شرایط نظم برقرار است.
+\end{note}
+
+\section{مثال‌ها: بهینه‌سازی با تابع هدف مشتق‌پذیر}
+
+\subsection{میانگین توزیع گاوسی با واریانس معلوم}
+\begin{example}[میانگین گاوسی با واریانس معلوم]
+فرض کنید متغیر تصادفی $X\sim\mathcal N(\mu,\sigma^2)$ دارای میانگین نامعلوم $\mu$ و واریانس دانسته‌شده $\sigma^2$ است. در صورتی که نمونه‌های $X_1,X_2,\ldots,X_n$ به صورت \lr{i.i.d.} از این توزیع گرفته شده باشند، تخمین‌گر \lr{MLE} برای $\mu$، یعنی $\hat\mu=\hat\mu(X_{1:n})$ را به دست آورید.
+\begin{solution}
+پارامتر نامعلوم را $\theta=\mu$ می‌نامیم. چگالی:
+\[
+f_X(x;\theta)=\frac{1}{\sqrt{2\pi}\sigma}\,e^{-\frac{(x-\theta)^2}{2\sigma^2}} .
+\]
+تابع درست‌نمایی:
+\[
+\prod_{i=1}^nf_X(X_i;\theta)=\Big(\frac{1}{\sqrt{2\pi}\sigma}\Big)^n\exp\Big[-\sum_{i=1}^n\frac{(X_i-\theta)^2}{2\sigma^2}\Big].
+\]
+ضریب $(\sqrt{2\pi}\sigma)^{-n}$ به $\theta$ بستگی ندارد و $e^{-u}$ نزولی است؛ پس بیشینه کردن درست‌نمایی معادل کمینه کردن نما است:
+\[
+\argmax_{\theta}\ \prod_{i=1}^nf_X(X_i;\theta)=\argmin_{\theta\in\R}\ \sum_{i=1}^n\frac{(X_i-\theta)^2}{2\sigma^2}.
+\]
+(یعنی برای داده گاوسی، \lr{MLE} میانگین همان \textbf{کمترین مربعات} است.) با مشتق‌گیری:
+\[
+\frac{\partial}{\partial\theta}\sum_{i=1}^n\frac{(X_i-\theta)^2}{2\sigma^2}=\sum_{i=1}^n\frac{\theta-X_i}{\sigma^2}=\frac{n\theta-\sum_iX_i}{\sigma^2}=0
+\quad\Rightarrow\quad
+\boxed{\ \hat\theta_\ML=\frac1n\sum_{i=1}^nX_i=\bar X_n\ }
+\]
+مشتق دوم تابع هدف $\frac{n}{\sigma^2}>0$ است؛ پس این نقطه کمینه یکتای تابع هدف (و بیشینه یکتای درست‌نمایی) است. \lr{MLE} میانگین، \textbf{میانگین نمونه‌ای} است.
+\end{solution}
+\end{example}
+
+\subsubsection{خواص این تخمین‌گر}
+\begin{enumerate}
+\item \textbf{بی‌گرایش \lr{(Unbiased)} است:}
+\[
+\E\big(\hat\theta_\ML(X_1,\ldots,X_n)\big)=\frac1n\sum_{i=1}^n\E(X_i)=\frac1n\cdot n\mu=\mu .
+\]
+\item \textbf{سازگار \lr{(Consistent)} نیز هست:} طبق قانون (قوی) اعداد بزرگ،
+\[
+\lim_{n\to\infty}\hat\theta_\ML(X_{1:n})=\lim_{n\to\infty}\frac1n\sum_iX_i=\mu\qquad(\mathrm{a.s.})
+\]
+\item \textbf{واریانس:} به دلیل استقلال نمونه‌ها،
+\[
+\Var\big(\hat\theta_\ML\big)=\sum_{i=1}^n\Var\Big(\frac{X_i}{n}\Big)=\sum_{i=1}^n\frac{\sigma^2}{n^2}=\frac{\sigma^2}{n}.
+\]
+در واقع $\hat\theta_\ML\sim\mathcal N\big(\mu,\frac{\sigma^2}{n}\big)$ (جمع گاوسی‌های مستقل، گاوسی است).
+\item می‌توان نشان داد که این تخمین‌گر \textbf{کمترین واریانس} را در میان تمامی تخمین‌گرهای \textbf{بی‌گرایش} دارد (نکته زیر).
+\end{enumerate}
+
+\begin{note}
+\notetitle \textbf{دقیق‌تر کردن ادعای «کمترین واریانس».} ادعا باید به تخمین‌گرهای \textbf{بی‌گرایش} محدود شود؛ وگرنه تخمین‌گر ثابت $\hat\theta\equiv0$ واریانس صفر دارد (هرچند گرایشش می‌تواند بسیار بزرگ باشد). ابزار اثبات، \textbf{نامساوی کرامر--رائو} است: برای هر تخمین‌گر بی‌گرایش $\hat\theta$ از نمونه‌های \lr{i.i.d.} (تحت شرایط نظم)،
+\[
+\Var(\hat\theta)\ \ge\ \frac{1}{n\,I(\theta)},\qquad
+I(\theta)=\E\Big[\Big(\frac{\partial}{\partial\theta}\log f_X(X;\theta)\Big)^2\Big]=-\E\Big[\frac{\partial^2}{\partial\theta^2}\log f_X(X;\theta)\Big],
+\]
+که $I(\theta)$ \textbf{اطلاعات فیشر} \lr{(Fisher Information)} یک نمونه است. برای میانگین گاوسی: $\frac{\partial}{\partial\mu}\log f=\frac{x-\mu}{\sigma^2}$ و $I(\mu)=\frac{\E(X-\mu)^2}{\sigma^4}=\frac1{\sigma^2}$؛ پس کران برابر $\frac{\sigma^2}{n}$ است که دقیقاً واریانس $\bar X_n$ است. بنابراین $\bar X_n$ یک \lr{MVUE} است. به علاوه، تحت شرایط نظم، \lr{MLE} \textbf{به طور مجانبی} گاوسی با واریانس $\frac{1}{nI(\theta)}$ است: $\sqrt n(\hat\theta_\ML-\theta)\to\mathcal N\big(0,\frac{1}{I(\theta)}\big)$؛ یعنی برای $n$ بزرگ، \lr{MLE} تقریباً بهترین کار ممکن را انجام می‌دهد.
+\end{note}
+
+\begin{example}[یک محاسبه عددی]
+شش اندازه‌گیری مستقل از یک کمیت فیزیکی با نویز گاوسی با انحراف معیار معلوم $\sigma=0.6$ به صورت زیر است:
+$4.2,\ 5.1,\ 3.8,\ 4.9,\ 5.6,\ 4.4$.
+\lr{MLE} مقدار واقعی $\mu$ و انحراف معیار این تخمین را بیابید.
+\begin{solution}
+$\hat\mu_\ML=\bar X=\frac{28}{6}\approx4.667$. انحراف معیار تخمین‌گر: $\sqrt{\Var\hat\mu}=\frac{\sigma}{\sqrt n}=\frac{0.6}{\sqrt6}\approx0.245$. (برای دو برابر کردن دقت، یعنی نصف کردن این عدد، باید تعداد نمونه‌ها را \textbf{چهار برابر} کرد.)
+\end{solution}
+\end{example}
+
+\subsection{واریانس توزیع گاوسی با میانگین معلوم}
+\begin{example}[واریانس گاوسی با میانگین معلوم]
+فرض کنید متغیر تصادفی $X\sim\mathcal N(\mu,\sigma^2)$ دارای میانگین معلوم $\mu$ و واریانس نامعلوم $\sigma^2$ است. در صورتی که نمونه‌های $X_1,\ldots,X_n$ به صورت \lr{i.i.d.} از این توزیع گرفته شده باشند، تخمین‌گر \lr{MLE} برای $\sigma^2$، یعنی $\hat\sigma^2=\hat\sigma^2(X_{1:n})$ را به دست آورید.
+\begin{solution}
+مطابق اسلایدها، پارامتر را \textbf{انحراف معیار} $\theta=\sigma>0$ می‌گیریم:
+\[
+f_X(x;\theta)=\frac{1}{\sqrt{2\pi}\theta}\,e^{-\frac{(x-\mu)^2}{2\theta^2}}
+\ \Rightarrow\
+\prod_{i=1}^nf_X(X_i;\theta)=\Big(\frac{1}{\sqrt{2\pi}\theta}\Big)^n\exp\Big[-\sum_{i=1}^n\frac{(X_i-\mu)^2}{2\theta^2}\Big].
+\]
+با لگاریتم گرفتن:
+\[
+LL(\theta;X_{1:n})=-n\log\theta-\sum_{i=1}^n\frac{(X_i-\mu)^2}{2\theta^2}+\underbrace{\Big(-\tfrac n2\log2\pi\Big)}_{\mathrm{const}} .
+\]
+با مشتق‌گیری نسبت به $\theta$:
+\[
+\frac{\partial}{\partial\theta}LL(\theta;X_{1:n})=-\frac n\theta+\sum_{i=1}^n\frac{(X_i-\mu)^2}{\theta^3}=0
+\quad\Rightarrow\quad
+\boxed{\ \hat\theta_\ML=\sqrt{\frac1n\sum_{i=1}^n(X_i-\mu)^2}\ }
+\]
+\textbf{بررسی بیشینه بودن:} با نماد $W=\frac1n\sum_i(X_i-\mu)^2$ داریم $\frac{\partial LL}{\partial\theta}=\frac{n}{\theta^3}(W-\theta^2)$ که برای $\theta<\sqrt W$ مثبت و برای $\theta>\sqrt W$ منفی است؛ پس $LL$ ابتدا صعودی و سپس نزولی است و $\theta=\sqrt W$ بیشینه سراسری است. (همچنین $LL\to-\infty$ وقتی $\theta\to0^+$ یا $\theta\to\infty$.)
+
+پس \lr{MLE} انحراف معیار $\sqrt W$ است و، طبق خاصیت ناوردایی (پایین‌تر)، \lr{MLE} واریانس
+\[
+\hat\sigma^2_\ML=\hat\theta_\ML^2=\frac1n\sum_{i=1}^n(X_i-\mu)^2 .
+\]
+\textbf{راه دوم:} اگر مستقیماً $v=\sigma^2$ را پارامتر بگیریم، $LL=-\frac n2\log v-\frac{nW}{2v}+c$ و $\frac{\partial LL}{\partial v}=-\frac{n}{2v}+\frac{nW}{2v^2}=0\Rightarrow\hat v=W$؛ همان جواب.
+\end{solution}
+\end{example}
+
+\subsubsection{خواص این تخمین‌گر}
+\begin{itemize}
+\item مشابه قبل، تخمین‌گر \textbf{واریانس} بدون گرایش است: چون $\E(X_i-\mu)^2=\sigma^2$،
+\[
+\E\big(\hat\theta^2_\ML\big)=\E\Big(\frac1n\sum_{i=1}^n(X_i-\mu)^2\Big)=\frac1n\cdot n\sigma^2=\sigma^2 .
+\]
+\item طبق قانون اعداد بزرگ (اعمال‌شده به متغیرهای \lr{i.i.d.} $Y_i=(X_i-\mu)^2$ با میانگین $\sigma^2$)، و مشابه قبل، خاصیت سازگاری \lr{(Consistency)} نیز برقرار است: $\hat\theta^2_\ML\to\sigma^2$ \lr{(a.s.)}.
+\item \textbf{واریانس:} $\frac{(X_i-\mu)^2}{\sigma^2}\sim\chi^2(1)$ با واریانس $2$؛ پس $\Var(\hat\theta^2_\ML)=\frac1{n^2}\cdot n\cdot2\sigma^4=\frac{2\sigma^4}{n}$.
+\item کماکان می‌توان نشان داد که در میان تمامی تخمین‌گرهای \textbf{بی‌گرایش} $\sigma^2$، کمترین واریانس را داراست: اطلاعات فیشر برای $v=\sigma^2$ برابر $I(v)=\frac{1}{2v^2}$ است و کران کرامر--رائو $\frac{2\sigma^4}{n}$ دقیقاً برابر واریانس بالاست.
+\end{itemize}
+
+\begin{question}[آیا تخمین‌گر بیشینه درست‌نمایی برای انحراف معیار هم بدون گرایش \lr{(Unbiased)} است؟ سازگار چطور؟]
+\begin{answer}
+\textbf{۱) بی‌گرایش نیست.} با نماد $W=\frac1n\sum_i(X_i-\mu)^2$ داریم $\hat\theta_\ML=\sqrt W$ و $\E W=\sigma^2$. تابع $\sqrt{\cdot}$ \textbf{اکیداً مقعر} است؛ پس طبق \textbf{نامساوی ینسن}:
+\[
+\E\big[\hat\theta_\ML\big]=\E\big[\sqrt W\big]\ <\ \sqrt{\E W}=\sqrt{\sigma^2}=\sigma ,
+\]
+که نامساوی اکید است چون $W$ ثابت نیست. راه ساده‌تر بدون ینسن:
+\[
+0<\Var\big(\sqrt W\big)=\E W-\big(\E\sqrt W\big)^2=\sigma^2-\big(\E\hat\theta_\ML\big)^2\ \Rightarrow\ \E\hat\theta_\ML<\sigma .
+\]
+یعنی \lr{MLE} انحراف معیار به طور متوسط مقدار واقعی را \textbf{کمتر} تخمین می‌زند. در حالی که $\hat\theta_\ML^2$ برای $\sigma^2$ بی‌گرایش است، جذر آن برای $\sigma$ بی‌گرایش نیست: \textbf{بی‌گرایشی تحت تبدیل‌های غیرخطی حفظ نمی‌شود.}
+
+\textbf{محاسبه دقیق:} چون $\frac{nW}{\sigma^2}\sim\chi^2(n)$ و برای $Q\sim\chi^2(n)$ داریم $\E\sqrt Q=\sqrt2\,\frac{\Gamma(\frac{n+1}2)}{\Gamma(\frac n2)}$:
+\[
+\E\hat\theta_\ML=c_n\sigma,\qquad c_n=\sqrt{\frac2n}\,\frac{\Gamma\big(\frac{n+1}{2}\big)}{\Gamma\big(\frac n2\big)}\approx1-\frac{1}{4n}.
+\]
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{c|ccccccc}
+$n$ & $1$ & $2$ & $3$ & $5$ & $10$ & $30$ & $100$\\\hline
+$c_n$ & $0.798$ & $0.886$ & $0.921$ & $0.952$ & $0.975$ & $0.992$ & $0.998$
+\end{tabular}
+\end{center}
+گرایش برابر $\sigma(1-c_n)\approx\frac{\sigma}{4n}$ است که با $n\to\infty$ صفر می‌شود (\textbf{بی‌گرایش مجانبی}). تخمین‌گر $\hat\theta_\ML/c_n$ بی‌گرایش است، اما دیگر \lr{MLE} نیست.
+
+\textbf{۲) سازگار است.} طبق قانون اعداد بزرگ $W\to\sigma^2$ (\lr{a.s.}). چون تابع $g(w)=\sqrt w$ \textbf{پیوسته} است، $\hat\theta_\ML=g(W)\to g(\sigma^2)=\sigma$ (\lr{a.s.}). (اصل کلی: تابع پیوسته‌ای از یک تخمین‌گر سازگار، تخمین‌گری سازگار برای همان تابع از پارامتر است؛ قضیه نگاشت پیوسته.)
+\end{answer}
+\end{question}
+
+\section{خاصیت ناوردایی \lr{MLE}}
+\begin{theorem}[ناوردایی \lr{(Invariance)}]
+اگر $\hat\theta_\ML$ تخمین‌گر بیشینه درست‌نمایی $\theta$ باشد و $g$ یک تابع یک‌به‌یک باشد، آنگاه تخمین‌گر بیشینه درست‌نمایی $\eta=g(\theta)$ برابر است با
+\[
+\hat\eta_\ML=g\big(\hat\theta_\ML\big).
+\]
+\end{theorem}
+\begin{proof}
+با پارامتر جدید $\eta$، درست‌نمایی برابر $\tilde L(\eta)=L(g^{-1}(\eta))$ است. وقتی $\eta$ تمام مقادیر $g(\Theta)$ را می‌پیماید، $\theta=g^{-1}(\eta)$ تمام $\Theta$ را می‌پیماید؛ پس بیشینه $\tilde L$ در نقطه‌ای رخ می‌دهد که $g^{-1}(\eta)=\hat\theta_\ML$، یعنی $\hat\eta=g(\hat\theta_\ML)$. (برای $g$ غیر یک‌به‌یک نیز با تعریف «درست‌نمایی القایی» $\tilde L(\eta)=\sup_{\theta:g(\theta)=\eta}L(\theta)$ همین نتیجه برقرار است.)
+\end{proof}
+به همین دلیل در مثال قبل، پارامتر کردن با $\sigma$ یا $\sigma^2$ تفاوتی نداشت. دقت کنید: \lr{MLE} تحت تبدیل ناورداست، اما \textbf{بی‌گرایشی} چنین نیست (پرسش بالا).
+
+\section{مثال‌های بیشتر از توزیع‌های مشهور}
+
+\begin{example}[برنولی: تخمین احتمال موفقیت]
+$X_1,\ldots,X_n\sim\mathrm{Bernoulli}(p)$ به صورت \lr{i.i.d.} و $K=\sum_iX_i$ تعداد موفقیت‌هاست. \lr{MLE} پارامتر $p$ را بیابید و خواص آن را بررسی کنید.
+\begin{solution}
+$P_X(x;p)=p^x(1-p)^{1-x}$ برای $x\in\{0,1\}$. پس
+\[
+L(p)=\prod_{i=1}^np^{X_i}(1-p)^{1-X_i}=p^K(1-p)^{n-K},\qquad LL(p)=K\log p+(n-K)\log(1-p).
+\]
+اگر $0<K<n$:
+\[
+\frac{\dd LL}{\dd p}=\frac Kp-\frac{n-K}{1-p}=0\ \Rightarrow\ K(1-p)=(n-K)p\ \Rightarrow\ \boxed{\ \hat p_\ML=\frac Kn=\bar X_n\ }
+\]
+و $\frac{\dd^2LL}{\dd p^2}=-\frac{K}{p^2}-\frac{n-K}{(1-p)^2}<0$ (بیشینه). اگر $K=0$ باشد، $L(p)=(1-p)^n$ نزولی است و بیشینه در مرز $\hat p=0$ رخ می‌دهد (اینجا مشتق صفر نمی‌شود!)؛ به طور مشابه $K=n\Rightarrow\hat p=1$. پس در همه حالات $\hat p_\ML=K/n$.
+
+\textbf{خواص:} $\E\hat p=p$ (بی‌گرایش)، $\Var\hat p=\frac{p(1-p)}{n}\to0$ (پس سازگار). مثال سکه ابتدای جلسه حالت خاص $n=3,K=2$ است.
+\end{solution}
+\end{example}
+
+\begin{example}[پواسون]
+$X_1,\ldots,X_n\sim\mathrm{Pois}(\lambda)$ به صورت \lr{i.i.d.}. \lr{MLE} پارامتر $\lambda$ را بیابید.
+\begin{solution}
+\[
+L(\lambda)=\prod_{i=1}^n\frac{e^{-\lambda}\lambda^{X_i}}{X_i!}
+\ \Rightarrow\
+LL(\lambda)=-n\lambda+\Big(\sum_iX_i\Big)\log\lambda-\sum_i\log(X_i!) .
+\]
+\[
+\frac{\dd LL}{\dd\lambda}=-n+\frac{\sum_iX_i}{\lambda}=0\ \Rightarrow\ \boxed{\ \hat\lambda_\ML=\bar X_n\ },\qquad
+\frac{\dd^2LL}{\dd\lambda^2}=-\frac{\sum_iX_i}{\lambda^2}<0 .
+\]
+(اگر همه $X_i=0$ باشند، $L=e^{-n\lambda}$ نزولی است و $\hat\lambda=0=\bar X_n$.) این تخمین‌گر بی‌گرایش با واریانس $\frac\lambda n$ و سازگار است (تمرین جلسه قبل).
+\end{solution}
+\end{example}
+
+\begin{example}[نمایی: یک \lr{MLE} گرایش‌دار]
+$X_1,\ldots,X_n\sim\mathrm{Exp}(\lambda)$ با چگالی $f(x;\lambda)=\lambda e^{-\lambda x}$ برای $x\ge0$. \lr{MLE} پارامتر $\lambda$ را بیابید، گرایش آن را محاسبه کرده و یک تخمین‌گر بی‌گرایش بسازید.
+\begin{solution}
+\[
+L(\lambda)=\lambda^ne^{-\lambda\sum_iX_i},\qquad LL(\lambda)=n\log\lambda-\lambda\sum_iX_i,
+\]
+\[
+\frac{\dd LL}{\dd\lambda}=\frac n\lambda-\sum_iX_i=0\ \Rightarrow\ \boxed{\ \hat\lambda_\ML=\frac{n}{\sum_iX_i}=\frac{1}{\bar X_n}\ },\qquad\frac{\dd^2LL}{\dd\lambda^2}=-\frac n{\lambda^2}<0 .
+\]
+\textbf{گرایش:} $S=\sum_iX_i\sim\mathrm{Erlang}(n,\lambda)$ با چگالی $f_S(s)=\frac{\lambda^ns^{n-1}e^{-\lambda s}}{(n-1)!}$. برای $n\ge2$:
+\[
+\E\Big[\frac1S\Big]=\int_0^\infty\frac1s\cdot\frac{\lambda^ns^{n-1}e^{-\lambda s}}{(n-1)!}\dd s
+=\frac{\lambda}{n-1}\underbrace{\int_0^\infty\frac{\lambda^{n-1}s^{n-2}e^{-\lambda s}}{(n-2)!}\dd s}_{=1\ (\text{چگالی }\mathrm{Erlang}(n-1,\lambda))}=\frac{\lambda}{n-1}.
+\]
+پس $\E\hat\lambda_\ML=\frac{n\lambda}{n-1}>\lambda$: \lr{MLE} \textbf{گرایش‌دار} است (به سمت بالا)، هرچند گرایش با $n\to\infty$ صفر می‌شود. این هم از ینسن قابل پیش‌بینی بود: $1/x$ محدب است، پس $\E[1/\bar X]>1/\E\bar X=\lambda$.
+
+\textbf{تخمین‌گر بی‌گرایش:} $\tilde\lambda=\frac{n-1}{n}\hat\lambda_\ML=\frac{n-1}{\sum_iX_i}$.
+
+\textbf{سازگاری:} $\bar X_n\to\frac1\lambda$ (\lr{a.s.}) و $x\mapsto1/x$ در $\frac1\lambda>0$ پیوسته است؛ پس $\hat\lambda_\ML\to\lambda$.
+
+\textbf{عددی:} برای داده‌های $1.2,\ 0.4,\ 2.5,\ 0.9,\ 1.5$ (زمان‌های بین ورود مشتریان، به دقیقه): $\sum X_i=6.5$، $\hat\lambda_\ML=\frac{5}{6.5}\approx0.769$ و $\tilde\lambda=\frac{4}{6.5}\approx0.615$ مشتری در دقیقه.
+\end{solution}
+\end{example}
+
+\begin{summarybox}[جمع‌بندی \lr{MLE} توزیع‌های مشهور (یک پارامتر نامعلوم)]
+\begin{center}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{c|c|c|c}
+توزیع & پارامتر & $\hat\theta_\ML$ & بی‌گرایش؟\\\hline
+$\mathrm{Bernoulli}(p)$ & $p$ & $\bar X_n$ & بله\\
+$\mathrm{Pois}(\lambda)$ & $\lambda$ & $\bar X_n$ & بله\\
+$\mathcal N(\mu,\sigma^2)$، $\sigma$ معلوم & $\mu$ & $\bar X_n$ & بله\\
+$\mathcal N(\mu,\sigma^2)$، $\mu$ معلوم & $\sigma^2$ & $\frac1n\sum(X_i-\mu)^2$ & بله\\
+$\mathcal N(\mu,\sigma^2)$، $\mu$ معلوم & $\sigma$ & $\sqrt{\frac1n\sum(X_i-\mu)^2}$ & خیر\\
+$\mathrm{Exp}(\lambda)$ & $\lambda$ & $1/\bar X_n$ & خیر
+\end{tabular}
+\end{center}
+همه موارد بالا سازگارند.
+\end{summarybox}
+
+\section{تمرین‌های تکمیلی}
+
+\begin{exercise}
+$X_1,\ldots,X_n$ نمونه‌های \lr{i.i.d.} از توزیع هندسی $P(X=x)=(1-p)^{x-1}p$، $x=1,2,\ldots$ هستند. \lr{MLE} پارامتر $p$ را بیابید.
+\end{exercise}
+\begin{solution}
+$L(p)=p^n(1-p)^{\sum_iX_i-n}$ و $LL=n\log p+\big(\sum_iX_i-n\big)\log(1-p)$.
+\[
+\frac{\dd LL}{\dd p}=\frac np-\frac{\sum_iX_i-n}{1-p}=0\ \Rightarrow\ n(1-p)=p\Big(\sum_iX_i-n\Big)\ \Rightarrow\ \hat p_\ML=\frac{n}{\sum_iX_i}=\frac1{\bar X_n}.
+\]
+شهود: میانگین توزیع هندسی $\frac1p$ است و \lr{MLE} معکوس میانگین نمونه‌ای است. (اگر همه $X_i=1$ باشند، $\hat p=1$ که با بیشینه در مرز سازگار است.)
+\end{solution}
+
+\begin{exercise}
+نمونه‌های \lr{i.i.d.} از توزیع رایلی با چگالی $f(x;\sigma^2)=\frac{x}{\sigma^2}e^{-x^2/(2\sigma^2)}$، $x\ge0$ داریم. \lr{MLE} پارامتر $s=\sigma^2$ را بیابید و نشان دهید بی‌گرایش است.
+\end{exercise}
+\begin{solution}
+$LL(s)=\sum_i\log X_i-n\log s-\frac{1}{2s}\sum_iX_i^2$. پس
+\[
+\frac{\dd LL}{\dd s}=-\frac ns+\frac{1}{2s^2}\sum_iX_i^2=0\ \Rightarrow\ \hat s_\ML=\frac{1}{2n}\sum_{i=1}^nX_i^2 .
+\]
+برای رایلی $\E X^2=2\sigma^2$ (چون $X^2\sim\mathrm{Exp}$ با میانگین $2\sigma^2$)؛ پس $\E\hat s_\ML=\frac{1}{2n}\cdot n\cdot2\sigma^2=\sigma^2$: بی‌گرایش است.
+\end{solution}
+
+\begin{exercise}
+برای نمونه‌های نمایی، \lr{MLE} احتمال $q=\Prob(X>t)$ (مثلاً احتمال اینکه قطعه‌ای بیش از $t$ ساعت کار کند) را بیابید. برای داده‌های مثال نمایی بالا و $t=2$ مقدار آن را حساب کنید.
+\end{exercise}
+\begin{solution}
+$q=e^{-\lambda t}$ تابع یک‌به‌یکی از $\lambda$ است. طبق ناوردایی: $\hat q_\ML=e^{-\hat\lambda_\ML t}=e^{-t/\bar X_n}$. با $\bar X=1.3$ و $t=2$: $\hat q=e^{-2/1.3}\approx e^{-1.538}\approx0.215$.
+\end{solution}
+
+\begin{exercise}
+یک پزشک $n=50$ بیمار را آزمایش کرده و $K=12$ مورد مثبت مشاهده کرده است. با فرض برنولی بودن نتایج، (الف) \lr{MLE} احتمال ابتلا را بیابید؛ (ب) \lr{MLE} نسبت شانس $\eta=\frac{p}{1-p}$ را بیابید؛ (ج) انحراف معیار تقریبی تخمین $p$ را حساب کنید.
+\end{exercise}
+\begin{solution}
+(الف) $\hat p=\frac{12}{50}=0.24$. (ب) $g(p)=\frac{p}{1-p}$ روی $(0,1)$ یک‌به‌یک است؛ پس $\hat\eta=\frac{0.24}{0.76}\approx0.316$. (ج) $\sqrt{\Var\hat p}=\sqrt{\frac{p(1-p)}{n}}$ که با جایگذاری $\hat p$: $\sqrt{\frac{0.24\times0.76}{50}}\approx0.060$.
+\end{solution}
+
+\begin{exercise}
+نشان دهید برای هر نمونه \lr{i.i.d.} از توزیعی با میانگین $\mu$ و واریانس متناهی، $\E[(\bar X_n-\mu)^2]=\frac{\sigma^2}{n}$ و نتیجه بگیرید که اگر بخواهیم انحراف معیار تخمین $\mu$ در مثال عددی گاوسی بالا ($\sigma=0.6$) حداکثر $0.1$ باشد، حداقل چند نمونه لازم است.
+\end{exercise}
+\begin{solution}
+$\E[(\bar X_n-\mu)^2]=\Var(\bar X_n)=\frac1{n^2}\sum_i\Var X_i=\frac{\sigma^2}{n}$ (استقلال). شرط $\frac{0.6}{\sqrt n}\le0.1$ معادل $\sqrt n\ge6$، یعنی $n\ge36$ نمونه.
+\end{solution}
+
+\begin{exercise}
+فرض کنید $X_1,\ldots,X_n$ \lr{i.i.d.} با چگالی $f(x;\theta)=\theta x^{\theta-1}$ برای $0<x<1$ و $\theta>0$ باشند. \lr{MLE} پارامتر $\theta$ را بیابید.
+\end{exercise}
+\begin{solution}
+$LL(\theta)=n\log\theta+(\theta-1)\sum_i\log X_i$. مشتق: $\frac n\theta+\sum_i\log X_i=0$؛ پس
+\[
+\hat\theta_\ML=-\frac{n}{\sum_{i=1}^n\log X_i}.
+\]
+چون $0<X_i<1$، $\log X_i<0$ و تخمین مثبت است. مشتق دوم $-\frac n{\theta^2}<0$؛ پس بیشینه است. (توجه: $-\log X_i\sim\mathrm{Exp}(\theta)$، پس این مسئله در واقع همان مثال نمایی است و $\hat\theta_\ML$ نیز به همان دلیل گرایش‌دار است.)
+\end{solution}

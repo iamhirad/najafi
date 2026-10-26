@@ -1,0 +1,431 @@
+% ===============================================================
+%  جلسه بیست‌ودوم
+% ===============================================================
+\chapter{بیشینه درست‌نمایی: مثال‌های پیشرفته}
+
+اسلایدهای این جلسه ابتدا تعریف تخمین‌گر بیشینه درست‌نمایی (حالت گسسته و پیوسته)، تابع \lr{\mbox{Log-Likelihood}}، خواص کلی \lr{MLE} و دو مثال گاوسی (میانگین با واریانس معلوم و واریانس با میانگین معلوم) را مرور می‌کنند؛ این مطالب به طور کامل در جلسه ۲۱ آمده است. در این فصل، پس از یک خلاصه کوتاه، به مثال‌های جدید می‌پردازیم: تابع هدف \textbf{مشتق‌ناپذیر}، بهینه‌سازی \textbf{بدون جواب تحلیلی}، یک مثال \textbf{گسسته} ساده، و بهینه‌سازی \textbf{دومتغیره}.
+
+\begin{summarybox}[خلاصه جلسه قبل]
+\begin{itemize}
+\item پارامتر $\theta$ غیرتصادفی ولی نامعلوم است و نمونه‌های $X_1,\ldots,X_n$ به صورت \lr{i.i.d.} از $f_X(x;\theta)$ (یا $P_X(x;\theta)$) گرفته شده‌اند.
+\item تعریف \lr{MLE} و تابع لگاریتم درست‌نمایی:
+\[
+\hat\theta_\ML=\argmax_{\theta}\prod_{i=1}^nf_X(X_i;\theta)=\argmax_\theta\ LL(\theta;X_{1:n}),
+\]
+\[
+LL(\theta;X_{1:n})=\sum_{i=1}^n\log f_X(X_i;\theta).
+\]
+\item \lr{MLE} از حیث بیشینه کردن احتمال مشاهده داده‌ها بهینه است، (تحت شرایط نظم) \textbf{سازگار} است، اما لزوماً \textbf{بی‌گرایش} نیست و لزوماً کمینه واریانس را ندارد.
+\item گاوسی با $\sigma^2$ معلوم: $\hat\mu_\ML=\bar X_n$ (بی‌گرایش، سازگار، $\Var=\sigma^2/n$).\quad
+گاوسی با $\mu$ معلوم: $\hat\sigma^2_\ML=\frac1n\sum_i(X_i-\mu)^2$ (بی‌گرایش، سازگار)؛ اما $\hat\sigma_\ML=\sqrt{\hat\sigma^2_\ML}$ برای $\sigma$ گرایش‌دار (ولی سازگار) است.
+\item \textbf{ناوردایی:} $\widehat{g(\theta)}_\ML=g(\hat\theta_\ML)$.
+\end{itemize}
+\end{summarybox}
+
+\section{بهینه‌سازی با تابع هدف غیرمشتق‌پذیر: حدود توزیع یکنواخت}
+
+\begin{example}[حد بالای توزیع یکنواخت]
+فرض کنید متغیر تصادفی $X$ دارای توزیعی یکنواخت در بازه $[0,\theta]$ است که در اینجا $\theta$ (با $\theta>0$) مقداری نامعلوم است. در صورتی که نمونه‌های $X_1,X_2,\ldots,X_n$ به صورت \lr{i.i.d.} از این توزیع تولید شده باشند، تخمین‌گر بیشینه درست‌نمایی برای $\theta$ را بیابید.
+\begin{solution}
+چگالی را با تابع نشانگر می‌نویسیم:
+\[
+f_X(x;\theta)=\frac1\theta\,\ind_{0\le x\le\theta}.
+\]
+حاصل‌ضرب چگالی‌ها:
+\[
+\prod_{i=1}^nf_X(X_i;\theta)=\frac{1}{\theta^n}\prod_{i=1}^n\ind_{0\le X_i\le\theta}=\frac{1}{\theta^n}\,\ind_{0\le X_1,\ldots,X_n\le\theta}=\frac{1}{\theta^n}\,\ind_{\theta\ge\max_iX_i}.
+\]
+(حاصل‌ضرب نشانگرها فقط وقتی $1$ است که \textbf{همه} شرط‌ها برقرار باشند، و $X_i\ge0$ همواره برقرار است؛ پس تنها شرط مؤثر $\theta\ge X_i$ برای همه $i$، یعنی $\theta\ge\max_iX_i$ است.)
+
+\textbf{چرا مشتق کار نمی‌کند؟} مشتق $\theta^{-n}$ برابر $-n\theta^{-n-1}$ است که هرگز صفر نمی‌شود! درست‌نمایی در $\theta=\max_iX_i$ یک \textbf{ناپیوستگی} (پرش) دارد: برای $\theta<\max_iX_i$ صفر است (مشاهده بزرگ‌ترین نمونه غیرممکن می‌شود) و برای $\theta\ge\max_iX_i$ برابر $\theta^{-n}$ و \textbf{اکیداً نزولی} است. پس بیشینه در کوچک‌ترین مقدار مجاز رخ می‌دهد:
+\[
+\Rightarrow\ \hat\theta_\ML=\min\ \theta\quad\text{\lr{subject to}}\quad\theta\ge X_1,\ldots,X_n
+\qquad\Rightarrow\qquad
+\boxed{\ \hat\theta_\ML=\max\big(X_1,\ldots,X_n\big)\ }
+\]
+\end{solution}
+\end{example}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[width=11cm,height=5.5cm,xmin=0,xmax=5,ymin=0,ymax=0.036,
+  xlabel={$\theta$},ylabel={$L(\theta)$},grid=major,grid style={gray!20},
+  ytick={0,0.01,0.02,0.03},xtick={0,1,2,3,4,5}]
+\addplot[very thick,excol,domain=0:2,samples=2]{0};
+\addplot[very thick,excol,domain=2:5,samples=100]{x^(-5)};
+\draw[dashed,excol] (axis cs:2,0) -- (axis cs:2,0.03125);
+\fill[white,draw=excol,thick] (axis cs:2,0) circle (2pt);
+\fill[thmcol] (axis cs:2,0.03125) circle (2.3pt);
+\node[thmcol,right] at (axis cs:2.05,0.032) {$\hat\theta_\ML=\max_iX_i=2$};
+\foreach \p in {0.4,0.7,1.3,1.6,2.0}{\addplot[only marks,mark=x,mark size=3pt,defcol,thick] coordinates {(\p,0.0015)};}
+\end{axis}
+\end{tikzpicture}\\
+{\small تابع درست‌نمایی $\mathcal U(0,\theta)$ برای $n=5$ مشاهده (علامت‌های $\times$): $0.4,0.7,1.3,1.6,2.0$. برای $\theta<2$ درست‌نمایی صفر است و پس از آن به صورت $\theta^{-5}$ نزول می‌کند؛ بیشینه روی لبه ناپیوستگی قرار دارد.}
+\end{center}
+
+\subsection{خواص تخمین بیشینه درست‌نمایی در این مثال}
+\begin{itemize}
+\item واضح است که تخمین‌گر \lr{MLE} در این حالت \textbf{بدون گرایش نیست}. چرا که با احتمال یک
+\[
+\max_i(X_i)<\theta\quad\Rightarrow\quad\E\big(\hat\theta_\ML=\max(X_{1:n})\big)<\theta .
+\]
+یعنی تخمین‌گر همواره از مقدار واقعی کوچک‌تر است، پس میانگینش هم کوچک‌تر است (گرایش به سمت پایین).
+\item می‌توان دید که تخمین‌گر \lr{MLE} در این مثال نیز (مانند همیشه) \textbf{سازگار} است. برای $0<\varepsilon<\theta$:
+\[
+\Prob\big(\big|\max X_{1:n}-\theta\big|>\varepsilon\big)=\Prob\big(\max X_{1:n}<\theta-\varepsilon\big)=\prod_{i=1}^n\Prob(X_i<\theta-\varepsilon)=\Big(1-\frac\varepsilon\theta\Big)^n
+\]
+(تساوی اول چون $\max\le\theta$ همواره برقرار است، و تساوی دوم به دلیل استقلال: بیشینه کمتر از یک مقدار است اگر و تنها اگر همه نمونه‌ها کمتر از آن باشند.) چون $0<1-\frac\varepsilon\theta<1$:
+\[
+\Rightarrow\quad\lim_{n\to\infty}\Prob\big(\big|\hat\theta_\ML-\theta\big|>\varepsilon\big)=0,\qquad\forall\varepsilon>0
+\]
+(برای $\varepsilon\ge\theta$ احتمال از ابتدا صفر است).
+\end{itemize}
+
+\begin{note}
+\notetitle عبارت $\lim_{n\to\infty}\Prob(|\hat\theta_\ML-\theta|>\varepsilon)=0$ برای هر $\varepsilon>0$، به معنی \textbf{یک شکل از همگرایی}
+\[
+\lim_{n\to\infty}\hat\theta_\ML(X_{1:n})=\theta
+\]
+است که \textbf{همگرایی در احتمال} \lr{(convergence in probability)} نام دارد: احتمال اینکه تخمین‌گر بیش از هر مقدار ثابت $\varepsilon$ از $\theta$ فاصله داشته باشد، به صفر میل می‌کند. در این مثال حتی همگرایی \textbf{تقریباً حتمی} نیز برقرار است: دنباله $\max(X_1,\ldots,X_n)$ برحسب $n$ \textbf{صعودی} و از بالا به $\theta$ محدود است، پس حتماً به حدی مانند $M\le\theta$ همگراست؛ و چون $\Prob(M<\theta-\varepsilon)\le(1-\frac\varepsilon\theta)^n\to0$ برای هر $n$، داریم $M=\theta$ با احتمال یک.
+\end{note}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[width=10cm,height=5.5cm,xmin=0,xmax=1.05,ymin=0,ymax=10.5,
+  xlabel={$x/\theta$},ylabel={$\theta f_{\hat\theta_\ML}(x)$},grid=major,grid style={gray!20},
+  legend pos=north west,legend style={font=\small}]
+\addplot[thick,defcol,domain=0:1,samples=100]{2*x};
+\addplot[thick,excol,domain=0:1,samples=100]{5*x^4};
+\addplot[thick,thmcol,domain=0:1,samples=150]{10*x^9};
+\legend{$n=2$,$n=5$,$n=10$}
+\end{axis}
+\end{tikzpicture}\\
+{\small چگالی $\hat\theta_\ML=\max_iX_i$ (یعنی $nx^{n-1}/\theta^n$) برای چند مقدار $n$: با افزایش $n$ جرم احتمال در نزدیکی $\theta$ (از سمت چپ) متمرکز می‌شود ــ هم گرایش و هم واریانس به صفر میل می‌کنند.}
+\end{center}
+
+\subsection{تخمین‌گر بی‌گرایش و سازگار برای $\theta$}
+\begin{itemize}
+\item فرض کنید بخواهیم مشکل گرایش‌دار \lr{(Biased)} بودن تخمین‌گر \lr{MLE} در این مثال (تخمین حد بالای یک توزیع یکنواخت) را حل کنیم.
+\item ابتدا مقدار میانگین $\hat\theta_\ML=\max(X_1,\ldots,X_n)$ را محاسبه می‌کنیم. از بحث آماره‌های ترتیبی (جلسه ۱۷) می‌دانیم که اگر $X_1,\ldots,X_n\sim f_X(x)$ متغیرهای تصادفی \lr{i.i.d.} باشند، آنگاه
+\[
+\max_i(X_i)\sim nf_X(x)F_X^{n-1}(x)
+\]
+(چون $F_{\max}(x)=\Prob(\text{همه}\le x)=F_X^n(x)$ و با مشتق‌گیری). که در حالت $X\sim\mathrm{Unif}(0,\theta)$ با $F_X(x)=x/\theta$ خواهیم داشت:
+\[
+\max_i(X_i)\sim\frac{nx^{n-1}}{\theta^n}\ind_{0\le x\le\theta}.
+\]
+\item مقدار $\E\hat\theta_\ML$ مطابق زیر محاسبه خواهد شد:
+\[
+\E\hat\theta_\ML=\int_0^\theta x\cdot\frac{nx^{n-1}}{\theta^n}\dd x=\int_0^\theta\frac{nx^n}{\theta^n}\dd x=\frac{n}{\theta^n}\cdot\frac{\theta^{n+1}}{n+1}=\Big(\frac{n}{n+1}\Big)\theta .
+\]
+گرایش (با تعریف درس) برابر $\theta-\E\hat\theta_\ML=\frac{\theta}{n+1}$ است.
+\item همان‌گونه که پیش‌تر نیز می‌دانستیم، $\hat\theta_\ML$ یک تخمین‌گر \lr{Biased} است. اما در صورتی که تخمین‌گر جدیدی به صورت
+\[
+\hat\theta_*\triangleq\frac{n+1}{n}\,\hat\theta_\ML
+\]
+تعریف کنیم، آنگاه:
+\begin{itemize}
+\item $\hat\theta_*$ یک تخمین‌گر \lr{Unbiased} برای $\theta$ است: $\E\hat\theta_*=\frac{n+1}{n}\cdot\frac{n}{n+1}\theta=\theta$.
+\item $\hat\theta_*$ سازگار نیز هست: $\frac{n+1}{n}\to1$ و $\hat\theta_\ML\to\theta$، پس حاصل‌ضرب به $\theta$ میل می‌کند.
+\item اما $\hat\theta_*$ دیگر از منظر بیشینه درست‌نمایی \textbf{بهینه نیست}: چون $\hat\theta_*>\hat\theta_\ML$ و $L(\theta)=\theta^{-n}$ در این ناحیه اکیداً نزولی است، $L(\hat\theta_*)<L(\hat\theta_\ML)$.
+\end{itemize}
+\end{itemize}
+
+\begin{note}
+\notetitle \textbf{مقایسه \lr{MSE}.} در جلسه ۲۰ دیدیم: $\mathrm{MSE}(\hat\theta_\ML)=\frac{2\theta^2}{(n+1)(n+2)}$ و $\mathrm{MSE}(\hat\theta_*)=\frac{\theta^2}{n(n+2)}$. برای $n\ge2$ داریم $\frac1n<\frac2{n+1}$، پس در این مثال تخمین‌گر بی‌گرایش، \lr{MSE} کمتری هم دارد (برای $n=1$ برابرند). همچنین خطا از مرتبه $\frac1{n^2}$ است و نه $\frac1n$: در این مسئله تکیه‌گاه توزیع به $\theta$ وابسته است، شرایط نظم برقرار نیست و \lr{MLE} (به جای رفتار گاوسی مجانبی با نرخ $\frac{1}{\sqrt n}$) با نرخ سریع‌تر $\frac1n$ همگرا می‌شود؛ در واقع $\frac{n(\theta-\hat\theta_\ML)}{\theta}$ به توزیع $\mathrm{Exp}(1)$ همگراست، چون $\Prob\big(n(\theta-\hat\theta_\ML)>t\theta\big)=(1-\frac tn)^n\to e^{-t}$.
+\end{note}
+
+\section{بهینه‌سازی بدون جواب تحلیلی: بازیابی رشته دودویی از کانال نویزی}
+
+\begin{example}[بازیابی یک رشته دودویی ارسالی در گیرنده یک کانال نویزی]
+فرض کنید یک رشته دودویی $k$تایی (یعنی عضو $\{0,1\}^k$) توسط یک فرستنده روی یک کانال نویزی برای گیرنده فرستاده می‌شود. هر بیت ارسالی، مستقل از سایرین با احتمال دانسته‌شده $\varepsilon$ عوض شده و با احتمال $1-\varepsilon$ تغییر نمی‌کند.
+به منظور کاهش احتمال خطا، رشته قبل از ارسال کدگذاری شده است. لذا می‌دانیم تعداد بیت‌های ۱ در این رشته حتماً عددی \textbf{زوج} است.
+در صورت مشاهده یک نمونه نویزی‌شده از این رشته در گیرنده، تخمین بیشینه درست‌نمایی از رشته اصلی را به دست آورید.
+\end{example}
+
+\begin{center}
+\begin{tikzpicture}[>=Stealth,node distance=1.2cm]
+\node[circle,draw,thick,minimum size=7mm] (x0) at (0,1.6) {$0$};
+\node[circle,draw,thick,minimum size=7mm] (x1) at (0,0) {$1$};
+\node[circle,draw,thick,minimum size=7mm] (y0) at (4,1.6) {$0$};
+\node[circle,draw,thick,minimum size=7mm] (y1) at (4,0) {$1$};
+\draw[->,thick,excol] (x0) -- node[above]{$1-\varepsilon$} (y0);
+\draw[->,thick,excol] (x1) -- node[below]{$1-\varepsilon$} (y1);
+\draw[->,thick,warncol] (x0) -- node[pos=0.25,above right=-1pt]{$\varepsilon$} (y1);
+\draw[->,thick,warncol] (x1) -- node[pos=0.25,below right=-1pt]{$\varepsilon$} (y0);
+\node[above=3mm of x0]{\small بیت ارسالی};
+\node[above=3mm of y0]{\small بیت دریافتی};
+\end{tikzpicture}\\
+{\small کانال دودویی متقارن \lr{(Binary Symmetric Channel, BSC)} با احتمال خطای $\varepsilon$.}
+\end{center}
+
+\begin{solution}
+\textbf{مدل‌سازی.} در اینجا «پارامتر» نامعلوم، خود رشته ارسالی $x=(x_1,\ldots,x_k)$ است که مقداری \textbf{گسسته} در مجموعه
+\[
+\mathcal C=\Big\{x\in\{0,1\}^k:\ \sum_{j=1}^kx_j\ \text{زوج}\Big\},\qquad|\mathcal C|=2^{k-1}
+\]
+دارد (فضای پارامتر $\Theta=\mathcal C$). مشاهده، رشته دریافتی $y\in\{0,1\}^k$ است. با تعریف \textbf{فاصله همینگ} $d(x,y)=$ تعداد مکان‌هایی که $x$ و $y$ با هم تفاوت دارند، و به دلیل مستقل بودن خطای بیت‌ها:
+\[
+\Prob(y;x)=\prod_{j=1}^k\Prob(y_j;x_j)=\varepsilon^{d(x,y)}(1-\varepsilon)^{k-d(x,y)}=(1-\varepsilon)^k\Big(\frac{\varepsilon}{1-\varepsilon}\Big)^{d(x,y)} .
+\]
+پس
+\[
+\hat x_\ML=\argmax_{x\in\mathcal C}\ (1-\varepsilon)^k\Big(\frac{\varepsilon}{1-\varepsilon}\Big)^{d(x,y)} .
+\]
+اینجا هیچ مشتقی در کار نیست: یک مسئله بهینه‌سازی \textbf{ترکیبیاتی} روی $2^{k-1}$ گزینه است. رفتار جواب به $\varepsilon$ بستگی دارد:
+
+\textbf{حالت ۱: $\varepsilon<\frac12$ (حالت معمول).} آنگاه $\frac{\varepsilon}{1-\varepsilon}<1$ و درست‌نمایی با افزایش $d$ کاهش می‌یابد؛ پس
+\[
+\hat x_\ML=\argmin_{x\in\mathcal C}\ d(x,y)\qquad(\text{رمزگشایی کمینه فاصله}).
+\]
+\begin{itemize}
+\item اگر تعداد یک‌های $y$ \textbf{زوج} باشد، $y\in\mathcal C$ و با $d=0$: $\ \hat x_\ML=y$ (یکتا).
+\item اگر تعداد یک‌های $y$ \textbf{فرد} باشد، $y\notin\mathcal C$ و کمترین فاصله ممکن $1$ است: \textbf{هر} رشته‌ای که از تغییر \textbf{یک} بیت دلخواه $y$ به دست آید، زوجیت را درست می‌کند. پس $k$ جواب هم‌ارز وجود دارد و \lr{MLE} \textbf{یکتا نیست}! این کد می‌تواند وجود خطا را \textbf{آشکار} کند ولی نمی‌تواند آن را \textbf{تصحیح} کند.
+\end{itemize}
+
+\textbf{حالت ۲: $\varepsilon>\frac12$.} آنگاه $\frac{\varepsilon}{1-\varepsilon}>1$ و باید فاصله را \textbf{بیشینه} کرد: اگر متمم $\bar y$ (همه بیت‌ها معکوس) در $\mathcal C$ باشد (یعنی $k-w(y)$ زوج باشد، که $w(y)$ تعداد یک‌های $y$ است) آنگاه $\hat x=\bar y$ با $d=k$؛ وگرنه هر رشته با فاصله $k-1$ (متمم $y$ با یک بیت برگشته). معادلاً: ابتدا همه بیت‌های $y$ را معکوس کرده و سپس قاعده حالت ۱ را با $1-\varepsilon$ به کار ببرید.
+
+\textbf{حالت ۳: $\varepsilon=\frac12$.} درست‌نمایی برای همه $x$ برابر $2^{-k}$ است؛ همه $2^{k-1}$ رشته مجاز، \lr{MLE} هستند. مشاهده هیچ اطلاعاتی درباره ورودی ندارد (کانال کاملاً تصادفی است).
+
+\textbf{مثال عددی.} $k=4$، $\varepsilon=0.1$ و $y=1011$ (سه یک، فرد). هشت رشته مجاز و فاصله‌شان از $y$:
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{c|cccccccc}
+$x$ & \lr{0000} & \lr{0011} & \lr{0101} & \lr{0110} & \lr{1001} & \lr{1010} & \lr{1100} & \lr{1111}\\\hline
+$d(x,y)$ & $3$ & $1$ & $3$ & $3$ & $1$ & $1$ & $3$ & $1$
+\end{tabular}
+\end{center}
+چهار رشته \lr{0011}، \lr{1001}، \lr{1010} و \lr{1111} با درست‌نمایی $\varepsilon(1-\varepsilon)^3=0.0729$ همگی \lr{MLE} هستند؛ چهار رشته دیگر درست‌نمایی $\varepsilon^3(1-\varepsilon)=0.0009$ دارند. (اگر همه رشته‌های مجاز از پیش هم‌احتمال باشند، احتمال درست بودن هر یک از چهار گزینه اول با قاعده بیز $\frac{0.0729}{4(0.0729)+4(0.0009)}\approx0.247$ است.)
+
+\textbf{چرا «بدون جواب تحلیلی»؟} برای این کد ساده (توازن زوج) جواب را با استدلال یافتیم؛ اما در حالت کلی، کدهای خطی با ماتریس توازن $H$ استفاده می‌شوند ($\mathcal C=\{x: Hx=0\}$ در حساب پیمانه ۲) و \lr{MLE} یعنی یافتن نزدیک‌ترین کلمه کد به $y$ (معادلاً کم‌وزن‌ترین الگوی خطای $e$ با $He=Hy$). هیچ فرمول بسته‌ای برای آن وجود ندارد؛ جست‌وجوی کامل به $|\mathcal C|$ مقایسه نیاز دارد که به صورت \textbf{نمایی} با طول پیام رشد می‌کند، و ثابت شده است که این مسئله در حالت کلی \textbf{\lr{NP}-سخت} است (برلکمپ، مک‌الیس و ون تیلبورگ، ۱۹۷۸). این همان نکته اسلاید خواص است: حل عددی \lr{MLE} ممکن است بسیار زمان‌بر باشد. (به همین دلیل در عمل از کدهایی با ساختار خاص، مانند کدهای کانولوشنی با الگوریتم ویتربی، استفاده می‌شود که رمزگشایی \lr{ML} برایشان کارآمد است.)
+\end{solution}
+
+\section{یک مثال ساده (گسسته): یافتن تعداد کارت‌های درون یک جعبه}
+
+\begin{example}[تعداد کارت‌ها]
+فرض کنید $n$ کارت شامل اعداد به ترتیب $1$ تا $n$ را درون یک جعبه انداخته و سپس یکی را به صورت تصادفی انتخاب می‌کنیم. روی کارت عدد $X$ نمایش داده شده است.
+\begin{itemize}
+\item در صورتی که مقدار $n$ را ندانیم و بخواهیم آن را بر اساس $X$ تخمین بزنیم، تخمین‌گر بیشینه درست‌نمایی را برای آن بیابید.
+\item آیا این تخمین‌گر بی‌گرایش \lr{(unbiased)} است؟ تخمین‌گر بدون گرایش برای $n$ برحسب $X$ چه خواهد بود؟
+\end{itemize}
+\begin{solution}
+تابع درست‌نمایی \lr{(likelihood)} مطابق زیر قابل نوشتن است ($n\in\{1,2,3,\ldots\}$ پارامتر و $X$ ثابت):
+\[
+\Prob(X;n)=\frac1n\,\ind_{X\le n}.
+\]
+برای $n<X$ مقدار صفر است (کارتی با عدد $X$ در جعبه نیست) و برای $n\ge X$ برابر $\frac1n$ است که با $n$ کاهش می‌یابد. پس کوچک‌ترین $n$ مجاز را انتخاب می‌کنیم. لذا، می‌توان به راحتی دید که داریم:
+\[
+\boxed{\ \hat n_\ML=X\ }
+\]
+(این همتای گسسته مثال توزیع یکنواخت پیوسته است: بیشینه درست‌نمایی روی لبه تکیه‌گاه.)
+
+اما این تخمین‌گر \lr{Unbiased} نیست، چرا که داریم
+\[
+\E X=\frac1n(1+2+\cdots+n)=\frac1n\cdot\frac{n(n+1)}{2}=\frac{n+1}{2}\ne n\qquad(n\ge2).
+\]
+گرایش $n-\frac{n+1}2=\frac{n-1}2$ است (و بر خلاف مثال‌های قبل، به صفر میل نمی‌کند؛ چون همیشه فقط یک کارت داریم و «$n\to\infty$ نمونه» معنا ندارد).
+
+\textbf{تخمین‌گر بی‌گرایش:} از $\E X=\frac{n+1}{2}$ داریم $n=2\E X-1=\E(2X-1)$. پس می‌توان تحقیق نمود که تخمین‌گر
+\[
+\boxed{\ \hat n_*=2X-1\ }
+\]
+یک تخمین‌گر \textbf{بدون گرایش} برای $n$ است: $\E\hat n_*=2\cdot\frac{n+1}{2}-1=n$. اما دیگر از حیث بیشینه درست‌نمایی \textbf{بهینه} نیست (برای $X\ge2$ داریم $2X-1>X$ و $\frac{1}{2X-1}<\frac1X$).
+
+\textbf{مقایسه \lr{MSE} (فراتر از اسلاید).} با $\Var X=\frac{n^2-1}{12}$ (یکنواخت گسسته):
+\[
+\begin{aligned}
+\mathrm{MSE}(\hat n_*)&=\Var(2X-1)=\frac{n^2-1}{3},\\
+\mathrm{MSE}(\hat n_\ML)&=\Var X+\Big(\frac{n-1}2\Big)^2=\frac{(n-1)(2n-1)}{6}.
+\end{aligned}
+\]
+چون $(n-1)(2n-1)\le2(n-1)(n+1)$، تخمین‌گر \lr{ML} (با وجود گرایش) \lr{MSE} کمتری دارد! مثلاً برای $n=10$: $28.5$ در برابر $33$. باز هم مصالحه گرایش--واریانس.
+\end{solution}
+\end{example}
+
+\section{بهینه‌سازی دومتغیره با تابع هدف مشتق‌پذیر: گاوسی با میانگین و واریانس نامعلوم}
+
+\begin{example}[تخمین همزمان میانگین و واریانس توزیع گاوسی]
+فرض کنید متغیر تصادفی $X\sim\mathcal N(\mu,\sigma^2)$ به ترتیب دارای میانگین و واریانس نامعلوم $\mu$ و $\sigma^2$ باشد. در صورتی که نمونه‌های $X_1,\ldots,X_n$ به صورت \lr{i.i.d.} از این توزیع گرفته شده باشند، تخمین‌گر \lr{MLE} برای زوج مرتب $\theta=(\mu,\sigma^2)$ را به دست آورید.
+\begin{solution}
+\[
+f_X(x;\theta)=\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x-\mu)^2}{2\sigma^2}}
+\ \Rightarrow\
+\prod_{i=1}^nf_X(X_i;\theta)=\Big(\frac{1}{\sqrt{2\pi}\sigma}\Big)^n\exp\Big[-\sum_{i=1}^n\frac{(X_i-\mu)^2}{2\sigma^2}\Big]
+\]
+\[
+\Rightarrow\ LL(\theta;X_{1:n})=-n\log\sigma-\sum_{i=1}^n\frac{(X_i-\mu)^2}{2\sigma^2}+\mathrm{const}.
+\]
+اکنون $LL$ تابعی از \textbf{دو} متغیر است و در نقطه بیشینه باید \textbf{گرادیان} صفر شود؛ یعنی هر دو مشتق جزئی:
+\[
+\frac{\partial}{\partial\mu}LL(\theta;X_{1:n})=\sum_{i=1}^n\frac{X_i-\mu}{\sigma^2}=0
+\quad\Rightarrow\quad
+\boxed{\ \hat\mu_\ML=\bar X_n=\frac1n\sum_{i=1}^nX_i\ }
+\]
+\[
+\frac{\partial}{\partial\sigma}LL(\theta;X_{1:n})=-\frac n\sigma+\sum_{i=1}^n\frac{(X_i-\mu)^2}{\sigma^3}=0
+\quad\Rightarrow\quad
+\boxed{\ \hat\sigma^2_\ML=\frac1n\sum_{i=1}^n\big(X_i-\bar X_n\big)^2\ }
+\]
+(در معادله دوم $\mu$ را با جواب معادله اول، $\bar X_n$، جایگزین کرده‌ایم. در اسلاید، در مشتق نسبت به $\mu$ یک ضریب $2$ اضافه نوشته شده است؛ چون عبارت برابر صفر قرار می‌گیرد، در جواب اثری ندارد.)
+
+\textbf{بیشینه سراسری بودن.} برای هر $\sigma$ ثابت، $LL$ برحسب $\mu$ فقط از طریق $-\sum(X_i-\mu)^2$ وابسته است که در $\mu=\bar X_n$ بیشینه می‌شود ــ \textbf{مستقل از} $\sigma$. پس می‌توان ابتدا $\mu=\bar X_n$ گذاشت و سپس تابع یک‌متغیره $-n\log\sigma-\frac{\sum(X_i-\bar X)^2}{2\sigma^2}$ را برحسب $\sigma$ بیشینه کرد؛ این دقیقاً مثال جلسه قبل (با $\mu$ معلوم) است و بیشینه یکتایش در جواب بالاست. (بررسی با ماتریس هسین: در نقطه جواب $\frac{\partial^2LL}{\partial\mu^2}=-\frac{n}{\hat\sigma^2}$، $\frac{\partial^2LL}{\partial\sigma^2}=-\frac{2n}{\hat\sigma^2}$ و مشتق مختلط صفر است؛ ماتریس معین منفی است.)
+\end{solution}
+\end{example}
+
+\subsection{خواص تخمین بیشینه درست‌نمایی در این مثال}
+\begin{itemize}
+\item واضح است که تخمین‌گر \lr{MLE} برای میانگین $\mu$ در اینجا \textbf{بدون گرایش} است (چون مشابه با حالتی است که واریانس $\sigma^2$ معلوم بود).
+\item اما، در مورد $\hat\sigma^2_\ML$ چه چیزی می‌توان گفت؟
+\[
+\E\hat\sigma^2_\ML=\frac1n\sum_{i=1}^n\E\Big(\big(X_i-\bar X_n\big)^2\Big),
+\]
+\[
+\E\Big(\big(X_i-\bar X_n\big)^2\Big)=\E\big[X_i^2+\bar X_n^2-2X_i\bar X_n\big]=\E\big[X_i^2\big]+\E\big[\bar X_n^2\big]-2\E\big[X_i\bar X_n\big].
+\]
+با توجه به اینکه $\E[X_iX_j]=\mu^2$ برای $i\ne j$ (استقلال) و $\E[X_i^2]=\mu^2+\sigma^2$:
+\[
+\begin{aligned}
+\E\big[X_i^2\big]&=\mu^2+\sigma^2,\\
+\E\big[\bar X_n^2\big]&=\frac{1}{n^2}\sum_{i,j=1}^n\E\big[X_iX_j\big]=\frac{1}{n^2}\big[n(\mu^2+\sigma^2)+n(n-1)\mu^2\big]=\mu^2+\frac{\sigma^2}{n},\\
+\E\big[X_i\bar X_n\big]&=\frac1n\sum_{j=1}^n\E\big[X_iX_j\big]=\frac1n\big[(\mu^2+\sigma^2)+(n-1)\mu^2\big]=\mu^2+\frac{\sigma^2}{n}.
+\end{aligned}
+\]
+پس $\E\big((X_i-\bar X_n)^2\big)=\mu^2+\sigma^2+\mu^2+\frac{\sigma^2}n-2\mu^2-\frac{2\sigma^2}{n}=\frac{n-1}{n}\sigma^2$ و
+\[
+\Rightarrow\quad\boxed{\ \E\hat\sigma^2_\ML=\Big(\frac{n-1}{n}\Big)\sigma^2\ }
+\]
+یعنی $\hat\sigma^2_\ML$ \textbf{گرایش‌دار} است و واریانس را به طور متوسط \textbf{کمتر} برآورد می‌کند (هرچند گرایش $\frac{\sigma^2}{n}$ با $n\to\infty$ صفر می‌شود و تخمین‌گر سازگار است).
+\end{itemize}
+
+\begin{note}
+\notetitle \textbf{شهود و اثبات دوم.} چون $\bar X_n$ مقدار $c$ ای است که $\sum_i(X_i-c)^2$ را \textbf{کمینه} می‌کند، همواره $\sum_i(X_i-\bar X_n)^2\le\sum_i(X_i-\mu)^2$: داده‌ها به میانگین نمونه‌ای خودشان نزدیک‌ترند تا به میانگین واقعی. دقیق‌تر، با نوشتن $X_i-\mu=(X_i-\bar X_n)+(\bar X_n-\mu)$:
+\[
+\sum_{i=1}^n(X_i-\mu)^2=\sum_{i=1}^n(X_i-\bar X_n)^2+n(\bar X_n-\mu)^2
+\]
+(جمله ضرب متقابل صفر است چون $\sum_i(X_i-\bar X_n)=0$). با امید گرفتن: $n\sigma^2=\E\sum_i(X_i-\bar X_n)^2+n\cdot\frac{\sigma^2}{n}$، پس $\E\sum_i(X_i-\bar X_n)^2=(n-1)\sigma^2$. اصطلاحاً با تخمین $\mu$ از روی همان داده‌ها، یک «درجه آزادی» از دست می‌رود.
+\end{note}
+
+\subsection{تخمین بدون گرایش \lr{(Unbiased)} برای $\sigma^2$}
+\begin{itemize}
+\item در یک توزیع گاوسی، در صورتی که مقدار واقعی میانگین را ندانیم و بخواهیم از تخمین‌گر بیشینه درست‌نمایی برای تخمین واریانس استفاده کنیم، ناچار هستیم تا میانگین را با تخمین میانگین نمونه‌ای \lr{(Sample Mean)} جایگزین کنیم.
+\item در این حالت، تخمین‌گر واریانس نمونه‌ای \lr{(Sample Variance)} دارای گرایش \lr{(Biased)} خواهد شد.
+\item یک تخمین‌گر بدون بایاس برای واریانس نمونه‌ای به شکل زیر است:
+\[
+\boxed{\ \hat\sigma^2_{UB}=\frac{1}{n-1}\sum_{i=1}^n\big(X_i-\bar X_n\big)^2=\frac{n}{n-1}\,\hat\sigma^2_\ML\ }
+\qquad\Rightarrow\qquad\E\hat\sigma^2_{UB}=\frac{n}{n-1}\cdot\frac{n-1}{n}\sigma^2=\sigma^2 .
+\]
+(این همان $S^2$ جلسات ۱۸ و ۱۹ است.)
+\item اما این تخمین‌گر از حیث بیشینه درست‌نمایی \textbf{بهینه نیست} (بیشینه درست‌نمایی فقط در $\hat\sigma^2_\ML$ رخ می‌دهد).
+\end{itemize}
+
+\begin{note}
+\notetitle \textbf{کدام بهتر است؟} از نظر \lr{MSE}، طبق جدول جلسه ۲۰: $\mathrm{MSE}(\hat\sigma^2_{UB})=\frac{2\sigma^4}{n-1}$ و $\mathrm{MSE}(\hat\sigma^2_\ML)=\frac{(2n-1)\sigma^4}{n^2}$ که دومی همواره کوچک‌تر است (و کوچک‌ترین \lr{MSE} در این خانواده با ضریب $\frac{1}{n+1}$ به دست می‌آید). بنابراین «بی‌گرایش» و «بهینه از نظر خطا» دو معیار متفاوت‌اند. در عمل $S^2$ به دلیل بی‌گرایش بودن و نقش آن در آزمون‌ها و بازه‌های اطمینان (توزیع $t$) رایج‌تر است؛ برای $n$ بزرگ تفاوت ناچیز است.
+\end{note}
+
+\begin{example}[یک محاسبه عددی]
+برای داده‌های $4.2,\ 5.1,\ 3.8,\ 4.9,\ 5.6,\ 4.4$ (این بار بدون دانستن $\sigma$)، \lr{MLE} زوج $(\mu,\sigma^2)$ و تخمین بی‌گرایش واریانس را بیابید.
+\begin{solution}
+$\hat\mu_\ML=\bar X=\frac{28}{6}\approx4.667$. انحراف‌ها از میانگین و مجموع مربعات آن‌ها:
+\[
+X_i-\bar X:\quad -0.467,\ \ 0.433,\ \ -0.867,\ \ 0.233,\ \ 0.933,\ \ -0.267
+\]
+\[
+\Rightarrow\quad\sum_i(X_i-\bar X)^2\approx2.153 .
+\]
+پس
+\[
+\hat\sigma^2_\ML=\frac{2.153}{6}\approx0.359,\qquad\hat\sigma^2_{UB}=\frac{2.153}{5}\approx0.431,\qquad\hat\sigma_\ML=\sqrt{0.359}\approx0.599 .
+\]
+(طبق ناوردایی، $\hat\sigma_\ML=\sqrt{\hat\sigma^2_\ML}$ است.)
+\end{solution}
+\end{example}
+
+\begin{summarybox}[جمع‌بندی: انواع مسائل بهینه‌سازی در \lr{MLE}]
+\begin{center}
+\renewcommand{\arraystretch}{1.45}
+\begin{tabular}{>{\raggedright\arraybackslash}p{3.8cm}|>{\raggedright\arraybackslash}p{4.3cm}|>{\raggedright\arraybackslash}p{5.3cm}}
+نوع مسئله & مثال & روش حل\\\hline
+مشتق‌پذیر، یک پارامتر & گاوسی، برنولی، پواسون، نمایی & حل $\frac{\dd}{\dd\theta}LL=0$ و بررسی بیشینه\\
+مشتق‌پذیر، چند پارامتر & گاوسی با $(\mu,\sigma^2)$ نامعلوم & صفر کردن گرادیان (همه مشتقات جزئی)\\
+مشتق‌ناپذیر (تکیه‌گاه وابسته به $\theta$) & $\mathcal U(0,\theta)$، کارت‌ها & بررسی مستقیم شکل $L(\theta)$؛ جواب روی لبه\\
+گسسته/ترکیبیاتی & کانال نویزی & جست‌وجو در فضای گسسته؛ ممکن است \lr{NP}-سخت باشد
+\end{tabular}
+\end{center}
+در اغلب این مثال‌ها \lr{MLE} سازگار است ولی ممکن است گرایش داشته باشد؛ اصلاح گرایش (مانند $\frac{n+1}{n}\max$، $2X-1$ و $\frac{1}{n-1}$) تخمین‌گر بی‌گرایش می‌دهد که دیگر \lr{MLE} نیست و لزوماً \lr{MSE} کمتری هم ندارد.
+\end{summarybox}
+
+\section{تمرین‌های تکمیلی}
+
+\begin{exercise}[کد تکرار]
+برای ارسال یک بیت $b\in\{0,1\}$ روی کانال دودویی متقارن با $\varepsilon<\frac12$، آن را سه بار تکرار می‌کنیم ($000$ یا $111$). (الف) \lr{MLE} بیت ارسالی را برحسب رشته دریافتی بیابید. (ب) احتمال خطای این تخمین را حساب کنید و برای $\varepsilon=0.1$ با ارسال بدون کد مقایسه کنید.
+\end{exercise}
+\begin{solution}
+(الف) $\mathcal C=\{000,111\}$ و طبق حالت ۱ مثال کانال نویزی، کلمه کد نزدیک‌تر به $y$ انتخاب می‌شود: اگر حداقل دو بیت $y$ برابر ۱ باشد، $\hat b=1$ وگرنه $\hat b=0$ (\textbf{رأی اکثریت}). اینجا \lr{MLE} همواره یکتاست چون فاصله‌ها $d$ و $3-d$ هرگز برابر نیستند.
+(ب) خطا وقتی رخ می‌دهد که حداقل دو بیت از سه بیت عوض شوند:
+\[
+P_e=\binom32\varepsilon^2(1-\varepsilon)+\varepsilon^3=3(0.01)(0.9)+0.001=0.028,
+\]
+در مقایسه با $0.1$ بدون کد (به قیمت سه برابر شدن طول ارسال).
+\end{solution}
+
+\begin{exercise}[مسئله تانک آلمانی]
+تانک‌های دشمن با شماره‌های سریال $1,2,\ldots,N$ شماره‌گذاری شده‌اند ($N$ نامعلوم). شماره $k$ تانک (بدون جایگذاری و به تصادف) مشاهده شده و بزرگ‌ترین آن‌ها $M$ است. (الف) \lr{MLE} مقدار $N$ را بیابید. (ب) نشان دهید $\E M=\frac{k(N+1)}{k+1}$ و یک تخمین‌گر بی‌گرایش بسازید. (ج) برای مشاهدات $19,40,42,60$ هر دو تخمین را حساب کنید.
+\end{exercise}
+\begin{solution}
+(الف) هر زیرمجموعه $k$تایی هم‌احتمال است: احتمال مشاهده این مجموعه خاص $1/\binom Nk$ برای $N\ge M$ و صفر برای $N<M$ است. چون $\binom Nk$ با $N$ صعودی است، درست‌نمایی نزولی است و $\hat N_\ML=M$ (تعمیم مثال کارت‌ها با $k=1$).
+
+(ب) $\Prob(M=m)=\binom{m-1}{k-1}/\binom Nk$ (یک تانک شماره $m$ دارد و $k-1$ تای دیگر از $m-1$ شماره کوچک‌تر). با اتحاد $m\binom{m-1}{k-1}=k\binom mk$ و اتحاد چوب هاکی $\sum_{m=k}^N\binom mk=\binom{N+1}{k+1}$:
+\[
+\E M=\frac{k}{\binom Nk}\sum_{m=k}^N\binom mk=\frac{k\binom{N+1}{k+1}}{\binom Nk}=\frac{k(N+1)}{k+1}.
+\]
+پس $\hat N_*=\frac{k+1}{k}M-1=M+\frac Mk-1$ بی‌گرایش است (برای $k=1$ همان $2X-1$).
+
+(ج) $k=4$، $M=60$: $\hat N_\ML=60$ و $\hat N_*=60\cdot\frac54-1=74$.
+\end{solution}
+
+\begin{exercise}
+نمونه‌های \lr{i.i.d.} از $\mathcal U(-\theta,\theta)$ داریم. \lr{MLE} پارامتر $\theta$ را بیابید.
+\end{exercise}
+\begin{solution}
+$L(\theta)=(2\theta)^{-n}\ind_{\theta\ge|X_i|\ \forall i}=(2\theta)^{-n}\ind_{\theta\ge\max_i|X_i|}$. نزولی روی ناحیه مجاز؛ پس $\hat\theta_\ML=\max_i|X_i|$.
+\end{solution}
+
+\begin{exercise}[نمایی انتقال‌یافته]
+نمونه‌های \lr{i.i.d.} با چگالی $f(x;\theta)=e^{-(x-\theta)}$ برای $x\ge\theta$ داریم. \lr{MLE} پارامتر $\theta$ را بیابید، گرایش آن را حساب کرده و آن را اصلاح کنید.
+\end{exercise}
+\begin{solution}
+$L(\theta)=e^{-\sum_i(X_i-\theta)}\ind_{\theta\le\min_iX_i}=e^{-\sum_iX_i}e^{n\theta}\ind_{\theta\le\min_iX_i}$ که روی ناحیه مجاز \textbf{صعودی} است؛ پس بزرگ‌ترین مقدار مجاز: $\hat\theta_\ML=\min_iX_i$.
+\textbf{گرایش:} $\Prob(\min_iX_i-\theta>t)=\prod_i\Prob(X_i-\theta>t)=e^{-nt}$؛ پس $\min_iX_i-\theta\sim\mathrm{Exp}(n)$ و $\E\hat\theta_\ML=\theta+\frac1n$. تخمین‌گر بی‌گرایش: $\min_iX_i-\frac1n$. (هر دو سازگارند.)
+\end{solution}
+
+\begin{exercise}[\lr{MLE} یکتا نیست]
+نمونه‌های \lr{i.i.d.} از $\mathcal U(\theta,\theta+1)$ داریم. نشان دهید \lr{MLE} یکتا نیست.
+\end{exercise}
+\begin{solution}
+$L(\theta)=\prod_i\ind_{\theta\le X_i\le\theta+1}=\ind_{\max_iX_i-1\le\theta\le\min_iX_i}$. درست‌نمایی روی کل بازه $[\max_iX_i-1,\ \min_iX_i]$ (که ناتهی است چون $\max-\min\le1$) برابر $1$ و بیرون آن صفر است. پس \textbf{هر} نقطه این بازه یک \lr{MLE} است؛ مثلاً نقطه وسط $\frac{\min_iX_i+\max_iX_i-1}{2}$ انتخابی متقارن و معقول است.
+\end{solution}
+
+\begin{exercise}
+نمونه‌های \lr{i.i.d.} از $\mathcal U(a,b)$ با هر دو پارامتر نامعلوم داریم. \lr{MLE} زوج $(a,b)$ را بیابید.
+\end{exercise}
+\begin{solution}
+$L(a,b)=(b-a)^{-n}\ind_{a\le\min_iX_i}\ind_{b\ge\max_iX_i}$. برای بیشینه کردن، $b-a$ باید تا حد امکان کوچک باشد، یعنی $a$ تا حد امکان بزرگ و $b$ تا حد امکان کوچک: $\hat a_\ML=\min_iX_i$ و $\hat b_\ML=\max_iX_i$.
+\end{solution}
+
+\begin{exercise}[توزیع لاپلاس و میانه]
+نمونه‌های \lr{i.i.d.} با چگالی $f(x;\theta)=\frac12e^{-|x-\theta|}$ داریم. نشان دهید \lr{MLE} پارامتر $\theta$ \textbf{میانه نمونه‌ای} است و آن را برای داده‌های $2,7,3,10,4$ حساب کنید.
+\end{exercise}
+\begin{solution}
+$LL(\theta)=-n\log2-\sum_i|X_i-\theta|$؛ پس باید $g(\theta)=\sum_i|X_i-\theta|$ را کمینه کرد (تابعی مشتق‌ناپذیر در نقاط $X_i$). در هر نقطه غیر از داده‌ها:
+\[
+g'(\theta)=\#\{i:X_i<\theta\}-\#\{i:X_i>\theta\}.
+\]
+تا وقتی تعداد نمونه‌های سمت چپ کمتر از راست است $g$ نزولی، و پس از آن صعودی است؛ پس کمینه در \textbf{میانه} رخ می‌دهد (برای $n$ فرد یکتا؛ برای $n$ زوج هر نقطه بین دو داده وسطی). داده‌های مرتب: $2,3,4,7,10$؛ پس $\hat\theta_\ML=4$ (در حالی که میانگین $5.2$ است و تحت تأثیر داده پرت $10$ قرار گرفته است؛ میانه نسبت به داده‌های پرت \textbf{مقاوم} است).
+\end{solution}
+
+\begin{exercise}
+نشان دهید برای نمونه‌های گاوسی با $\mu,\sigma^2$ نامعلوم، $\hat\sigma^2_\ML$ سازگار است.
+\end{exercise}
+\begin{solution}
+با اتحاد بالا: $\hat\sigma^2_\ML=\frac1n\sum_i(X_i-\mu)^2-(\bar X_n-\mu)^2$. طبق قانون اعداد بزرگ جمله اول به $\sigma^2$ و $\bar X_n\to\mu$؛ پس جمله دوم به صفر میل می‌کند و $\hat\sigma^2_\ML\to\sigma^2$. (روش دیگر: گرایش $\frac{\sigma^2}{n}$ و واریانس $\frac{2(n-1)\sigma^4}{n^2}$ هر دو به صفر میل می‌کنند.)
+\end{solution}

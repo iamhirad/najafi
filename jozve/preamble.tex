@@ -24,6 +24,8 @@
 \setlatintextfont{Latin Modern Roman}
 \linespread{1.3}
 \setlength{\emergencystretch}{3em}
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
 
 % ---------- colors ----------
 \definecolor{defcol}{HTML}{1F5FA8}
@@ -93,6 +95,9 @@
 \newcommand{\dd}{\,\mathrm{d}}
 \newcommand{\en}[1]{\lr{#1}}
 \newcommand{\mtxt}[1]{\text{\lr{#1}}}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\newcommand{\ML}{\mathrm{ML}}
 
 % ---------- lists ----------
 \setlist{itemsep=2pt,topsep=4pt}
