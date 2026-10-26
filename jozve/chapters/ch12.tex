@@ -165,10 +165,10 @@ $\Prob\big(F_Z^{-1}(Y)\le z\big)=\Prob\big(Y\le F_Z(z)\big)=F_Z(z)$، زیرا �
 \end{proof}
 
 \begin{center}
-\begin{tikzpicture}[>=Stealth,node distance=4.2cm,box/.style={draw,thick,rounded corners,minimum width=2.8cm,minimum height=1cm,align=center}]
-\node[box,fill=blue!8] (X) {$X\sim F_X$\\ (هر توزیع)};
-\node[box,fill=green!10,right of=X] (U) {$U\sim\mathcal U(0,1)$};
-\node[box,fill=red!8,right of=U] (Z) {$Z\sim F_Z$\\ (توزیع دلخواه)};
+\begin{tikzpicture}[>=Stealth,box/.style={draw,thick,rounded corners,minimum width=2.6cm,minimum height=1.1cm,align=center}]
+\node[box,fill=blue!8] (X) at (0,0) {$X\sim F_X$\\ \small(هر توزیع)};
+\node[box,fill=green!10] (U) at (5.6,0) {$U\sim\mathcal U(0,1)$};
+\node[box,fill=red!8] (Z) at (11.2,0) {$Z\sim F_Z$\\ \small(توزیع دلخواه)};
 \draw[->,very thick] (X) -- node[above]{$U=F_X(X)$} (U);
 \draw[->,very thick] (U) -- node[above]{$Z=F_Z^{-1}(U)$} (Z);
 \end{tikzpicture}
