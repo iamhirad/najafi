@@ -1,0 +1,255 @@
+% ===============================================================
+%  جلسه چهاردهم
+% ===============================================================
+\chapter{چگالی شرطی، میانگین شرطی و متغیرهای مشترکاً گاوسی}
+
+\section{یادآوری: توزیع مشترک چند متغیر تصادفی}
+
+متغیرهای تصادفی $X_1,\ldots,X_n$ دارای تابع توزیع انباشته مشترک
+$F_{X_1,\ldots,X_n}(x_1,\ldots,x_n)=\Prob(X_1\le x_1,\ldots,X_n\le x_n)$
+هستند و مستقل نامیده می‌شوند اگر و تنها اگر $F_{X_1,\ldots,X_n}=\prod_iF_{X_i}(x_i)$. تابع چگالی مشترک
+$f_{X_1,\ldots,X_n}=\frac{\partial^n}{\partial x_1\cdots\partial x_n}F_{X_1,\ldots,X_n}$
+است و برای به دست آوردن چگالی هر زیرمجموعه از متغیرها، بر روی تمامی اندیس‌هایی که در آن زیرمجموعه نیستند انتگرال می‌گیریم (حاشیه‌سازی).
+
+\section{نکته جانبی: توابعی از متغیرهای مستقل}
+
+\begin{theorem}
+به ازای هر دو تابعی مانند $g,h$، و در صورتی که متغیرهای تصادفی $X,Y$ \textbf{مستقل} باشند، متغیرهای تصادفی $h(X)$ و $g(Y)$ هم \textbf{مستقل}‌اند.
+\end{theorem}
+\begin{proof}
+برای مجموعه‌های دلخواه $A,B$:
+\[
+\Prob\big(h(X)\in A,\ g(Y)\in B\big)=\Prob\big(X\in h^{-1}(A),\ Y\in g^{-1}(B)\big)=\Prob\big(X\in h^{-1}(A)\big)\Prob\big(Y\in g^{-1}(B)\big),
+\]
+که برابر $\Prob(h(X)\in A)\Prob(g(Y)\in B)$ است. (در اینجا $h^{-1}(A)=\{x:h(x)\in A\}$ پیش‌نگاره است و از تعریف استقلال $X,Y$ برای مجموعه‌های پیش‌نگاره استفاده کردیم.)
+\end{proof}
+مثال: اگر $X,Y$ مستقل باشند، $X^2$ و $e^Y$ نیز مستقل‌اند. (ما از این نتیجه در جلسه دهم استفاده کردیم: $X-\mu_X$ و $Y-\mu_Y$ مستقل‌اند.)
+
+\section{توابع چگالی احتمال شرطی و قانون بیز \lr{(Bayes' Rule)}}
+
+\subsection{تابع چگالی احتمال شرطی}
+\begin{definition}[چگالی و توزیع شرطی]
+مشابه با حالت گسسته، توابع توزیع انباشته و چگالی احتمال شرطی برای دو متغیر تصادفی $X,Y$ را به صورت زیر تعریف می‌کنیم:
+\[
+F_{X|Y}(x\given y)=\Prob(X\le x\given Y=y),\qquad
+f_{X|Y}(x\given y)=\frac{f_{XY}(x,y)}{f_Y(y)}\quad(f_Y(y)>0).
+\]
+دقت کنید که همواره داریم:
+\[
+f_Y(y)=\int_{-\infty}^{\infty}f_{XY}(x,y)\dd x .
+\]
+\end{definition}
+
+\begin{note}
+\notetitle برای متغیر پیوسته $\Prob(Y=y)=0$؛ پس تعریف احتمال شرطی جلسه چهارم مستقیماً قابل استفاده نیست. تعریف بالا در واقع حد $\Prob(X\le x\given y\le Y\le y+\varepsilon)$ وقتی $\varepsilon\to0$ است. \textbf{تعبیر هندسی:} $f_{X|Y}(\cdot\given y)$ برشی از سطح $f_{XY}$ در امتداد خط $Y=y$ است که برای بهنجار شدن (مساحت ۱) بر مساحت آن برش، یعنی $f_Y(y)$، تقسیم شده است. به ازای هر $y$ ثابت، $f_{X|Y}(\cdot\given y)$ یک چگالی معتبر بر حسب $x$ است.
+\end{note}
+
+\subsection{قانون بیز و قانون زنجیره‌ای}
+\begin{theorem}[قانون بیز برای چگالی‌ها]
+قانون بیز (\lr{Bayes' rule}) نیز مشابه با قبل برقرار خواهد بود:
+\[
+f_{X|Y}(x\given y)=\frac{f_{Y|X}(y\given x)\,f_X(x)}{f_Y(y)},\qquad f_Y(y)=\int f_{Y|X}(y\given x)f_X(x)\dd x .
+\]
+\end{theorem}
+\begin{theorem}[قانون زنجیره‌ای]
+دقت کنید که همواره داریم:
+\[
+f_{X_1,\ldots,X_n}(x_1,\ldots,x_n)=f_{X_1}(x_1)\cdot f_{X_2|X_1}(x_2\given x_1)\cdot f_{X_3|X_2,X_1}(x_3\given x_2,x_1)\cdots
+\]
+\end{theorem}
+(اثبات هر دو، مانند حالت رویدادها، مستقیماً از تعریف چگالی شرطی به دست می‌آید.) مثال سکه با احتمال نامعلوم در جلسه نهم، دقیقاً کاربرد قانون بیز در حالت مخلوط (پیوسته--گسسته) بود.
+
+\begin{example}[چگالی شرطی روی مثلث]
+در مثال جلسه قبل، $(X,Y)$ یکنواخت روی مثلث $0\le y\le x\le1$ بود ($f_{XY}=2$، $f_X(x)=2x$، $f_Y(y)=2(1-y)$). $f_{Y|X}(y\given x)$ و $f_{X|Y}(x\given y)$ را بیابید.
+\begin{solution}
+\[
+f_{Y|X}(y\given x)=\frac{2}{2x}=\frac1x,\quad 0\le y\le x;\qquad
+f_{X|Y}(x\given y)=\frac{2}{2(1-y)}=\frac{1}{1-y},\quad y\le x\le1 .
+\]
+یعنی به شرط $X=x$، $Y$ یکنواخت روی $[0,x]$ است و به شرط $Y=y$، $X$ یکنواخت روی $[y,1]$ است. (برش یک چگالی ثابت، یکنواخت است.)
+\end{solution}
+\end{example}
+
+\section{میانگین‌گیری و میانگین‌های شرطی}
+
+\subsection{میانگین}
+میانگین هر یک از متغیرهای تصادفی $X,Y$ مشابه با قبل محاسبه می‌شود:
+\[
+\E(X)=\int_\R xf_X(x)\dd x=\iint_{\R^2}xf_{XY}(x,y)\dd x\dd y .
+\]
+همچنین میانگین، کماکان خاصیت خطی خود را حفظ خواهد کرد:
+\[
+\E(X+Y)=\iint_{\R^2}(x+y)f_{XY}(x,y)\dd x\dd y=\E(X)+\E(Y).
+\]
+(با شکستن انتگرال به دو قسمت و حاشیه‌سازی در هر قسمت.)
+
+\subsection{میانگین شرطی \lr{(Conditional Expectation)}}
+\begin{definition}[میانگین شرطی]
+میانگین شرطی متغیر تصادفی $X$ به شرط $Y$ به صورت زیر تعریف می‌شود:
+\[
+\E(X\given Y)=\int_\R xf_{X|Y}(x\given Y)\dd x .
+\]
+\end{definition}
+\begin{itemize}
+\item مقدار میانگین $\E(X)$ یک عدد ثابت و یقینی، اما $\E(X\given Y)$ در حالت کلی یک \textcolor{red!70!black}{\textbf{متغیر تصادفی}} است (چون همه چیز کماکان به $Y$ بستگی دارد). دقیق‌تر: ابتدا برای هر عدد $y$ تابع $\psi(y)=\E(X\given Y=y)$ را حساب می‌کنیم؛ سپس $\E(X\given Y)=\psi(Y)$ تابعی از متغیر تصادفی $Y$ است.
+\end{itemize}
+
+\begin{theorem}[قانون میانگین کل \lr{(Law of Total Expectation)}]
+\[
+\boxed{\ \E\big(\E(X\given Y)\big)=\E(X)\ }
+\]
+\end{theorem}
+\begin{proof}
+\[
+\E\big(\E(X\given Y)\big)=\int\Big(\int xf_{X|Y}(x\given y)\dd x\Big)f_Y(y)\dd y=\iint xf_{XY}(x,y)\dd x\dd y=\E(X).
+\]
+(از $f_{X|Y}(x\given y)f_Y(y)=f_{XY}(x,y)$ استفاده شد.)
+\end{proof}
+این رابطه نسخه «میانگینی» قانون احتمال کل است: برای محاسبه میانگین، ابتدا به ازای هر حالت ممکن $Y$ میانگین را حساب کنید، سپس روی حالت‌ها وزن‌دار میانگین بگیرید. در حالت گسسته: $\E X=\sum_y\E(X\given Y=y)\Prob(Y=y)$.
+
+\begin{example}[تعداد کل مشتری‌ها ــ جمع تصادفی]
+تعداد مشتریانی که در یک روز وارد فروشگاه می‌شوند $N\sim\mathrm{Pois}(50)$ است و هر مشتری مستقلاً به طور متوسط ۲۰ هزار تومان خرید می‌کند. میانگین فروش روزانه چقدر است؟
+\begin{solution}
+فروش کل $S=\sum_{i=1}^NX_i$ است. به شرط $N=n$، $\E(S\given N=n)=20n$؛ پس $\E(S\given N)=20N$ و
+$\E(S)=\E(\E(S\given N))=20\E(N)=1000$ هزار تومان. (توجه: $N$ خودش تصادفی است و نمی‌توان مستقیماً از خاصیت خطی با تعداد ثابت جمله استفاده کرد.)
+\end{solution}
+\end{example}
+
+\begin{example}[چوب شکسته]
+چوبی به طول ۱ را در نقطه تصادفی یکنواخت $U$ می‌شکنیم و تکه چپ (به طول $U$) را دوباره در نقطه‌ای یکنواخت می‌شکنیم. میانگین طول تکه چپِ نهایی چقدر است؟
+\begin{solution}
+اگر $X$ طول نهایی باشد، به شرط $U=u$، $X\sim\mathcal U(0,u)$ و $\E(X\given U)=\frac U2$. پس $\E X=\E\big(\frac U2\big)=\frac14$.
+\end{solution}
+\end{example}
+
+\section[متغیرهای تصادفی مشترکاً گاوسی]{متغیرهای تصادفی مشترکاً گاوسی {\large\lr{(Jointly Gaussian R.V.s)}}}
+
+\subsection{تعریف}
+دو متغیر تصادفی گاوسی $X\sim\mathcal N(\mu,\sigma^2)$ و $Y\sim\mathcal N(\mu',\sigma'^2)$ را در نظر بگیرید. می‌دانیم که توزیع مشترک این دو متغیر تصادفی می‌تواند بسیاری توابع مختلف باشد\ldots\ (مثلاً اگر مستقل باشند، $f_Xf_Y$؛ اگر $Y=X$ باشند، تمام جرم روی یک خط است؛ و حالت‌های عجیب‌تر دیگر.)
+
+\begin{definition}[توزیع مشترکاً بهنجار]
+می‌گوییم دو متغیر تصادفی فوق \textcolor{red!70!black}{مشترکاً گاوسی} با \textcolor{blue!60!black}{ضریب همبستگی} (\lr{Correlation Coefficient}) $r$ (به شرط $|r|<1$) هستند، اگر:
+\[
+f_{X,Y}(x,y)=A\exp\left[\frac{-1}{2(1-r^2)}\left(\frac{(x-\mu)^2}{\sigma^2}+\frac{(y-\mu')^2}{\sigma'^2}-2r\frac{(x-\mu)(y-\mu')}{\sigma\sigma'}\right)\right].
+\]
+برای شرط بهنجارش باید داشته باشیم:
+\[
+A=\frac{1}{2\pi\sigma\sigma'\sqrt{1-r^2}} .
+\]
+\end{definition}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[width=5.3cm,height=5.3cm,view={0}{90},xmin=-3,xmax=3,ymin=-3,ymax=3,title={$r=0$},xtick=\empty,ytick=\empty,axis equal image]
+\addplot3[contour gnuplot={levels={0.02,0.06,0.1,0.14},labels=false},thick,samples=40,domain=-3:3,y domain=-3:3] {exp(-(x^2+y^2)/2)/(2*pi)};
+\end{axis}
+\end{tikzpicture}
+\begin{tikzpicture}
+\begin{axis}[width=5.3cm,height=5.3cm,view={0}{90},xmin=-3,xmax=3,ymin=-3,ymax=3,title={$r=0.7$},xtick=\empty,ytick=\empty,axis equal image]
+\addplot3[contour gnuplot={levels={0.02,0.06,0.1,0.14,0.2},labels=false},thick,samples=40,domain=-3:3,y domain=-3:3] {exp(-(x^2+y^2-1.4*x*y)/(2*0.51))/(2*pi*sqrt(0.51))};
+\end{axis}
+\end{tikzpicture}
+\begin{tikzpicture}
+\begin{axis}[width=5.3cm,height=5.3cm,view={0}{90},xmin=-3,xmax=3,ymin=-3,ymax=3,title={$r=-0.9$},xtick=\empty,ytick=\empty,axis equal image]
+\addplot3[contour gnuplot={levels={0.02,0.06,0.1,0.2,0.3},labels=false},thick,samples=50,domain=-3:3,y domain=-3:3] {exp(-(x^2+y^2+1.8*x*y)/(2*0.19))/(2*pi*sqrt(0.19))};
+\end{axis}
+\end{tikzpicture}\\
+{\small منحنی‌های تراز چگالی مشترکاً گاوسی (با $\mu=\mu'=0$ و $\sigma=\sigma'=1$): بیضی‌هایی که با افزایش $|r|$ کشیده‌تر می‌شوند؛ $r>0$ یعنی گرایش به هم‌جهتی و $r<0$ یعنی خلاف‌جهتی.}
+\end{center}
+
+\begin{note}
+\notetitle \textbf{بررسی ثابت بهنجارش:} با استانداردسازی $u=\frac{x-\mu}{\sigma}$ و $v=\frac{y-\mu'}{\sigma'}$ ($\dd x\dd y=\sigma\sigma'\dd u\dd v$) و تکمیل مربع $u^2-2ruv+v^2=(u-rv)^2+(1-r^2)v^2$:
+\[
+\iint e^{-\frac{(u-rv)^2+(1-r^2)v^2}{2(1-r^2)}}\dd u\dd v=\int e^{-v^2/2}\Big(\int e^{-\frac{(u-rv)^2}{2(1-r^2)}}\dd u\Big)\dd v=\sqrt{2\pi}\cdot\sqrt{2\pi(1-r^2)} .
+\]
+پس انتگرال کل $\sigma\sigma'\cdot2\pi\sqrt{1-r^2}$ است و $A$ باید عکس آن باشد. \checkmark
+\end{note}
+
+\subsection{خواص}
+متغیرهای تصادفی $X,Y$ در صورتی که مشترکاً نرمال باشند، ویژگی‌های بسیار زیادی خواهند داشت:
+
+\begin{theorem}[خواص توزیع مشترکاً گاوسی]
+\begin{enumerate}
+\item توزیع‌های حاشیه‌ای $f_X$ و $f_Y$ هر کدام گاوسی با میانگین‌ها و واریانس‌های به ترتیب $(\mu,\sigma^2)$ و $(\mu',\sigma'^2)$ خواهند بود.
+\item در صورتی که $r=0$ باشد، متغیرهای تصادفی $X,Y$ از یکدیگر \textbf{مستقل} خواهند بود.
+\item توزیع شرطی $f_{X|Y}(x\given y)$ نیز گاوسی است:
+\[
+\boxed{\ X\given Y=y\ \sim\ \mathcal N\Big(\mu+\frac{\sigma}{\sigma'}r(y-\mu'),\ (1-r^2)\sigma^2\Big)\ }
+\]
+\item به ازای هر مقدار $a,b\in\R$، توزیع $aX+bY$ همواره گاوسی است.
+\item به ازای $a,b,c,d\in\R$، دو متغیر $aX+bY$ و $cX+dY$ مشترکاً گاوسی هستند.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+با نمادگذاری استاندارد $u,v$ بالا و تکمیل مربع:
+\[
+f_{XY}(x,y)=\underbrace{\frac{1}{\sqrt{2\pi}\sigma'}e^{-v^2/2}}_{f_Y(y)}\cdot\underbrace{\frac{1}{\sqrt{2\pi(1-r^2)}\,\sigma}\exp\Big(-\frac{(u-rv)^2}{2(1-r^2)}\Big)}_{f_{X|Y}(x\given y)} .
+\]
+(۱) با انتگرال‌گیری روی $x$، عامل دوم (که یک چگالی گاوسی بر حسب $x$ است) انتگرال ۱ دارد و $f_Y$ باقی می‌ماند که $\mathcal N(\mu',\sigma'^2)$ است. به‌طور متقارن $f_X$ نیز گاوسی است.
+(۳) عامل دوم، بر حسب $x$، گاوسی است با $u$-مرکز $rv$؛ یعنی $\frac{x-\mu}{\sigma}$ حول $r\frac{y-\mu'}{\sigma'}$ با واریانس $1-r^2$ پخش شده است. با برگرداندن به $x$: میانگین $\mu+\frac{\sigma}{\sigma'}r(y-\mu')$ و واریانس $(1-r^2)\sigma^2$.
+(۲) با $r=0$، چگالی شرطی همان $\mathcal N(\mu,\sigma^2)=f_X$ می‌شود؛ پس $f_{XY}=f_Xf_Y$.
+(۴) و (۵) را با ابزار تبدیل دو متغیره یا تابع مشخصه (جلسات بعد) می‌توان ثابت کرد.
+\end{proof}
+
+\begin{note}
+\notetitle (در اسلاید واریانس شرطی به صورت $(1-r^2)\sigma$ نوشته شده که با نماد $\mathcal N(\mu,\sigma)$ اسلاید ــ یعنی پارامتر دوم به عنوان «پراکندگی» ــ آمده است؛ در قالب استاندارد $\mathcal N(\text{میانگین},\text{واریانس})$ مقدار درست $(1-r^2)\sigma^2$ است.)
+
+\textbf{تعبیر:} میانگین شرطی $\E(X\given Y=y)$ یک تابع \emph{خطی} از $y$ است (خط رگرسیون)؛ و دانستن $Y$ واریانس $X$ را با ضریب $(1-r^2)$ کاهش می‌دهد ــ هرچه $|r|$ بزرگ‌تر، $Y$ اطلاعات بیشتری درباره $X$ دارد. در حالت $|r|\to1$، $X$ تقریباً تابع خطی قطعی از $Y$ می‌شود.
+\end{note}
+
+\begin{warning}
+\warntitle بند (۲) ویژگی خاص توزیع \emph{مشترکاً} گاوسی است: در حالت کلی، $r=0$ (ناهمبستگی) استقلال را نتیجه نمی‌دهد. همچنین «هر دو حاشیه گاوسی باشند» برای مشترکاً گاوسی بودن کافی نیست. مثال: $X\sim\mathcal N(0,1)$ و $Y=SX$ که $S=\pm1$ با احتمال برابر و مستقل از $X$ است. $Y$ نیز $\mathcal N(0,1)$ است، اما $X+Y$ با احتمال $\frac12$ دقیقاً صفر است ــ پس $X+Y$ گاوسی نیست و $(X,Y)$ مشترکاً گاوسی نیستند.
+\end{warning}
+
+\begin{question}[میانگین و واریانس $aX+bY$ چقدر است؟]
+\begin{answer}
+طبق خاصیت خطی، $\E(aX+bY)=a\mu+b\mu'$. برای واریانس:
+\[
+\Var(aX+bY)=a^2\Var X+b^2\Var Y+2ab\,\E\big[(X-\mu)(Y-\mu')\big].
+\]
+برای توزیع مشترکاً گاوسی، با قانون میانگین کل و میانگین شرطی بالا:
+\[
+\E[(X-\mu)(Y-\mu')]=\E\Big[(Y-\mu')\,\E(X-\mu\given Y)\Big]=\E\Big[(Y-\mu')\frac{\sigma}{\sigma'}r(Y-\mu')\Big]=r\sigma\sigma' .
+\]
+پس
+\[
+\boxed{\ aX+bY\sim\mathcal N\big(a\mu+b\mu',\ a^2\sigma^2+b^2\sigma'^2+2abr\sigma\sigma'\big)\ }
+\]
+(جمله $r\sigma\sigma'$ همان «کوواریانس» است که در جلسه بعد تعریف می‌شود؛ از این‌رو $r$ را ضریب همبستگی می‌نامند.) برای $r=0$ به نتیجه آشنای جمع واریانس‌ها برای متغیرهای مستقل می‌رسیم.
+\end{answer}
+\end{question}
+
+\begin{example}[قد پدر و پسر]
+قد پدر $X$ و قد پسر $Y$ (سانتی‌متر) مشترکاً گاوسی‌اند با $\mu=\mu'=175$، $\sigma=\sigma'=7$ و $r=0.5$. اگر قد پدری ۱۸۹ باشد، توزیع قد پسرش چیست؟ احتمال اینکه پسر بلندتر از ۱۸۹ باشد چقدر است؟
+\begin{solution}
+با فرمول شرطی (جای $X,Y$ عوض شده): $Y\given X=189\sim\mathcal N\big(175+0.5\times(189-175),\ (1-0.25)\times49\big)=\mathcal N(182,\ 36.75)$، یعنی انحراف معیار حدود $6.06$.
+$\Prob(Y>189\given X=189)=1-\Phi\big(\frac{189-182}{6.06}\big)=1-\Phi(1.155)\approx0.124$.
+\textbf{«بازگشت به میانگین»} (\lr{regression to the mean}): پسر یک پدر بسیار بلند، به طور متوسط بلند است اما نه به اندازه پدر ــ همین پدیده بود که واژه «رگرسیون» را به وجود آورد (گالتون).
+\end{solution}
+\end{example}
+
+\section{تمرین‌های تکمیلی}
+
+\begin{exercise}
+$f_{XY}(x,y)=e^{-y}$ برای $0<x<y$. (الف) $f_X$ و $f_Y$ را بیابید. (ب) $f_{X|Y}(x\given y)$ و $\E(X\given Y)$ را بیابید. (ج) با قانون میانگین کل، $\E X$ را حساب کنید.
+\end{exercise}
+\begin{solution}
+(الف) $f_X(x)=\int_x^\infty e^{-y}\dd y=e^{-x}$ ($x>0$)، یعنی $X\sim\mathrm{Exp}(1)$. $f_Y(y)=\int_0^ye^{-y}\dd x=ye^{-y}$ ($y>0$) ــ ارلانگ با $k=2$.
+(ب) $f_{X|Y}(x\given y)=\frac{e^{-y}}{ye^{-y}}=\frac1y$ برای $0<x<y$: یکنواخت روی $(0,y)$. پس $\E(X\given Y)=\frac Y2$.
+(ج) $\E X=\E\frac Y2=\frac12\int_0^\infty y^2e^{-y}\dd y=\frac12\cdot2=1$، که با $X\sim\mathrm{Exp}(1)$ سازگار است.
+\end{solution}
+
+\begin{exercise}
+$X,Y$ مشترکاً گاوسی با $\mu=\mu'=0$، $\sigma=1$، $\sigma'=2$ و $r=-0.5$. توزیع $Z=2X+Y$ و $\Prob(Z>2)$ را بیابید.
+\end{exercise}
+\begin{solution}
+$\E Z=0$. $\Var Z=4\cdot1+1\cdot4+2\cdot2\cdot1\cdot(-0.5)\cdot1\cdot2=4+4-4=4$. پس $Z\sim\mathcal N(0,4)$ و $\Prob(Z>2)=1-\Phi(1)\approx0.159$.
+\end{solution}
+
+\begin{exercise}
+یک سکه با احتمال شیر $P\sim\mathcal U(0,1)$ داریم (مانند جلسه نهم). احتمال اینکه پرتاب اول شیر بیاید، و احتمال اینکه دو پرتاب اول هر دو شیر بیایند، چقدر است؟ آیا دو پرتاب مستقل‌اند؟
+\end{exercise}
+\begin{solution}
+$\Prob(H_1)=\E\big(\Prob(H_1\given P)\big)=\E P=\frac12$. $\Prob(H_1H_2)=\E(P^2)=\frac13$. چون $\frac13\ne\frac14$، دو پرتاب مستقل نیستند (هرچند به شرط $P$ مستقل‌اند) ــ همان پدیده استقلال شرطی جلسه پنجم. $\Prob(H_2\given H_1)=\frac{1/3}{1/2}=\frac23$.
+\end{solution}

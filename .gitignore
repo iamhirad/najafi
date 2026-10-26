@@ -3,3 +3,4 @@ jozve/*.log
 jozve/*.out
 jozve/*.toc
 jozve/build.log
+jozve/*_contourtmp*
