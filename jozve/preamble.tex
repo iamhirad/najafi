@@ -1,0 +1,112 @@
+% ---------------------------------------------------------------
+%  Preamble — Persian lecture notes (XeLaTeX + xepersian)
+% ---------------------------------------------------------------
+\usepackage[top=2.4cm,bottom=2.4cm,right=2.2cm,left=2.2cm,headheight=16pt]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools,bm}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{array,booktabs,multirow,tabularx}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes,calc,patterns,decorations.pathreplacing,fit,backgrounds}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18,every axis/.append style={scaled y ticks=false,yticklabel style={/pgf/number format/fixed,/pgf/number format/precision=3}}}
+\usepackage[most]{tcolorbox}
+\usepackage{fancyhdr}
+\usepackage{float}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue!50!black,urlcolor=blue!50!black}
+\usepackage[mathdigits=default]{xepersian}
+\settextfont[Path=/usr/share/fonts/truetype/vazirmatn/,Extension=.ttf,
+  UprightFont=*-Regular,BoldFont=*-Bold,ItalicFont=*-Medium,BoldItalicFont=*-ExtraBold,Scale=0.97]{Vazirmatn}
+\setdigitfont[Path=/usr/share/fonts/truetype/vazirmatn/,Extension=.ttf,
+  UprightFont=*-Regular,BoldFont=*-Bold,ItalicFont=*-Medium,BoldItalicFont=*-ExtraBold,Scale=0.97]{Vazirmatn}
+\setlatintextfont{Latin Modern Roman}
+\linespread{1.3}
+\setlength{\emergencystretch}{3em}
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+
+% ---------- colors ----------
+\definecolor{defcol}{HTML}{1F5FA8}
+\definecolor{thmcol}{HTML}{8E2C2C}
+\definecolor{excol}{HTML}{2E7D32}
+\definecolor{exrcol}{HTML}{B35C00}
+\definecolor{notecol}{HTML}{5E35B1}
+\definecolor{warncol}{HTML}{C62828}
+\definecolor{qcol}{HTML}{00838F}
+
+% ---------- naming ----------
+\AtBeginDocument{\renewcommand{\chaptername}{جلسه}\renewcommand{\contentsname}{فهرست مطالب}}
+
+% ---------- counters ----------
+\newcounter{boxcnt}[chapter]
+\renewcommand{\theboxcnt}{\thechapter-\arabic{boxcnt}}
+
+% ---------- boxes ----------
+\tcbset{
+  basestyle/.style={enhanced,breakable,sharp corners=south,arc=2mm,
+    boxrule=0.6pt,left=3mm,right=3mm,top=2mm,bottom=2mm,
+    fonttitle=\bfseries,coltitle=white,
+    before skip=8pt,after skip=8pt}
+}
+\newtcolorbox{definition}[1][]{basestyle,colback=defcol!4,colframe=defcol,
+  title={\stepcounter{boxcnt}تعریف \theboxcnt\ifx\relax#1\relax\else: #1\fi}}
+\newtcolorbox{theorem}[1][]{basestyle,colback=thmcol!4,colframe=thmcol,
+  title={\stepcounter{boxcnt}قضیه \theboxcnt\ifx\relax#1\relax\else: #1\fi}}
+\newtcolorbox{example}[1][]{basestyle,colback=excol!3,colframe=excol,
+  title={\stepcounter{boxcnt}مثال \theboxcnt\ifx\relax#1\relax\else: #1\fi}}
+\newtcolorbox{exercise}[1][]{basestyle,colback=exrcol!4,colframe=exrcol,
+  title={\stepcounter{boxcnt}تمرین \theboxcnt\ifx\relax#1\relax\else: #1\fi}}
+\newtcolorbox{question}[1][]{basestyle,colback=qcol!4,colframe=qcol,
+  title={پرسش\ifx\relax#1\relax\else: #1\fi}}
+\newtcolorbox{note}[1][]{enhanced,breakable,colback=notecol!5,colframe=notecol,
+  boxrule=0pt,leftrule=0pt,rightrule=3pt,sharp corners,left=3mm,right=3mm,
+  top=1.5mm,bottom=1.5mm,before skip=8pt,after skip=8pt,
+  fontupper=\small}
+\newtcolorbox{warning}[1][]{enhanced,breakable,colback=warncol!5,colframe=warncol,
+  boxrule=0pt,leftrule=0pt,rightrule=3pt,sharp corners,left=3mm,right=3mm,
+  top=1.5mm,bottom=1.5mm,before skip=8pt,after skip=8pt}
+\newtcolorbox{summarybox}[1][]{enhanced,breakable,colback=gray!6,colframe=gray!60,
+  boxrule=0.6pt,arc=2mm,left=3mm,right=3mm,title={#1},fonttitle=\bfseries,coltitle=black,colbacktitle=gray!25}
+
+% inline labels
+\newcommand{\notetitle}{\textbf{\textcolor{notecol}{نکته.}}\ }
+\newcommand{\warntitle}{\textbf{\textcolor{warncol}{دقت کنید!}}\ }
+
+% ---------- solution / proof ----------
+\newenvironment{solution}[1][حل]{\par\smallskip\noindent\textbf{\textcolor{excol!70!black}{#1.}}\ }{\hfill$\blacksquare$\par\medskip}
+\newenvironment{answer}{\par\smallskip\noindent\textbf{\textcolor{qcol!80!black}{پاسخ.}}\ }{\par\medskip}
+\renewenvironment{proof}[1][اثبات]{\par\smallskip\noindent\textbf{#1.}\ }{\hfill$\square$\par\medskip}
+
+% ---------- math shortcuts ----------
+\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\ind}{\mathbf{1}}
+\newcommand{\given}{\,|\,}
+\newcommand{\iid}{\text{i.i.d.}}
+\newcommand{\indep}{\perp\!\!\!\perp}
+\newcommand{\dd}{\,\mathrm{d}}
+\newcommand{\en}[1]{\lr{#1}}
+\newcommand{\mtxt}[1]{\text{\lr{#1}}}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\newcommand{\ML}{\mathrm{ML}}
+
+% ---------- lists ----------
+\setlist{itemsep=2pt,topsep=4pt}
+
+% ---------- headers ----------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{\small\textcolor{gray}{\leftmark}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\chaptermark}[1]{\markboth{\chaptername\ \thechapter:\ #1}{}}
+\fancypagestyle{plain}{\fancyhf{}\fancyfoot[C]{\thepage}\renewcommand{\headrulewidth}{0pt}}
