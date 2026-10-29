@@ -15,3 +15,9 @@ cd web && npm install && python3 build.py
 ```
 
 Requires Python 3 (beautifulsoup4, numpy, scipy), pandoc, Node 18+ and the Vazirmatn TTF fonts.
+
+PDF (same pages printed by Chromium, with cover, table of contents with page numbers and bookmarks):
+
+```
+cd web && python3 print.py     # -> pdf/Jozve-Amar-Ehtemal-Najafi.pdf
+```
