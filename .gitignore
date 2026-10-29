@@ -4,3 +4,5 @@ jozve/*.out
 jozve/*.toc
 jozve/build.log
 jozve/*_contourtmp*
+web/node_modules/
+web/__pycache__/
