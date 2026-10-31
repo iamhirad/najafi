@@ -5,7 +5,7 @@ name: انتشار نسخه
 on:
   push:
     branches: [main]
-    paths: ['.github/release-notes/**']
+    paths: ['.github/release-notes/**', '.github/workflows/release.yml']
     tags: ['v*']
   workflow_dispatch:
 
