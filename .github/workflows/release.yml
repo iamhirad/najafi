@@ -1,0 +1,34 @@
+name: انتشار نسخه
+
+# برای هر فایل .github/release-notes/vX.Y.Z.md که هنوز release ندارد،
+# تگ و release با فایل PDF ساخته می‌شود.
+on:
+  push:
+    branches: [main]
+    paths: ['.github/release-notes/**', '.github/workflows/release.yml']
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: ساخت تگ و release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for notes in .github/release-notes/v*.md; do
+            tag="$(basename "$notes" .md)"
+            if gh release view "$tag" >/dev/null 2>&1; then
+              echo "$tag: release از قبل وجود دارد"
+              continue
+            fi
+            title="$(head -n 1 "$notes" | sed 's/^# //')"
+            tail -n +3 "$notes" > /tmp/notes.md
+            gh release create "$tag" web/pdf/Jozve-Amar-Ehtemal-Najafi.pdf \
+              --target "$GITHUB_SHA" --title "$title" --notes-file /tmp/notes.md --latest
+          done
