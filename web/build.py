@@ -159,7 +159,7 @@ def build_chapter(ch, prev, nxt, labels):
     return len(page)
 
 
-def build_index(chapters):
+def build_index(chapters, site=None):
     tot = {k: sum(c['counts'][k] for c in chapters) for k in ('ex', 'exr', 'fig', 'thm', 'def')}
     by = {c['num']: c for c in chapters}
     parts = []
@@ -194,6 +194,7 @@ def build_index(chapters):
         '<h1>آمار و احتمال مهندسی</h1>'
         '<p>جزوه کامل درس بر اساس اسلایدهای جلسات سوم تا بیست‌ودوم: توضیح کامل هر مبحث، همه مثال‌ها و پرسش‌های اسلایدها با حل قدم‌به‌قدم، و تمرین‌های تکمیلی حل‌شده.</p>'
         '<p class="who">مدرس: دکتر امیر نجفی · زمستان ۱۴۰۴ و بهار ۱۴۰۵</p>'
+        '@@DL@@'
         '</div><figure class="hero-fig">%s<figcaption>توزیع دوجمله‌ای: احتمال \\(k\\) شیر در \\(n=20\\) پرتاب سکه سالم، و منحنی گاوسی که قضیه حد مرکزی پیش‌بینی می‌کند</figcaption></figure></section>'
         '<div class="stats">'
         '<div class="stat"><b>%s</b><span>فصل</span></div><div class="stat"><b>%s</b><span>تعریف و قضیه</span></div>'
@@ -212,12 +213,30 @@ def build_index(chapters):
         ''.join(parts))
     body = convert.BeautifulSoup(body, 'html.parser')
     body = str(body)
-    # note: the publish skeleton supplies <html>/<head>/<body>; our wrapper carries dir/lang
-    page = ('<title>جزوه آمار و احتمال مهندسی</title>'
-            '<meta name="claude:viewport-fit-sides" content="cover">' + template.FONTS +
-            '<style>%s .page{min-height:100%%}</style>' % template.CSS + '@@DEFS@@' + body +
-            '<script>document.body.setAttribute("data-page","index");document.documentElement.setAttribute("lang","fa");</script>'
-            '<script>%s</script>' % template.JS)
+    if site:
+        body = body.replace('@@DL@@', (
+            '<p class="dl-row"><a class="dl" href="%s" download>%s<span>دانلود نسخه PDF</span></a>'
+            '<span class="dl-meta">%s صفحه <span class="en" dir="ltr">A4</span> · %s مگابایت</span></p>') % (
+            site['pdf'], template.ICONS['download'], FA(site['pages']), FA(site['mb'])))
+        desc = 'جزوه کامل درس آمار و احتمال مهندسی (دکتر امیر نجفی، دانشگاه صنعتی شریف): جلسات ۳ تا ۲۲ با توضیح کامل، مثال‌ها و تمرین‌های حل‌شده.'
+        page = ('<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8">'
+                '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">'
+                '<title>جزوه آمار و احتمال مهندسی</title>'
+                '<meta name="description" content="%s">'
+                '<meta property="og:type" content="website"><meta property="og:title" content="جزوه آمار و احتمال مهندسی">'
+                '<meta property="og:description" content="%s"><meta property="og:image" content="%s">'
+                '<meta property="og:url" content="%s"><meta name="twitter:card" content="summary_large_image">'
+                '%s%s<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}%s .page{min-height:100%%}</style>'
+                '</head><body data-page="index">@@DEFS@@%s<script>%s</script></body></html>') % (
+            desc, desc, site['url'] + 'og.png', site['url'], template.FAVICON, template.FONTS, template.CSS, body, template.JS)
+    else:
+        body = body.replace('@@DL@@', '')
+        # the artifact publish skeleton supplies <html>/<head>/<body>; our wrapper carries dir/lang
+        page = ('<title>جزوه آمار و احتمال مهندسی</title>'
+                '<meta name="claude:viewport-fit-sides" content="cover">' + template.FONTS +
+                '<style>%s .page{min-height:100%%}</style>' % template.CSS + '@@DEFS@@' + body +
+                '<script>document.body.setAttribute("data-page","index");document.documentElement.setAttribute("lang","fa");</script>'
+                '<script>%s</script>' % template.JS)
     page = page.replace('\\(k\\)', '<span class="math inline">\\(k\\)</span>').replace(
         '\\(n=20\\)', '<span class="math inline">\\(n=20\\)</span>')
     page, defs = render_math(page)

@@ -21,3 +21,11 @@ PDF (same pages printed by Chromium, with cover, table of contents with page num
 ```
 cd web && python3 print.py     # -> pdf/Jozve-Amar-Ehtemal-Najafi.pdf
 ```
+
+Website (GitHub Pages, https://iamhirad.github.io/najafi/):
+
+```
+cd web && python3 print.py && python3 site.py   # -> site/ (full HTML pages, PDF, preview image)
+```
+
+The `gh-pages` branch holds the contents of `web/site/`; replace its files with a fresh build to update the site.

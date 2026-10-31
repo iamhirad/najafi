@@ -313,6 +313,11 @@ body.quiz details.sol:not([open]) { background: var(--rule-2); }
 .hero h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(2.6rem, 1.6rem + 4vw, 4.2rem); line-height: 1.2; margin: .5rem 0 .7rem; text-wrap: balance; }
 .hero p { margin: .3rem 0; color: var(--ink-2); }
 .hero .who { color: var(--muted); font-size: .93rem; }
+.dl-row { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; margin-top: 1.1rem !important; }
+.dl { display: inline-flex; align-items: center; gap: .5rem; padding: .55rem 1.1rem; border-radius: 999px; background: var(--accent); color: var(--surface); text-decoration: none; font-weight: 700; font-size: .95rem; }
+.dl:hover { filter: brightness(1.1); }
+.dl svg { width: 1.15rem; height: 1.15rem; }
+.dl-meta { color: var(--muted); font-size: .85rem; }
 .hero-fig { text-align: center; }
 .hero-fig > svg { width: 100%; max-width: 26rem; height: auto; }
 .hero-fig mjx-container > svg { max-width: 100%; height: auto; }
@@ -419,10 +424,16 @@ JS = r"""
 })();
 """
 
+FAVICON = ('<link rel="icon" href="data:image/svg+xml,'
+           '%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E'
+           '%3Crect width=%2264%22 height=%2264%22 rx=%2214%22 fill=%22%231C39BB%22/%3E'
+           '%3Ctext x=%2232%22 y=%2246%22 font-size=%2240%22 text-anchor=%22middle%22 fill=%22white%22 font-family=%22Tahoma%22%3E%D8%A2%3C/text%3E%3C/svg%3E">')
+
 ICONS = {
     'list': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1" fill="currentColor"/><circle cx="4.5" cy="12" r="1" fill="currentColor"/><circle cx="4.5" cy="18" r="1" fill="currentColor"/></svg>',
     'eye': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
     'theme': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17A8.5 8.5 0 0 0 12 3.5z" fill="currentColor"/></svg>',
+    'download': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10.5l5 5 5-5M5 20h14"/></svg>',
     'close': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
 }
 
@@ -452,7 +463,7 @@ def chapter_page(ch, prev, nxt, body, toc_html, defs, head_html):
     return ('<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8">'
             '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">'
             '<meta name="claude:viewport-fit-sides" content="cover">'
-            '<title>%s</title>%s<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}%s</style></head>'
+            '<title>%s</title>' + FAVICON.replace('%', '%%') + '%s<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}%s</style></head>'
             '<body data-page="%s" data-label="%s">%s%s'
             '<div class="layout"><nav class="toc" id="toc" aria-label="فهرست این جلسه">'
             '<button class="tb-btn toc-close" id="toc-close" type="button">%s<span>بستن</span></button>'
