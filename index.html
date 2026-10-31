@@ -1,0 +1,416 @@
+<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>جزوه آمار و احتمال مهندسی</title><meta name="description" content="جزوه کامل درس آمار و احتمال مهندسی (دکتر امیر نجفی، دانشگاه صنعتی شریف): جلسات ۳ تا ۲۲ با توضیح کامل، مثال‌ها و تمرین‌های حل‌شده."><meta property="og:type" content="website"><meta property="og:title" content="جزوه آمار و احتمال مهندسی"><meta property="og:description" content="جزوه کامل درس آمار و احتمال مهندسی (دکتر امیر نجفی، دانشگاه صنعتی شریف): جلسات ۳ تا ۲۲ با توضیح کامل، مثال‌ها و تمرین‌های حل‌شده."><meta property="og:image" content="https://iamhirad.github.io/najafi/og.png"><meta property="og:url" content="https://iamhirad.github.io/najafi/"><meta name="twitter:card" content="summary_large_image"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 rx=%2214%22 fill=%22%231C39BB%22/%3E%3Ctext x=%2232%22 y=%2246%22 font-size=%2240%22 text-anchor=%22middle%22 fill=%22white%22 font-family=%22Tahoma%22%3E%D8%A2%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Markazi+Text:wght@500;600;700&family=Vazirmatn:wght@400;500;600;700;800&display=swap"><style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+/* Layout: one reading column (~46rem) with a sticky section index on the start (right) side on wide screens.
+   Boxes are coded by hue: definition / theorem / example / exercise / question. */
+:root {
+  --paper: #F5F6F8;
+  --surface: #FFFFFF;
+  --ink: #17202D;
+  --ink-2: #3D4757;
+  --muted: #687285;
+  --rule: #DFE3EA;
+  --rule-2: #EEF0F4;
+  --accent: #1C39BB;          /* Persian blue */
+  --accent-soft: #E8ECFA;
+  --def: #1C39BB;
+  --thm: #A1232B;
+  --ex: #00796B;
+  --exr: #A85A12;
+  --q: #0C6F8A;
+  --note: #5E44A6;
+  --warn: #B83226;
+  --sum: #4B5567;
+  --c1: #2451C9; --c2: #C8362F; --c3: #13896F; --c4: #D9821E; --c5: #7A4CC2; --c6: #1A93B0; --c7: #8A93A3;
+  --fig-ink: #303845; --fig-grid: #E6E9EF; --fig-bg: #FFFFFF; --fig-fill: .22;
+  --font-body: "Vazirmatn", "Noto Sans Arabic", Tahoma, "Segoe UI", sans-serif;
+  --font-display: "Markazi Text", "Noto Naskh Arabic", "Vazirmatn", serif;
+  --radius: 12px;
+  --shadow: 0 1px 2px rgba(23, 32, 45, .05), 0 4px 18px rgba(23, 32, 45, .04);
+  --measure: 46rem;
+  --head-h: 3.5rem;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0E1116; --surface: #151A22; --ink: #E6E9EF; --ink-2: #C5CBD6; --muted: #929BAC;
+    --rule: #283041; --rule-2: #1D2330; --accent: #93A6FF; --accent-soft: #1D2647;
+    --def: #93A6FF; --thm: #FF8D93; --ex: #4CD2B4; --exr: #F2A660; --q: #5FCAE4; --note: #BCA6F7; --warn: #FF7F72; --sum: #AEB6C4;
+    --c1: #7E9CFF; --c2: #FF7A72; --c3: #49CFA9; --c4: #F5AA55; --c5: #B994FF; --c6: #5BCDE6; --c7: #8F98A8;
+    --fig-ink: #C9CFDA; --fig-grid: #232A37; --fig-bg: #151A22; --fig-fill: .28;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0E1116; --surface: #151A22; --ink: #E6E9EF; --ink-2: #C5CBD6; --muted: #929BAC;
+  --rule: #283041; --rule-2: #1D2330; --accent: #93A6FF; --accent-soft: #1D2647;
+  --def: #93A6FF; --thm: #FF8D93; --ex: #4CD2B4; --exr: #F2A660; --q: #5FCAE4; --note: #BCA6F7; --warn: #FF7F72; --sum: #AEB6C4;
+  --c1: #7E9CFF; --c2: #FF7A72; --c3: #49CFA9; --c4: #F5AA55; --c5: #B994FF; --c6: #5BCDE6; --c7: #8F98A8;
+  --fig-ink: #C9CFDA; --fig-grid: #232A37; --fig-bg: #151A22; --fig-fill: .28;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0; background: var(--paper); color: var(--ink);
+  font-family: var(--font-body); font-size: 16.5px; line-height: 1.95;
+  text-rendering: optimizeLegibility;
+}
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
+  z-index: 30; background: var(--surface);
+}
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+.en { font-family: var(--font-body); unicode-bidi: isolate; }
+strong { font-weight: 700; color: var(--ink); }
+.tc-red { color: var(--thm); } .tc-blue { color: var(--def); } .tc-green { color: var(--ex); }
+.tc-orange { color: var(--exr); } .tc-accent { color: var(--note); }
+
+/* ---------- top bar ---------- */
+.topbar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  -webkit-backdrop-filter: saturate(1.4) blur(10px); backdrop-filter: saturate(1.4) blur(10px);
+  border-bottom: 1px solid var(--rule);
+}
+.topbar-in {
+  height: var(--head-h); display: flex; align-items: center; gap: .75rem;
+  max-width: 76rem; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.brand { display: flex; align-items: center; gap: .55rem; text-decoration: none; color: var(--ink); min-width: 0; }
+.brand-mark {
+  width: 2rem; height: 2rem; border-radius: 8px; background: var(--accent); color: var(--surface);
+  display: grid; place-items: center; font-family: var(--font-display); font-weight: 700; font-size: 1.25rem; flex: none;
+}
+.brand-text { font-size: .9rem; line-height: 1.3; min-width: 0; }
+.brand-text b { display: block; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.brand-text span { color: var(--muted); font-size: .78rem; white-space: nowrap; }
+.spacer { flex: 1; }
+.tb-btn {
+  display: inline-flex; align-items: center; gap: .4rem; height: 2.25rem; padding: 0 .7rem;
+  border: 1px solid var(--rule); border-radius: 999px; background: var(--surface); color: var(--ink-2);
+  font: inherit; font-size: .84rem; cursor: pointer; white-space: nowrap;
+}
+.tb-btn:hover { border-color: var(--accent); color: var(--accent); }
+.tb-btn svg { width: 1.05rem; height: 1.05rem; flex: none; }
+.tb-btn[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); border-color: transparent; }
+.toc-btn { display: none; }
+@media (max-width: 1179px) { .toc-btn { display: inline-flex; } }
+@media (max-width: 560px) { .tb-btn .lbl { display: none; } .tb-btn { padding: 0 .6rem; } .brand-text span { display: none; } }
+
+/* ---------- chapter layout ---------- */
+.layout {
+  max-width: 76rem; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr); gap: 3rem;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 4rem;
+}
+@media (min-width: 1180px) { .layout { grid-template-columns: 16rem minmax(0, var(--measure)); justify-content: center; } }
+main { min-width: 0; }
+.toc {
+  font-size: .86rem; line-height: 1.6;
+}
+@media (min-width: 1180px) {
+  .toc { position: sticky; top: calc(var(--head-h) + env(safe-area-inset-top, 0px) + 1.5rem); align-self: start;
+         max-height: calc(100vh - var(--head-h) - 3rem); overflow: auto; padding-block: 2.5rem 1rem; }
+}
+@media (max-width: 1179px) {
+  .toc { position: fixed; z-index: 25; inset: 0 auto 0 0; width: min(22rem, 88vw);
+         background: var(--surface); border-inline-end: 1px solid var(--rule); box-shadow: var(--shadow);
+         padding: calc(1.25rem + env(safe-area-inset-top, 0px)) 1.25rem calc(1.25rem + env(safe-area-inset-bottom, 0px));
+         padding-right: max(1.25rem, env(safe-area-inset-right, 0px));
+         overflow: auto; transform: translateX(100%); visibility: hidden; transition: transform .25s ease, visibility .25s; right: 0; left: auto; }
+  .toc.open { transform: none; visibility: visible; }
+  .scrim { position: fixed; inset: 0; z-index: 24; background: rgba(10, 14, 20, .35); }
+}
+.toc-title { font-weight: 700; color: var(--muted); font-size: .78rem; letter-spacing: .02em; margin: 0 0 .6rem; }
+.toc ol { list-style: none; margin: 0; padding: 0; }
+.toc li a { display: flex; gap: .5rem; padding: .28rem .6rem; border-radius: 8px; color: var(--ink-2); text-decoration: none; }
+.toc li a:hover { background: var(--rule-2); color: var(--ink); }
+.toc li a.active { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.toc li.l3 a { padding-right: 1.9rem; font-size: .82rem; color: var(--muted); }
+.toc .n { font-variant-numeric: tabular-nums; color: var(--muted); flex: none; }
+.toc li a.active .n { color: inherit; }
+.toc-close { display: none; }
+@media (max-width: 1179px) { .toc-close { display: inline-flex; margin-bottom: 1rem; } }
+
+/* ---------- chapter head ---------- */
+.ch-head { padding-block: 2.6rem 1.6rem; border-bottom: 1px solid var(--rule); margin-bottom: 1.8rem; }
+.ch-eyebrow { display: flex; align-items: center; gap: .6rem; color: var(--accent); font-weight: 600; font-size: .92rem; }
+.ch-num {
+  font-family: var(--font-display); font-weight: 700; font-size: 1.35rem; line-height: 1;
+  border: 1.5px solid currentColor; border-radius: 10px; padding: .35rem .55rem .25rem;
+}
+.ch-title {
+  font-family: var(--font-display); font-weight: 700; font-size: clamp(2rem, 1.4rem + 2.4vw, 2.9rem);
+  line-height: 1.35; margin: .8rem 0 .6rem; text-wrap: balance; color: var(--ink);
+}
+.ch-meta { color: var(--muted); font-size: .9rem; display: flex; flex-wrap: wrap; gap: .3rem 1.2rem; }
+.ch-meta b { color: var(--ink-2); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* ---------- prose ---------- */
+main p { margin: .8rem 0; }
+main ul, main ol { padding-inline-start: 1.4rem; margin: .7rem 0; }
+main li { margin: .3rem 0; }
+main li > p { margin: .2rem 0; }
+main li::marker { color: var(--muted); }
+h2, h3, h4 { scroll-margin-top: calc(var(--head-h) + 1.2rem); }
+main h2 {
+  font-family: var(--font-display); font-weight: 700; font-size: 1.85rem; line-height: 1.4;
+  margin: 3.2rem 0 1rem; text-wrap: balance; display: flex; flex-wrap: wrap; align-items: baseline; gap: .2rem .7rem;
+}
+main h3 { font-size: 1.17rem; font-weight: 700; margin: 2.2rem 0 .6rem; display: flex; flex-wrap: wrap; align-items: baseline; gap: .2rem .6rem; text-wrap: balance; }
+main h4 { font-size: 1.02rem; font-weight: 700; margin: 1.6rem 0 .4rem; color: var(--ink-2); }
+main h2 .en, .ch-title .en { font-family: var(--font-body); font-size: .62em; font-weight: 600; color: var(--muted); }
+main h3 .en { font-weight: 600; color: var(--muted); font-size: .9em; }
+.h-num { font-family: var(--font-body); font-size: .62em; font-weight: 600; color: var(--accent); font-variant-numeric: tabular-nums; }
+main h3 .h-num { font-size: .82em; }
+.h-sub { flex-basis: 100%; font-family: var(--font-body); font-size: .58em; font-weight: 500; color: var(--muted); line-height: 1.5; }
+main h3 .h-sub { font-size: .8em; }
+
+/* math */
+mjx-container[jax="SVG"] { direction: ltr; }
+mjx-container[jax="SVG"] > svg { overflow: visible; min-height: 1px; min-width: 1px; }
+mjx-container[jax="SVG"][display="true"] { display: block; text-align: center; margin: 0; }
+mjx-container[jax="SVG"]:not([display]) { unicode-bidi: isolate; }
+main mjx-container[jax="SVG"]:not([display]) > svg { max-width: 100%; height: auto; }
+.dm { display: block; overflow-x: auto; overflow-y: hidden; margin: .9rem 0; padding: .35rem 0; -webkit-overflow-scrolling: touch; }
+.dm::-webkit-scrollbar { height: 6px; } .dm::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 3px; }
+.merr { color: var(--warn); font-family: monospace; direction: ltr; unicode-bidi: isolate; }
+
+/* ---------- boxes ---------- */
+.box {
+  --k: var(--def);
+  margin: 1.6rem 0; border-radius: var(--radius); background: var(--surface);
+  border: 1px solid color-mix(in srgb, var(--k) 26%, var(--rule)); box-shadow: var(--shadow);
+  scroll-margin-top: calc(var(--head-h) + 1rem); overflow: hidden;
+}
+.box-def { --k: var(--def); } .box-thm { --k: var(--thm); } .box-ex { --k: var(--ex); }
+.box-exr { --k: var(--exr); } .box-q { --k: var(--q); } .box-sum { --k: var(--sum); }
+.box-head {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: .15rem .7rem; padding: .7rem 1.15rem .6rem;
+  background: color-mix(in srgb, var(--k) 9%, var(--surface));
+  border-bottom: 1px solid color-mix(in srgb, var(--k) 18%, var(--rule));
+}
+.box-kind { color: var(--k); font-weight: 800; font-size: .86rem; letter-spacing: .01em; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.box-title { font-weight: 700; font-size: .98rem; color: var(--ink); line-height: 1.7; }
+.box-sum .box-title { color: var(--ink-2); }
+.box-body { padding: .35rem 1.15rem .55rem; }
+.box-body > :first-child { margin-top: .6rem; }
+.box-thm .box-body, .box-def .box-body { background: color-mix(in srgb, var(--k) 2.5%, var(--surface)); }
+
+/* solutions */
+details.sol { margin: .9rem -1.15rem -.55rem; border-top: 1px dashed color-mix(in srgb, var(--k, var(--ex)) 35%, var(--rule)); background: color-mix(in srgb, var(--paper) 55%, var(--surface)); }
+main > details.sol, .callout details.sol { margin: 1rem 0; border: 1px dashed var(--rule); border-radius: var(--radius); }
+details.sol > summary {
+  list-style: none; cursor: pointer; padding: .55rem 1.15rem; display: flex; align-items: center; gap: .5rem;
+  font-weight: 700; font-size: .9rem; color: var(--k, var(--ex)); user-select: none;
+}
+details.sol > summary::-webkit-details-marker { display: none; }
+details.sol > summary::before {
+  content: ""; width: .5rem; height: .5rem; border-inline-start: 2px solid currentColor; border-bottom: 2px solid currentColor;
+  transform: rotate(45deg); transition: transform .2s; margin-top: -.2rem;
+}
+details.sol:not([open]) > summary::before { transform: rotate(-45deg); margin-top: 0; }
+details.sol:not([open]) > summary::after { content: "نمایش"; font-weight: 500; font-size: .8rem; color: var(--muted); margin-inline-start: auto; }
+.sol-body { padding: 0 1.15rem .7rem; }
+.sol-body > :first-child { margin-top: 0; }
+
+.proof { margin: .9rem 0; }
+.proof-kind { font-weight: 700; color: var(--ink-2); margin-inline-end: .35rem; }
+.proof > p:first-of-type { display: inline; }
+.qed { display: block; width: .62rem; height: .62rem; border: 1.5px solid var(--muted); margin-inline-start: auto; margin-top: .2rem; }
+
+/* callouts */
+.callout {
+  --k: var(--note); margin: 1.3rem 0; padding: .7rem 1.1rem; border-radius: var(--radius);
+  background: color-mix(in srgb, var(--k) 7%, var(--surface)); font-size: .97rem;
+}
+.callout-warning { --k: var(--warn); }
+.callout-kind {
+  display: inline-block; font-weight: 800; font-size: .76rem; color: var(--surface); background: var(--k);
+  border-radius: 6px; padding: 0 .5rem; margin-inline-end: .45rem; line-height: 1.75; vertical-align: .08em;
+}
+.callout > p:first-of-type { display: inline; }
+.callout > .callout-kind + p { display: inline; }
+.callout > p { margin: .5rem 0; }
+
+/* figures */
+figure.fig { margin: 1.8rem 0; text-align: center; }
+.fig-row { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: .6rem 1rem; }
+.fig-row > svg { max-width: 100%; height: auto; flex: 0 1 auto; }
+.fig-op { font-size: 1.6rem; color: var(--muted); }
+.fig-eq { direction: ltr; }
+.fig-row > .flow { flex: 1 1 100%; }
+figcaption { color: var(--muted); font-size: .88rem; line-height: 1.8; margin-top: .6rem; max-width: 38rem; margin-inline: auto; text-wrap: pretty; }
+svg.plot { direction: ltr; overflow: visible; }
+svg.plot text { font-family: var(--font-body); }
+.subfig { display: flex; flex-direction: column; align-items: center; gap: .3rem; max-width: 100%; min-width: 0; }
+.subfig > svg { max-width: 100%; height: auto; }
+.subfig-t { font-size: .9rem; font-weight: 600; color: var(--ink-2); line-height: 1.7; }
+.fig-legend { list-style: none; margin: .2rem 0 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: .2rem 1.1rem; font-size: .85rem; color: var(--ink-2); }
+.fig-legend li { display: inline-flex; align-items: center; gap: .4rem; }
+.fig-legend svg { flex: none; }
+.flow { display: flex; align-items: stretch; justify-content: center; gap: 0; flex-wrap: nowrap; margin: .4rem auto; max-width: 40rem; direction: ltr; }
+.flow-node { flex: 0 1 11rem; min-width: 0; border: 1.6px solid var(--k, var(--rule)); border-radius: 12px; padding: .7rem .8rem; text-align: center; direction: rtl;
+  background: color-mix(in srgb, var(--k, var(--rule)) 8%, var(--surface)); display: flex; flex-direction: column; justify-content: center; }
+.flow-node.tone-blue { --k: var(--def); } .flow-node.tone-red { --k: var(--thm); } .flow-node.tone-green { --k: var(--ex); }
+.fn-main { font-size: 1.1rem; }
+.fn-sub { font-size: .82rem; color: var(--muted); line-height: 1.6; }
+.flow-edge { flex: 1 1 7rem; min-width: 5.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 .4rem; font-size: .9rem; direction: rtl; }
+.fe-line { display: block; width: 100%; height: 2px; background: var(--fig-ink); position: relative; margin: .3rem 0; }
+.fe-line::after { content: ""; position: absolute; right: -2px; top: -5px; border: 6px solid transparent; border-left: 9px solid var(--fig-ink); border-right: 0; }
+.fe-b { color: var(--muted); font-size: .82rem; }
+@media (max-width: 560px) {
+  .flow { flex-direction: column; align-items: center; }
+  .flow-node { flex: none; width: min(16rem, 100%); }
+  .flow-edge { flex: none; min-width: 0; flex-direction: row; gap: .6rem; padding: .3rem 0; }
+  .fe-line { width: 2px; height: 2.2rem; margin: 0; }
+  .fe-line::after { right: -5px; top: auto; bottom: -2px; border: 6px solid transparent; border-top: 9px solid var(--fig-ink); border-bottom: 0; }
+}
+.figph { padding: 2rem; border: 1px dashed var(--rule); color: var(--muted); }
+
+/* tables */
+.table-wrap { overflow-x: auto; margin: 1.1rem 0; -webkit-overflow-scrolling: touch; }
+.table-wrap table { border-collapse: collapse; margin: 0 auto; font-size: .93rem; font-variant-numeric: tabular-nums; min-width: min(100%, 22rem); }
+.table-wrap th, .table-wrap td { min-width: 4.5rem; padding: .45rem .8rem; border-bottom: 1px solid var(--rule); text-align: center; vertical-align: middle; }
+.table-wrap thead th { background: var(--rule-2); font-weight: 700; color: var(--ink-2); border-bottom: 1px solid var(--rule); }
+.table-wrap tbody tr:last-child td { border-bottom: none; }
+.table-wrap table { border: 1px solid var(--rule); border-radius: 10px; border-collapse: separate; border-spacing: 0; overflow: hidden; }
+
+a.xref { text-decoration: none; border-bottom: 1px dotted currentColor; }
+
+/* chapter nav */
+.pager { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 4rem; }
+.pager a {
+  display: flex; flex-direction: column; gap: .2rem; padding: 1rem 1.2rem; border: 1px solid var(--rule); border-radius: var(--radius);
+  background: var(--surface); text-decoration: none; color: var(--ink); min-width: 0;
+}
+.pager a:hover { border-color: var(--accent); }
+.pager .dir { font-size: .8rem; color: var(--muted); }
+.pager .t { font-weight: 700; line-height: 1.6; }
+.pager .next { text-align: left; grid-column: 2; }
+@media (max-width: 560px) { .pager { grid-template-columns: 1fr; } .pager .next { grid-column: 1; } }
+
+/* self-test mode: hide solutions */
+body.quiz details.sol:not([open]) { background: var(--rule-2); }
+
+/* ---------- index ---------- */
+.home { max-width: 64rem; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0 4rem; }
+.hero { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 2rem; align-items: end; padding-block: 3.2rem 2.4rem; border-bottom: 1px solid var(--rule); }
+@media (max-width: 760px) { .hero { grid-template-columns: minmax(0, 1fr); padding-block: 2.2rem 1.8rem; } }
+.hero-k { color: var(--accent); font-weight: 600; font-size: .92rem; }
+.hero h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(2.6rem, 1.6rem + 4vw, 4.2rem); line-height: 1.2; margin: .5rem 0 .7rem; text-wrap: balance; }
+.hero p { margin: .3rem 0; color: var(--ink-2); }
+.hero .who { color: var(--muted); font-size: .93rem; }
+.dl-row { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; margin-top: 1.1rem !important; }
+.dl { display: inline-flex; align-items: center; gap: .5rem; padding: .55rem 1.1rem; border-radius: 999px; background: var(--accent); color: var(--surface); text-decoration: none; font-weight: 700; font-size: .95rem; }
+.dl:hover { filter: brightness(1.1); }
+.dl svg { width: 1.15rem; height: 1.15rem; }
+.dl-meta { color: var(--muted); font-size: .85rem; }
+.hero-fig { text-align: center; }
+.hero-fig > svg { width: 100%; max-width: 26rem; height: auto; }
+.hero-fig mjx-container > svg { max-width: 100%; height: auto; }
+.hero-fig figcaption { margin-top: .2rem; }
+.stats { display: flex; flex-wrap: wrap; gap: .6rem 2.2rem; padding-block: 1.4rem; border-bottom: 1px solid var(--rule); }
+.stat b { display: block; font-family: var(--font-display); font-size: 2rem; line-height: 1.1; color: var(--ink); font-variant-numeric: tabular-nums; }
+.stat span { color: var(--muted); font-size: .85rem; }
+.resume { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; margin-top: 1.4rem; padding: .8rem 1.1rem; border-radius: var(--radius); background: var(--accent-soft); }
+.resume a { font-weight: 700; text-decoration: none; }
+.part { margin-top: 2.6rem; }
+.part-h { display: flex; align-items: baseline; gap: .8rem; margin-bottom: .8rem; }
+.part-h h2 { font-family: var(--font-display); font-size: 1.7rem; margin: 0; }
+.part-h span { color: var(--muted); font-size: .88rem; }
+.chap-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .7rem; }
+.chap {
+  display: grid; grid-template-columns: 4.2rem minmax(0, 1fr); gap: 1rem; align-items: start;
+  padding: 1rem 1.2rem; background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius);
+  text-decoration: none; color: var(--ink); transition: border-color .15s, transform .15s;
+}
+.chap:hover { border-color: var(--accent); }
+.chap-n { font-family: var(--font-display); font-weight: 700; font-size: 2.3rem; line-height: 1; color: var(--accent); text-align: center; padding-top: .25rem; }
+.chap-n small { display: block; font-family: var(--font-body); font-size: .68rem; font-weight: 600; color: var(--muted); margin-top: .35rem; }
+.chap-b { min-width: 0; }
+.chap-t { font-weight: 700; font-size: 1.06rem; line-height: 1.7; }
+.chap-s { color: var(--muted); font-size: .86rem; line-height: 1.8; margin-top: .15rem; }
+.chap-c { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .5rem; }
+.pill { font-size: .76rem; padding: .05rem .55rem; border-radius: 999px; background: var(--rule-2); color: var(--ink-2); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.pill.ex { color: var(--ex); background: color-mix(in srgb, var(--ex) 10%, var(--surface)); }
+.pill.exr { color: var(--exr); background: color-mix(in srgb, var(--exr) 10%, var(--surface)); }
+.pill.fig { color: var(--def); background: color-mix(in srgb, var(--def) 9%, var(--surface)); }
+.legend-boxes { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
+.howto { margin-top: 2.8rem; padding: 1.2rem 1.4rem; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--surface); font-size: .93rem; }
+.howto h2 { font-family: var(--font-display); font-size: 1.4rem; margin: 0 0 .4rem; }
+.howto ul { margin: .3rem 0; padding-inline-start: 1.2rem; }
+.foot { margin-top: 3rem; color: var(--muted); font-size: .82rem; text-align: center; }
+ .page{min-height:100%}</style></head><body data-page="index"><svg class="mjx-defs" aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden" xmlns="http://www.w3.org/2000/svg"><defs><path id="MJX-TEX-I-1D458" d="M121 647Q121 657 125 670T137 683Q138 683 209 688T282 694Q294 694 294 686Q294 679 244 477Q194 279 194 272Q213 282 223 291Q247 309 292 354T362 415Q402 442 438 442Q468 442 485 423T503 369Q503 344 496 327T477 302T456 291T438 288Q418 288 406 299T394 328Q394 353 410 369T442 390L458 393Q446 405 434 405H430Q398 402 367 380T294 316T228 255Q230 254 243 252T267 246T293 238T320 224T342 206T359 180T365 147Q365 130 360 106T354 66Q354 26 381 26Q429 26 459 145Q461 153 479 153H483Q499 153 499 144Q499 139 496 130Q455 -11 378 -11Q333 -11 305 15T277 90Q277 108 280 121T283 145Q283 167 269 183T234 206T200 217T182 220H180Q168 178 159 139T145 81T136 44T129 20T122 7T111 -2Q98 -11 83 -11Q66 -11 57 -1T48 16Q48 26 85 176T158 471L195 616Q196 629 188 632T149 637H144Q134 637 131 637T124 640T121 647Z"></path><path id="MJX-TEX-I-1D45B" d="M21 287Q22 293 24 303T36 341T56 388T89 425T135 442Q171 442 195 424T225 390T231 369Q231 367 232 367L243 378Q304 442 382 442Q436 442 469 415T503 336T465 179T427 52Q427 26 444 26Q450 26 453 27Q482 32 505 65T540 145Q542 153 560 153Q580 153 580 145Q580 144 576 130Q568 101 554 73T508 17T439 -10Q392 -10 371 17T350 73Q350 92 386 193T423 345Q423 404 379 404H374Q288 404 229 303L222 291L189 157Q156 26 151 16Q138 -11 108 -11Q95 -11 87 -5T76 7T74 17Q74 30 112 180T152 343Q153 348 153 366Q153 405 129 405Q91 405 66 305Q60 285 60 284Q58 278 41 278H27Q21 284 21 287Z"></path><path id="MJX-TEX-N-3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path><path id="MJX-TEX-N-32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path><path id="MJX-TEX-N-30" d="M96 585Q152 666 249 666Q297 666 345 640T423 548Q460 465 460 320Q460 165 417 83Q397 41 362 16T301 -15T250 -22Q224 -22 198 -16T137 16T82 83Q39 165 39 320Q39 494 96 585ZM321 597Q291 629 250 629Q208 629 178 597Q153 571 145 525T137 333Q137 175 145 125T181 46Q209 16 250 16Q290 16 318 46Q347 76 354 130T362 333Q362 478 354 524T321 597Z"></path><path id="MJX-TEX-I-1D454" d="M311 43Q296 30 267 15T206 0Q143 0 105 45T66 160Q66 265 143 353T314 442Q361 442 401 394L404 398Q406 401 409 404T418 412T431 419T447 422Q461 422 470 413T480 394Q480 379 423 152T363 -80Q345 -134 286 -169T151 -205Q10 -205 10 -137Q10 -111 28 -91T74 -71Q89 -71 102 -80T116 -111Q116 -121 114 -130T107 -144T99 -154T92 -162L90 -164H91Q101 -167 151 -167Q189 -167 211 -155Q234 -144 254 -122T282 -75Q288 -56 298 -13Q311 35 311 43ZM384 328L380 339Q377 350 375 354T369 368T359 382T346 393T328 402T306 405Q262 405 221 352Q191 313 171 233T151 117Q151 38 213 38Q269 38 323 108L331 118L384 328Z"></path><path id="MJX-TEX-I-1D44B" d="M42 0H40Q26 0 26 11Q26 15 29 27Q33 41 36 43T55 46Q141 49 190 98Q200 108 306 224T411 342Q302 620 297 625Q288 636 234 637H206Q200 643 200 645T202 664Q206 677 212 683H226Q260 681 347 681Q380 681 408 681T453 682T473 682Q490 682 490 671Q490 670 488 658Q484 643 481 640T465 637Q434 634 411 620L488 426L541 485Q646 598 646 610Q646 628 622 635Q617 635 609 637Q594 637 594 648Q594 650 596 664Q600 677 606 683H618Q619 683 643 683T697 681T738 680Q828 680 837 683H845Q852 676 852 672Q850 647 840 637H824Q790 636 763 628T722 611T698 593L687 584Q687 585 592 480L505 384Q505 383 536 304T601 142T638 56Q648 47 699 46Q734 46 734 37Q734 35 732 23Q728 7 725 4T711 1Q708 1 678 1T589 2Q528 2 496 2T461 1Q444 1 444 10Q444 11 446 25Q448 35 450 39T455 44T464 46T480 47T506 54Q523 62 523 64Q522 64 476 181L429 299Q241 95 236 84Q232 76 232 72Q232 53 261 47Q262 47 267 47T273 46Q276 46 277 46T280 45T283 42T284 35Q284 26 282 19Q279 6 276 4T261 1Q258 1 243 1T201 2T142 2Q64 2 42 0Z"></path><path id="MJX-TEX-N-2B" d="M56 237T56 250T70 270H369V420L370 570Q380 583 389 583Q402 583 409 568V270H707Q722 262 722 250T707 230H409V-68Q401 -82 391 -82H389H387Q375 -82 369 -68V230H70Q56 237 56 250Z"></path><path id="MJX-TEX-I-1D44C" d="M66 637Q54 637 49 637T39 638T32 641T30 647T33 664T42 682Q44 683 56 683Q104 680 165 680Q288 680 306 683H316Q322 677 322 674T320 656Q316 643 310 637H298Q242 637 242 624Q242 619 292 477T343 333L346 336Q350 340 358 349T379 373T411 410T454 461Q546 568 561 587T577 618Q577 634 545 637Q528 637 528 647Q528 649 530 661Q533 676 535 679T549 683Q551 683 578 682T657 680Q684 680 713 681T746 682Q763 682 763 673Q763 669 760 657T755 643Q753 637 734 637Q662 632 617 587Q608 578 477 424L348 273L322 169Q295 62 295 57Q295 46 363 46Q379 46 384 45T390 35Q390 33 388 23Q384 6 382 4T366 1Q361 1 324 1T232 2Q170 2 138 2T102 1Q84 1 84 9Q84 14 87 24Q88 27 89 30T90 35T91 39T93 42T96 44T101 45T107 45T116 46T129 46Q168 47 180 50T198 63Q201 68 227 171L252 274L129 623Q128 624 127 625T125 627T122 629T118 631T113 633T105 634T96 635T83 636T66 637Z"></path><path id="MJX-TEX-N-28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path><path id="MJX-TEX-N-2C" d="M78 35T78 60T94 103T137 121Q165 121 187 96T210 8Q210 -27 201 -60T180 -117T154 -158T130 -185T117 -194Q113 -194 104 -185T95 -172Q95 -168 106 -156T131 -126T157 -76T173 -3V9L172 8Q170 7 167 6T161 3T152 1T140 0Q113 0 96 17Z"></path><path id="MJX-TEX-N-29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></defs></svg><div class="page" dir="rtl" lang="fa"><header class="topbar"><div class="topbar-in"><a class="brand" href="index.html"><span class="brand-mark">آ</span><span class="brand-text"><b>آمار و احتمال مهندسی</b><span>جزوه کامل درس</span></span></a><span class="spacer"></span><button class="tb-btn" id="theme-btn" type="button"><svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 3.5v17A8.5 8.5 0 0 0 12 3.5z" fill="currentColor"></path></svg><span class="lbl">پوسته</span></button></div></header><div class="home"><section class="hero"><div><div class="hero-k">دانشکده مهندسی کامپیوتر · دانشگاه صنعتی شریف</div><h1>آمار و احتمال مهندسی</h1><p>جزوه کامل درس بر اساس اسلایدهای جلسات سوم تا بیست‌ودوم: توضیح کامل هر مبحث، همه مثال‌ها و پرسش‌های اسلایدها با حل قدم‌به‌قدم، و تمرین‌های تکمیلی حل‌شده.</p><p class="who">مدرس: دکتر امیر نجفی · زمستان ۱۴۰۴ و بهار ۱۴۰۵</p><p class="dl-row"><a class="dl" href="Jozve-Amar-Ehtemal-Najafi.pdf" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10.5l5 5 5-5M5 20h14"/></svg><span>دانلود نسخه PDF</span></a><span class="dl-meta">۲۲۰ صفحه <span class="en" dir="ltr">A4</span> · ۲۱ مگابایت</span></p></div><figure class="hero-fig"><svg aria-label="توزیع دوجمله‌ای n=20 و تقریب گاوسی آن" class="plot" height="230" role="img" viewbox="0 0 420 230" width="420" xmlns="http://www.w3.org/2000/svg"><defs><clippath id="hero-clip"><rect height="191.0" width="378.0" x="13.0" y="10.0"></rect></clippath></defs><path d="M21.0,200.0 L21.0,203.0 Q21.0,200.0 24.0,200.0 L31.9,200.0 Q34.9,200.0 34.9,203.0 L34.9,200.0 Z" style="fill:var(--c1);stroke:var(--fig-bg);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;fill-opacity:0.85"></path><path d="M38.4,200.0 L38.4,203.0 Q38.4,200.0 41.4,200.0 L49.3,200.0 Q52.3,200.0 52.3,203.0 L52.3,200.0 Z" style="fill:var(--c1);stroke:var(--fig-bg);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;fill-opacity:0.85"></path><path d="M55.8,200.0 L55.8,202.8 Q55.8,199.8 58.8,199.8 L66.7,199.8 Q69.7,199.8 69.7,202.8 L69.7,200.0 Z" style="fill:var(--c1);stroke:var(--fig-bg);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;fill-opacity:0.85"></path><path d="M73.2,200.0 L73.2,201.9 Q73.2,198.9 76.2,198.9 L84.1,198.9 Q87.1,198.9 87.1,201.9 L87.1,200.0 Z" style="fill:var(--c1);stroke:var(--fig-bg);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;fill-opacity:0.85"></path><path d="M90.6,200.0 L90.6,198.5 Q90.6,195.5 93.6,195.5 L101.5,195.5 Q104.5,195.5 104.5,198.5 L104.5,200.0 Z" style="fill:var(--c1);stroke:var(--fig-bg);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;fill-opacity:0.85"></path><path d="M108.0,200.0 L108.0,188.5 Q108.0,185.5 111.0,185.5 L118.9,185.5 Q121.9,185.5 121.9,188.5 L121.9,200.0 Z" style="fill:var(--c1);stroke:var(--fig-bg);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;fill-opacity:0.85"></path><path d="M125.4,200.0 L125.4,166.8 Q125.4,163.8 128.4,163.8 L136.3,163.8 Q139.3,163.8 139.3,166.8 L139.3,200.0 Z" style="fill:var(--c1);stroke:var(--fig-bg);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;fill-opacity:0.85"></path><path d="M142.8,200.0 L142.8,130.6 Q142.8,127.6 145.8,127.6 L153.7,127.6 Q156.7,127.6 156.7,130.6 L156.7,200.0 Z" style="fill:var(--c1);stroke:var(--fig-bg);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;fill-opacity:0.85"></path><path d="M160.2,200.0 L160.2,85.4 Q160.2,82.4 163.2,82.4 L171.1,82.4 Q174.1,82.4 174.1,85.4 L174.1,200.0 Z" style="fill:var(--c1);stroke:var(--fig-bg);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;fill-opacity:0.85"></path><path d="M177.6,200.0 L177.6,46.2 Q177.6,43.2 180.6,43.2 L188.6,43.2 Q191.6,43.2 191.6,46.2 L191.6,200.0 Z" style="fill:var(--c1);stroke:var(--fig-bg);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;fill-opacity:0.85"></path><path d="M195.0,200.0 L195.0,30.5 Q195.0,27.5 198.0,27.5 L206.0,27.5 Q209.0,27.5 209.0,30.5 L209.0,200.0 Z" style="fill:var(--c1);stroke:var(--fig-bg);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;fill-opacity:0.85"></path><path d="M212.4,200.0 L212.4,46.2 Q212.4,43.2 215.4,43.2 L223.4,43.2 Q226.4,43.2 226.4,46.2 L226.4,200.0 Z" style="fill:var(--c1);stroke:var(--fig-bg);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;fill-opacity:0.85"></path><path d="M229.9,200.0 L229.9,85.4 Q229.9,82.4 232.9,82.4 L240.8,82.4 Q243.8,82.4 243.8,85.4 L243.8,200.0 Z" style="fill:var(--c1);stroke:var(--fig-bg);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;fill-opacity:0.85"></path><path d="M247.3,200.0 L247.3,130.6 Q247.3,127.6 250.3,127.6 L258.2,127.6 Q261.2,127.6 261.2,130.6 L261.2,200.0 Z" style="fill:var(--c1);stroke:var(--fig-bg);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;fill-opacity:0.85"></path><path d="M264.7,200.0 L264.7,166.8 Q264.7,163.8 267.7,163.8 L275.6,163.8 Q278.6,163.8 278.6,166.8 L278.6,200.0 Z" style="fill:var(--c1);stroke:var(--fig-bg);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;fill-opacity:0.85"></path><path d="M282.1,200.0 L282.1,188.5 Q282.1,185.5 285.1,185.5 L293.0,185.5 Q296.0,185.5 296.0,188.5 L296.0,200.0 Z" style="fill:var(--c1);stroke:var(--fig-bg);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;fill-opacity:0.85"></path><path d="M299.5,200.0 L299.5,198.5 Q299.5,195.5 302.5,195.5 L310.4,195.5 Q313.4,195.5 313.4,198.5 L313.4,200.0 Z" style="fill:var(--c1);stroke:var(--fig-bg);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;fill-opacity:0.85"></path><path d="M316.9,200.0 L316.9,201.9 Q316.9,198.9 319.9,198.9 L327.8,198.9 Q330.8,198.9 330.8,201.9 L330.8,200.0 Z" style="fill:var(--c1);stroke:var(--fig-bg);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;fill-opacity:0.85"></path><path d="M334.3,200.0 L334.3,202.8 Q334.3,199.8 337.3,199.8 L345.2,199.8 Q348.2,199.8 348.2,202.8 L348.2,200.0 Z" style="fill:var(--c1);stroke:var(--fig-bg);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;fill-opacity:0.85"></path><path d="M351.7,200.0 L351.7,203.0 Q351.7,200.0 354.7,200.0 L362.6,200.0 Q365.6,200.0 365.6,203.0 L365.6,200.0 Z" style="fill:var(--c1);stroke:var(--fig-bg);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;fill-opacity:0.85"></path><path d="M369.1,200.0 L369.1,203.0 Q369.1,200.0 372.1,200.0 L380.0,200.0 Q383.0,200.0 383.0,203.0 L383.0,200.0 Z" style="fill:var(--c1);stroke:var(--fig-bg);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;fill-opacity:0.85"></path><path clip-path="url(#hero-clip)" d="M14.0,200.0 L15.6,200.0 L17.1,200.0 L18.7,200.0 L20.3,200.0 L21.9,200.0 L23.4,200.0 L25.0,200.0 L26.6,200.0 L28.2,200.0 L29.7,200.0 L31.3,200.0 L32.9,200.0 L34.5,200.0 L36.0,200.0 L37.6,200.0 L39.2,200.0 L40.7,200.0 L42.3,200.0 L43.9,200.0 L45.5,199.9 L47.0,199.9 L48.6,199.9 L50.2,199.9 L51.8,199.9 L53.3,199.9 L54.9,199.9 L56.5,199.8 L58.1,199.8 L59.6,199.8 L61.2,199.7 L62.8,199.7 L64.3,199.7 L65.9,199.6 L67.5,199.6 L69.1,199.5 L70.6,199.4 L72.2,199.3 L73.8,199.2 L75.4,199.1 L76.9,199.0 L78.5,198.9 L80.1,198.7 L81.6,198.5 L83.2,198.3 L84.8,198.1 L86.4,197.9 L87.9,197.6 L89.5,197.3 L91.1,197.0 L92.7,196.6 L94.2,196.2 L95.8,195.8 L97.4,195.3 L99.0,194.7 L100.5,194.2 L102.1,193.5 L103.7,192.8 L105.2,192.0 L106.8,191.2 L108.4,190.3 L110.0,189.3 L111.5,188.3 L113.1,187.1 L114.7,185.9 L116.3,184.6 L117.8,183.1 L119.4,181.6 L121.0,180.0 L122.6,178.2 L124.1,176.4 L125.7,174.4 L127.3,172.3 L128.8,170.1 L130.4,167.8 L132.0,165.3 L133.6,162.8 L135.1,160.1 L136.7,157.2 L138.3,154.3 L139.9,151.2 L141.4,148.0 L143.0,144.6 L144.6,141.2 L146.2,137.6 L147.7,133.9 L149.3,130.2 L150.9,126.3 L152.4,122.3 L154.0,118.3 L155.6,114.2 L157.2,110.0 L158.7,105.8 L160.3,101.6 L161.9,97.3 L163.5,93.0 L165.0,88.8 L166.6,84.5 L168.2,80.3 L169.7,76.1 L171.3,72.0 L172.9,67.9 L174.5,64.0 L176.0,60.2 L177.6,56.5 L179.2,52.9 L180.8,49.5 L182.3,46.3 L183.9,43.2 L185.5,40.4 L187.1,37.8 L188.6,35.4 L190.2,33.2 L191.8,31.3 L193.3,29.6 L194.9,28.2 L196.5,27.1 L198.1,26.2 L199.6,25.7 L201.2,25.4 L202.8,25.4 L204.4,25.7 L205.9,26.2 L207.5,27.1 L209.1,28.2 L210.7,29.6 L212.2,31.3 L213.8,33.2 L215.4,35.4 L216.9,37.8 L218.5,40.4 L220.1,43.2 L221.7,46.3 L223.2,49.5 L224.8,52.9 L226.4,56.5 L228.0,60.2 L229.5,64.0 L231.1,67.9 L232.7,72.0 L234.3,76.1 L235.8,80.3 L237.4,84.5 L239.0,88.8 L240.5,93.0 L242.1,97.3 L243.7,101.6 L245.3,105.8 L246.8,110.0 L248.4,114.2 L250.0,118.3 L251.6,122.3 L253.1,126.3 L254.7,130.2 L256.3,133.9 L257.8,137.6 L259.4,141.2 L261.0,144.6 L262.6,148.0 L264.1,151.2 L265.7,154.3 L267.3,157.2 L268.9,160.1 L270.4,162.8 L272.0,165.3 L273.6,167.8 L275.2,170.1 L276.7,172.3 L278.3,174.4 L279.9,176.4 L281.4,178.2 L283.0,180.0 L284.6,181.6 L286.2,183.1 L287.7,184.6 L289.3,185.9 L290.9,187.1 L292.5,188.3 L294.0,189.3 L295.6,190.3 L297.2,191.2 L298.8,192.0 L300.3,192.8 L301.9,193.5 L303.5,194.2 L305.0,194.7 L306.6,195.3 L308.2,195.8 L309.8,196.2 L311.3,196.6 L312.9,197.0 L314.5,197.3 L316.1,197.6 L317.6,197.9 L319.2,198.1 L320.8,198.3 L322.4,198.5 L323.9,198.7 L325.5,198.9 L327.1,199.0 L328.6,199.1 L330.2,199.2 L331.8,199.3 L333.4,199.4 L334.9,199.5 L336.5,199.6 L338.1,199.6 L339.7,199.7 L341.2,199.7 L342.8,199.7 L344.4,199.8 L345.9,199.8 L347.5,199.8 L349.1,199.9 L350.7,199.9 L352.2,199.9 L353.8,199.9 L355.4,199.9 L357.0,199.9 L358.5,199.9 L360.1,200.0 L361.7,200.0 L363.3,200.0 L364.8,200.0 L366.4,200.0 L368.0,200.0 L369.5,200.0 L371.1,200.0 L372.7,200.0 L374.3,200.0 L375.8,200.0 L377.4,200.0 L379.0,200.0 L380.6,200.0 L382.1,200.0 L383.7,200.0 L385.3,200.0 L386.9,200.0 L388.4,200.0 L390.0,200.0" style="fill:none;stroke:var(--c2);stroke-width:2;stroke-linecap:round;stroke-linejoin:round"></path><line style="stroke:var(--fig-ink);stroke-width:1.2" x1="14.0" x2="396.0" y1="200.0" y2="200.0"></line><line style="stroke:var(--fig-ink);stroke-width:1.2" x1="14.0" x2="14.0" y1="200.0" y2="8.0"></line><path d="M398.0,200.0 L392.6,202.5 L392.6,197.5 Z" style="fill:var(--fig-ink);stroke:var(--fig-ink);stroke-width:1;stroke-linecap:round;stroke-linejoin:round"></path><path d="M14.0,6.0 L16.5,11.4 L11.5,11.4 Z" style="fill:var(--fig-ink);stroke:var(--fig-ink);stroke-width:1;stroke-linecap:round;stroke-linejoin:round"></path><line style="stroke:var(--fig-ink);stroke-width:1" x1="27.9" x2="27.9" y1="200.0" y2="204.0"></line><text dominant-baseline="central" style="fill:var(--ink-2);font-size:12.5px" text-anchor="middle" x="27.9" y="215.0">0</text><line style="stroke:var(--fig-ink);stroke-width:1" x1="115.0" x2="115.0" y1="200.0" y2="204.0"></line><text dominant-baseline="central" style="fill:var(--ink-2);font-size:12.5px" text-anchor="middle" x="115.0" y="215.0">5</text><line style="stroke:var(--fig-ink);stroke-width:1" x1="202.0" x2="202.0" y1="200.0" y2="204.0"></line><text dominant-baseline="central" style="fill:var(--ink-2);font-size:12.5px" text-anchor="middle" x="202.0" y="215.0">10</text><line style="stroke:var(--fig-ink);stroke-width:1" x1="289.0" x2="289.0" y1="200.0" y2="204.0"></line><text dominant-baseline="central" style="fill:var(--ink-2);font-size:12.5px" text-anchor="middle" x="289.0" y="215.0">15</text><line style="stroke:var(--fig-ink);stroke-width:1" x1="376.1" x2="376.1" y1="200.0" y2="204.0"></line><text dominant-baseline="central" style="fill:var(--ink-2);font-size:12.5px" text-anchor="middle" x="376.1" y="215.0">20</text><svg x="402.0" y="194.7" width="7.8" height="10.6" viewBox="0 -694 521 705" overflow="visible" style="color:var(--ink)"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><use data-c="1D458" xlink:href="#MJX-TEX-I-1D458"></use></g></g></g></svg></svg><figcaption>توزیع دوجمله‌ای: احتمال <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="1.179ex" height="1.595ex" role="img" focusable="false" viewBox="0 -694 521 705" xmlns:xlink="http://www.w3.org/1999/xlink"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><use data-c="1D458" xlink:href="#MJX-TEX-I-1D458"></use></g></g></g></svg></mjx-container> شیر در <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.186ex;" xmlns="http://www.w3.org/2000/svg" width="6.637ex" height="1.692ex" role="img" focusable="false" viewBox="0 -666 2933.6 748" xmlns:xlink="http://www.w3.org/1999/xlink"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><use data-c="1D45B" xlink:href="#MJX-TEX-I-1D45B"></use></g><g data-mml-node="mo" transform="translate(877.8,0)"><use data-c="3D" xlink:href="#MJX-TEX-N-3D"></use></g><g data-mml-node="mn" transform="translate(1933.6,0)"><use data-c="32" xlink:href="#MJX-TEX-N-32"></use><use data-c="30" xlink:href="#MJX-TEX-N-30" transform="translate(500,0)"></use></g></g></g></svg></mjx-container> پرتاب سکه سالم، و منحنی گاوسی که قضیه حد مرکزی پیش‌بینی می‌کند</figcaption></figure></section><div class="stats"><div class="stat"><b>۲۱</b><span>فصل</span></div><div class="stat"><b>۱۰۹</b><span>تعریف و قضیه</span></div><div class="stat"><b>۹۲</b><span>مثال حل‌شده</span></div><div class="stat"><b>۷۹</b><span>تمرین با حل کامل</span></div><div class="stat"><b>۶۴</b><span>شکل و نمودار</span></div></div><div class="resume" hidden="" id="resume"><span>ادامه مطالعه از</span><a href="#">—</a></div><section class="part"><div class="part-h"><h2>مبانی احتمال</h2><span>فضای احتمال، احتمال شرطی و استقلال</span></div><ol class="chap-list"><li><a class="chap" href="ch00.html"><div class="chap-n">پیش<small>جلسات ۱ و ۲</small></div><div class="chap-b"><div class="chap-t">مرور پیش‌نیازها</div><div class="chap-s">نظریه مجموعه‌ها، اصول شمارش، فضای احتمال و اصول کولموگروف</div><div class="chap-c"></div></div></a></li><li><a class="chap" href="ch03.html"><div class="chap-n">۳<small>جلسه</small></div><div class="chap-b"><div class="chap-t">نتایج اصول کولموگروف، آزمایش برنولی و استقلال آماری</div><div class="chap-s">مرور مباحث جلسه قبل، نتایج بدیهی قوانین کولموگروف، اصل شمول و عدم شمول، کران اجتماع، محاسبه احتمال وقایع پیچیده با استفاده از احتمال وقایع پایه، یک مثال: آزمایش برنولی تکرارشونده، استقلال آماری، چند مثال، تمرین‌های تکمیلی</div><div class="chap-c"><span class="pill ex">۸ مثال</span><span class="pill exr">۵ تمرین</span><span class="pill fig">۵ شکل</span></div></div></a></li><li><a class="chap" href="ch04.html"><div class="chap-n">۴<small>جلسه</small></div><div class="chap-b"><div class="chap-t">احتمال شرطی، قانون زنجیره‌ای، احتمال کل و قانون بیز</div><div class="chap-s">احتمال شرطی، قانون زنجیره‌ای، قانون احتمال کل، قانون بیز، استقلال شرطی، تمرین‌های تکمیلی</div><div class="chap-c"><span class="pill ex">۶ مثال</span><span class="pill exr">۴ تمرین</span><span class="pill fig">۳ شکل</span></div></div></a></li><li><a class="chap" href="ch05.html"><div class="chap-n">۵<small>جلسه</small></div><div class="chap-b"><div class="chap-t">مثالی از استقلال شرطی و گراف‌های تصادفی</div><div class="chap-s">مثال از استقلال شرطی (حل مسئله دو سکه)، یک مثال از گراف‌های تصادفی: تشکیل مثلث، گراف‌های  و مسئله تشکیل، تمرین‌های تکمیلی</div><div class="chap-c"><span class="pill ex">۲ مثال</span><span class="pill exr">۳ تمرین</span><span class="pill fig">۳ شکل</span></div></div></a></li></ol></section><section class="part"><div class="part-h"><h2>متغیر تصادفی</h2><span>توزیع‌ها، میانگین، گشتاورها و تبدیل‌ها</span></div><ol class="chap-list"><li><a class="chap" href="ch06.html"><div class="chap-n">۶<small>جلسه</small></div><div class="chap-b"><div class="chap-t">متغیر تصادفی و متغیرهای تصادفی گسسته معروف</div><div class="chap-s">متغیر تصادفی  ــ مقدمه، متغیرهای تصادفی گسسته، متغیرهای تصادفی گسسته معروف، تمرین‌های تکمیلی</div><div class="chap-c"><span class="pill ex">۵ مثال</span><span class="pill exr">۴ تمرین</span><span class="pill fig">۴ شکل</span></div></div></a></li><li><a class="chap" href="ch07.html"><div class="chap-n">۷<small>جلسه</small></div><div class="chap-b"><div class="chap-t">متغیرهای تصادفی پیوسته، <span class="smallcaps">CDF</span> و <span class="smallcaps">PDF</span></div><div class="chap-s">متغیرهای تصادفی پیوسته، تابع توزیع انباشته، تابع چگالی احتمال، متغیرهای تصادفی پیوسته معروف، تمرین‌های تکمیلی</div><div class="chap-c"><span class="pill exr">۴ تمرین</span><span class="pill fig">۷ شکل</span></div></div></a></li><li><a class="chap" href="ch08.html"><div class="chap-n">۸<small>جلسه</small></div><div class="chap-b"><div class="chap-t">تساوی‌های آماری، استقلال متغیرهای تصادفی و متغیرهای مخلوط</div><div class="chap-s">مفهوم  در آمار و احتمال، استقلال متغیرهای تصادفی، متغیرهای تصادفی، رفتار دُم توزیع‌های مختلف، متغیرهای تصادفی مخلوط (گسسته و پیوسته)، تمرین‌های تکمیلی</div><div class="chap-c"><span class="pill ex">۲ مثال</span><span class="pill exr">۳ تمرین</span><span class="pill fig">۸ شکل</span></div></div></a></li><li><a class="chap" href="ch09.html"><div class="chap-n">۹<small>جلسه</small></div><div class="chap-b"><div class="chap-t">توزیع‌های شرطی، مدل‌های مخلوط، میانگین و قانون اعداد بزرگ</div><div class="chap-s">توزیع‌های شرطی، خاصیت بی‌حافظگی، مدل‌های آماری مخلوط، توصیف یک متغیر تصادفی، میانگین، خواص میانگین، مفهوم متغیرهای تصادفی  و قانون اعداد بزرگ، توزیع‌های بدون میانگین، یک مثال تمرینی: سکه تصادفی با احتمال نامعلوم، تمرین‌های تکمیلی</div><div class="chap-c"><span class="pill ex">۷ مثال</span><span class="pill exr">۳ تمرین</span><span class="pill fig">۶ شکل</span></div></div></a></li><li><a class="chap" href="ch10.html"><div class="chap-n">۱۰<small>جلسه</small></div><div class="chap-b"><div class="chap-t">عملگر میانگین‌گیری، واریانس، مُد و میانه</div><div class="chap-s">میانگین‌گیری یا عملگر، واریانس و انحراف معیار، واریانس توزیع‌های معروف، واریانس جمع متغیرهای تصادفی، مُد و میانه، تمرین‌های تکمیلی</div><div class="chap-c"><span class="pill ex">۸ مثال</span><span class="pill exr">۴ تمرین</span><span class="pill fig">۲ شکل</span></div></div></a></li><li><a class="chap" href="ch11.html"><div class="chap-n">۱۱<small>جلسه</small></div><div class="chap-b"><div class="chap-t">گشتاورها، تابع مولد گشتاور، تابع مشخصه و توابع یک متغیر تصادفی</div><div class="chap-s">گشتاورهای یک توزیع، تابع مولد گشتاور، تابع مشخصه، توابعی از یک متغیر تصادفی، تمرین‌های تکمیلی</div><div class="chap-c"><span class="pill ex">۶ مثال</span><span class="pill exr">۴ تمرین</span><span class="pill fig">۱ شکل</span></div></div></a></li><li><a class="chap" href="ch12.html"><div class="chap-n">۱۲<small>جلسه</small></div><div class="chap-b"><div class="chap-t">توابعی از یک متغیر تصادفی و تبدیل توزیع‌ها</div><div class="chap-s">یادآوری: تعریف مسئله و موارد ساده، فرمول در حالت توابع <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.464ex;" xmlns="http://www.w3.org/2000/svg" width="1.079ex" height="1.464ex" role="img" focusable="false" viewBox="0 -442 477 647" xmlns:xlink="http://www.w3.org/1999/xlink"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><use data-c="1D454" xlink:href="#MJX-TEX-I-1D454"></use></g></g></g></svg></mjx-container> یک‌به‌یک، فرمول کلی، بررسی و شهود ریاضیاتی، مثال، تبدیل توزیع‌های مختلف به یکدیگر، چگونگی تولید اعداد تصادفی، تمرین‌های تکمیلی</div><div class="chap-c"><span class="pill ex">۳ مثال</span><span class="pill exr">۴ تمرین</span><span class="pill fig">۳ شکل</span></div></div></a></li></ol></section><section class="part"><div class="part-h"><h2>چند متغیر تصادفی</h2><span>توزیع مشترک، همبستگی، جمع و قضایای حدی</span></div><ol class="chap-list"><li><a class="chap" href="ch13.html"><div class="chap-n">۱۳<small>جلسه</small></div><div class="chap-b"><div class="chap-t">توزیع مشترک دو یا چند متغیر تصادفی</div><div class="chap-s">توزیع مشترک دو متغیر تصادفی، تابع چگالی احتمال مشترک، خواص و حاشیه‌سازی، توزیع مشترک چند متغیر تصادفی، تمرین‌های تکمیلی</div><div class="chap-c"><span class="pill ex">۵ مثال</span><span class="pill exr">۳ تمرین</span><span class="pill fig">۴ شکل</span></div></div></a></li><li><a class="chap" href="ch14.html"><div class="chap-n">۱۴<small>جلسه</small></div><div class="chap-b"><div class="chap-t">چگالی شرطی، میانگین شرطی و متغیرهای مشترکاً گاوسی</div><div class="chap-s">یادآوری: توزیع مشترک چند متغیر تصادفی، نکته جانبی: توابعی از متغیرهای مستقل، توابع چگالی احتمال شرطی و قانون بیز، میانگین‌گیری و میانگین‌های شرطی، متغیرهای تصادفی مشترکاً گاوسی، تمرین‌های تکمیلی</div><div class="chap-c"><span class="pill ex">۴ مثال</span><span class="pill exr">۳ تمرین</span><span class="pill fig">۱ شکل</span></div></div></a></li><li><a class="chap" href="ch15.html"><div class="chap-n">۱۵<small>جلسه</small></div><div class="chap-b"><div class="chap-t">توزیع‌های مشترک تکین، گشتاورهای مشترک، کوواریانس و همبستگی</div><div class="chap-s">ادامه بحث متغیرهای مشترکاً گاوسی، توزیع‌های مشترک ترکیبی (تکینگی‌های خطی و نقطه‌ای)، گشتاورهای مشترک، کوواریانس و همبستگی آماری، ویژگی‌های ضریب همبستگی، تمرین‌های تکمیلی</div><div class="chap-c"><span class="pill ex">۲ مثال</span><span class="pill exr">۴ تمرین</span><span class="pill fig">۲ شکل</span></div></div></a></li><li><a class="chap" href="ch16.html"><div class="chap-n">۱۶<small>جلسه</small></div><div class="chap-b"><div class="chap-t">یک تابع از دو متغیر تصادفی: توزیع جمع و کانولوشن</div><div class="chap-s">مرور: گشتاورهای مشترک، کوواریانس و همبستگی، مبحث جدید: یک تابع از دو متغیر تصادفی، حالت خاص: جمع <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.186ex;" xmlns="http://www.w3.org/2000/svg" width="6.42ex" height="1.731ex" role="img" focusable="false" viewBox="0 -683 2837.4 765" xmlns:xlink="http://www.w3.org/1999/xlink"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><use data-c="1D44B" xlink:href="#MJX-TEX-I-1D44B"></use></g><g data-mml-node="mo" transform="translate(1074.2,0)"><use data-c="2B" xlink:href="#MJX-TEX-N-2B"></use></g><g data-mml-node="mi" transform="translate(2074.4,0)"><use data-c="1D44C" xlink:href="#MJX-TEX-I-1D44C"></use></g></g></g></svg></mjx-container> در حالت گسسته، حالت خاص: جمع <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.186ex;" xmlns="http://www.w3.org/2000/svg" width="6.42ex" height="1.731ex" role="img" focusable="false" viewBox="0 -683 2837.4 765" xmlns:xlink="http://www.w3.org/1999/xlink"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><use data-c="1D44B" xlink:href="#MJX-TEX-I-1D44B"></use></g><g data-mml-node="mo" transform="translate(1074.2,0)"><use data-c="2B" xlink:href="#MJX-TEX-N-2B"></use></g><g data-mml-node="mi" transform="translate(2074.4,0)"><use data-c="1D44C" xlink:href="#MJX-TEX-I-1D44C"></use></g></g></g></svg></mjx-container> در حالت پیوسته، مثال‌ها، خواص: جمع <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.186ex;" xmlns="http://www.w3.org/2000/svg" width="6.42ex" height="1.731ex" role="img" focusable="false" viewBox="0 -683 2837.4 765" xmlns:xlink="http://www.w3.org/1999/xlink"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><use data-c="1D44B" xlink:href="#MJX-TEX-I-1D44B"></use></g><g data-mml-node="mo" transform="translate(1074.2,0)"><use data-c="2B" xlink:href="#MJX-TEX-N-2B"></use></g><g data-mml-node="mi" transform="translate(2074.4,0)"><use data-c="1D44C" xlink:href="#MJX-TEX-I-1D44C"></use></g></g></g></svg></mjx-container> برای توزیع‌های گاوسی، تمرین‌های تکمیلی</div><div class="chap-c"><span class="pill ex">۵ مثال</span><span class="pill exr">۴ تمرین</span><span class="pill fig">۳ شکل</span></div></div></a></li><li><a class="chap" href="ch17.html"><div class="chap-n">۱۷<small>جلسه</small></div><div class="chap-b"><div class="chap-t">مثال‌های معروف از <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="7.499ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 3314.7 1000" xmlns:xlink="http://www.w3.org/1999/xlink"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><use data-c="1D454" xlink:href="#MJX-TEX-I-1D454"></use></g><g data-mml-node="mo" transform="translate(477,0)"><use data-c="28" xlink:href="#MJX-TEX-N-28"></use></g><g data-mml-node="mi" transform="translate(866,0)"><use data-c="1D44B" xlink:href="#MJX-TEX-I-1D44B"></use></g><g data-mml-node="mo" transform="translate(1718,0)"><use data-c="2C" xlink:href="#MJX-TEX-N-2C"></use></g><g data-mml-node="mi" transform="translate(2162.7,0)"><use data-c="1D44C" xlink:href="#MJX-TEX-I-1D44C"></use></g><g data-mml-node="mo" transform="translate(2925.7,0)"><use data-c="29" xlink:href="#MJX-TEX-N-29"></use></g></g></g></svg></mjx-container>، آماره‌های ترتیبی و قضیه حد مرکزی</div><div class="chap-s">مثال‌های معروف از <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="7.499ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 3314.7 1000" xmlns:xlink="http://www.w3.org/1999/xlink"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><use data-c="1D454" xlink:href="#MJX-TEX-I-1D454"></use></g><g data-mml-node="mo" transform="translate(477,0)"><use data-c="28" xlink:href="#MJX-TEX-N-28"></use></g><g data-mml-node="mi" transform="translate(866,0)"><use data-c="1D44B" xlink:href="#MJX-TEX-I-1D44B"></use></g><g data-mml-node="mo" transform="translate(1718,0)"><use data-c="2C" xlink:href="#MJX-TEX-N-2C"></use></g><g data-mml-node="mi" transform="translate(2162.7,0)"><use data-c="1D44C" xlink:href="#MJX-TEX-I-1D44C"></use></g><g data-mml-node="mo" transform="translate(2925.7,0)"><use data-c="29" xlink:href="#MJX-TEX-N-29"></use></g></g></g></svg></mjx-container>، آماره‌های ترتیبی، قضیه حد مرکزی، تمرین‌های تکمیلی</div><div class="chap-c"><span class="pill ex">۲ مثال</span><span class="pill exr">۴ تمرین</span><span class="pill fig">۳ شکل</span></div></div></a></li></ol></section><section class="part"><div class="part-h"><h2>آمار و تخمین</h2><span>نامساوی‌ها، آمار، تخمین و درست‌نمایی</span></div><ol class="chap-list"><li><a class="chap" href="ch18.html"><div class="chap-n">۱۸<small>جلسه</small></div><div class="chap-b"><div class="chap-t">نامساوی‌های احتمالاتی و مقدمه‌ای بر آمار</div><div class="chap-s">نامساوی‌های احتمالاتی، آمار، سرفصل‌های اصلی آمار، بهینگی، تمرین‌های تکمیلی</div><div class="chap-c"><span class="pill ex">۵ مثال</span><span class="pill exr">۳ تمرین</span><span class="pill fig">۳ شکل</span></div></div></a></li><li><a class="chap" href="ch19.html"><div class="chap-n">۱۹<small>جلسه</small></div><div class="chap-b"><div class="chap-t">آمار: مفاهیم تجربی، تخمین، آزمون فرض و پیش‌بینی (تعمیق)</div><div class="chap-s">خلاصه: آمار در مقابل احتمال، مفاهیم تجربی و ویژگی‌های آن‌ها، تخمین، آزمون فرض، پیش‌بینی، بهینگی: یادآوری، تمرین‌های تکمیلی</div><div class="chap-c"><span class="pill ex">۵ مثال</span><span class="pill exr">۳ تمرین</span><span class="pill fig">۱ شکل</span></div></div></a></li><li><a class="chap" href="ch20.html"><div class="chap-n">۲۰<small>جلسه</small></div><div class="chap-b"><div class="chap-t">تخمین میانگین مربع و مقدمه تخمین نقطه‌ای</div><div class="chap-s">تخمین میانگین مربع، تخمین نقطه‌ای، تمرین‌های تکمیلی</div><div class="chap-c"><span class="pill ex">۵ مثال</span><span class="pill exr">۳ تمرین</span><span class="pill fig">۱ شکل</span></div></div></a></li><li><a class="chap" href="ch21.html"><div class="chap-n">۲۱<small>جلسه</small></div><div class="chap-b"><div class="chap-t">تخمین‌گر بیشینه درست‌نمایی <span class="smallcaps">(MLE)</span></div><div class="chap-s">مرور: تخمین نقطه‌ای و معیارهای کیفیت، ایده درست‌نمایی، تعریف تخمین‌گر بیشینه درست‌نمایی، خواص و ویژگی‌ها، مثال‌ها: بهینه‌سازی با تابع هدف مشتق‌پذیر، خاصیت ناوردایی، مثال‌های بیشتر از توزیع‌های مشهور، تمرین‌های تکمیلی</div><div class="chap-c"><span class="pill ex">۷ مثال</span><span class="pill exr">۶ تمرین</span><span class="pill fig">۱ شکل</span></div></div></a></li><li><a class="chap" href="ch22.html"><div class="chap-n">۲۲<small>جلسه</small></div><div class="chap-b"><div class="chap-t">بیشینه درست‌نمایی: مثال‌های پیشرفته</div><div class="chap-s">بهینه‌سازی با تابع هدف غیرمشتق‌پذیر: حدود توزیع یکنواخت، بهینه‌سازی بدون جواب تحلیلی: بازیابی رشته دودویی از کانال نویزی، یک مثال ساده (گسسته): یافتن تعداد کارت‌های درون یک جعبه، بهینه‌سازی دومتغیره با تابع هدف مشتق‌پذیر: گاوسی با میانگین و واریانس نامعلوم، تمرین‌های تکمیلی</div><div class="chap-c"><span class="pill ex">۵ مثال</span><span class="pill exr">۸ تمرین</span><span class="pill fig">۳ شکل</span></div></div></a></li></ol></section><section class="howto"><h2>راهنمای استفاده</h2><ul><li>هر جلسه یک صفحه است؛ فهرست بخش‌ها در کنار صفحه (یا با دکمه «فهرست» در گوشی) در دسترس است.</li><li>حل هر مثال و تمرین زیر آن آمده است. با دکمه «حل‌ها» همه حل‌ها را پنهان کنید تا خودتان را بسنجید؛ هر حل با یک ضربه دوباره باز می‌شود.</li><li>رنگ هر کادر نوع آن را نشان می‌دهد: <span class="tc-blue">تعریف</span>، <span class="tc-red">قضیه</span>، <span class="tc-green">مثال</span>، <span class="tc-orange">تمرین</span>.</li></ul></section><p class="foot">نسخه وب جزوه · فرمول‌ها و شکل‌ها به صورت برداری رسم شده‌اند و در حالت روشن و تیره خوانا هستند.</p></div></div><script>
+(function () {
+  var root = document.documentElement;
+  function get(k, d) { try { var v = localStorage.getItem(k); return v === null ? d : v; } catch (e) { return d; } }
+  function set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+
+  // theme: system -> light -> dark
+  var themeBtn = document.getElementById('theme-btn');
+  var labels = { system: 'خودکار', light: 'روشن', dark: 'تیره' };
+  function applyTheme(t) {
+    if (t === 'system') root.removeAttribute('data-theme'); else root.setAttribute('data-theme', t);
+    if (themeBtn) { var l = themeBtn.querySelector('.lbl'); if (l) l.textContent = 'پوسته: ' + labels[t]; themeBtn.setAttribute('aria-label', 'پوسته: ' + labels[t]); }
+  }
+  var theme = get('jz-theme', 'system');
+  applyTheme(theme);
+  if (themeBtn) themeBtn.addEventListener('click', function () {
+    theme = theme === 'system' ? 'light' : theme === 'light' ? 'dark' : 'system';
+    set('jz-theme', theme); applyTheme(theme);
+  });
+
+  // self-test mode: collapse every solution
+  var quizBtn = document.getElementById('quiz-btn');
+  function applyQuiz(on) {
+    document.body.classList.toggle('quiz', on);
+    document.querySelectorAll('details.sol').forEach(function (d) { d.open = !on; });
+    if (quizBtn) {
+      quizBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      var l = quizBtn.querySelector('.lbl'); if (l) l.textContent = on ? 'حل‌ها پنهان' : 'حل‌ها نمایان';
+    }
+  }
+  var quiz = get('jz-quiz', '0') === '1';
+  if (document.querySelector('details.sol')) applyQuiz(quiz);
+  if (quizBtn) quizBtn.addEventListener('click', function () { quiz = !quiz; set('jz-quiz', quiz ? '1' : '0'); applyQuiz(quiz); });
+
+  // table of contents drawer (narrow screens)
+  var toc = document.getElementById('toc'), tocBtn = document.getElementById('toc-btn'), scrim = null;
+  function closeToc() { if (!toc) return; toc.classList.remove('open'); if (scrim) { scrim.remove(); scrim = null; } if (tocBtn) tocBtn.setAttribute('aria-expanded', 'false'); }
+  function openToc() {
+    toc.classList.add('open'); tocBtn.setAttribute('aria-expanded', 'true');
+    scrim = document.createElement('div'); scrim.className = 'scrim'; scrim.addEventListener('click', closeToc); document.body.appendChild(scrim);
+  }
+  if (tocBtn && toc) tocBtn.addEventListener('click', function () { toc.classList.contains('open') ? closeToc() : openToc(); });
+  var tocClose = document.getElementById('toc-close'); if (tocClose) tocClose.addEventListener('click', closeToc);
+  if (toc) toc.addEventListener('click', function (e) { if (e.target.closest('a') && window.matchMedia('(max-width: 1179px)').matches) closeToc(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeToc(); });
+
+  // highlight the section being read
+  var links = toc ? Array.prototype.slice.call(toc.querySelectorAll('a[href^="#"]')) : [];
+  var map = {}; links.forEach(function (a) { map[a.getAttribute('href').slice(1)] = a; });
+  var heads = Array.prototype.slice.call(document.querySelectorAll('main h2[id], main h3[id]')).filter(function (h) { return map[h.id]; });
+  function spy() {
+    var y = window.scrollY + 120, cur = null;
+    for (var i = 0; i < heads.length; i++) { if (heads[i].offsetTop <= y) cur = heads[i]; else break; }
+    links.forEach(function (a) { a.classList.remove('active'); });
+    if (cur) { map[cur.id].classList.add('active'); }
+  }
+  if (heads.length) { window.addEventListener('scroll', function () { window.requestAnimationFrame(spy); }, { passive: true }); spy(); }
+
+  // remember the last chapter read; show it on the home page
+  var page = document.body.getAttribute('data-page');
+  if (page && page !== 'index') set('jz-last', page + '|' + document.body.getAttribute('data-label'));
+  var resume = document.getElementById('resume');
+  if (resume) {
+    var last = get('jz-last', '');
+    if (last) { var parts = last.split('|'); var a = resume.querySelector('a'); a.href = parts[0] + '.html'; a.textContent = parts[1]; resume.hidden = false; }
+  }
+})();
+</script></body></html>
