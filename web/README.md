@@ -1,31 +1,14 @@
-# Web edition of the notes
+# ساخت نسخه وب و PDF
 
-An HTML edition of the course notes (sessions 3–22), with no PDF typesetting step.
+| دستور | خروجی |
+| --- | --- |
+| `python3 build.py` | صفحه‌های وب در `dist/` (نسخه artifact) |
+| `python3 print.py` | فایل PDF در `pdf/` |
+| `python3 site.py` | وب‌سایت کامل در `site/` (برای شاخه `gh-pages`) |
 
-- `build.py` builds `dist/` (one page per session plus `index.html`).
-- Content comes from `../jozve/chapters/*.tex`: pandoc reads its structure, and `convert.py` turns it into styled HTML (boxes, solutions, Persian digits).
-- `mathrender.js` (MathJax, Node) draws every formula as SVG. Persian text inside formulas is measured with HarfBuzz.
-- `figs.py` / `figlib.py` redraw every figure as SVG that follows the page's light or dark theme.
-- `template.py` holds the page layout, styles and the small script for the theme, solutions toggle and table of contents.
+اول یک بار `npm install` را اجرا کنید. پیش‌نیازها: Python 3 (beautifulsoup4، numpy، scipy، pypdf)، pandoc، Node 18+، Playwright و فونت وزیرمتن.
 
-Build:
-
-```
-cd web && npm install && python3 build.py
-```
-
-Requires Python 3 (beautifulsoup4, numpy, scipy), pandoc, Node 18+ and the Vazirmatn TTF fonts.
-
-PDF (same pages printed by Chromium, with cover, table of contents with page numbers and bookmarks):
-
-```
-cd web && python3 print.py     # -> pdf/Jozve-Amar-Ehtemal-Najafi.pdf
-```
-
-Website (GitHub Pages, https://iamhirad.github.io/najafi/):
-
-```
-cd web && python3 print.py && python3 site.py   # -> site/ (full HTML pages, PDF, preview image)
-```
-
-The `gh-pages` branch holds the contents of `web/site/`; replace its files with a fresh build to update the site.
+- **محتوا:** از `../jozve/chapters/` خوانده می‌شود.
+- **فرمول‌ها:** با MathJax به SVG تبدیل می‌شوند (`mathrender.js`).
+- **شکل‌ها:** با `figs.py` و `figlib.py` رسم می‌شوند.
+- **قالب صفحه:** در `template.py` است.

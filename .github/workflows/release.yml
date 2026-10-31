@@ -1,0 +1,23 @@
+name: انتشار نسخه
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: ساخت release با فایل PDF
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          notes=".github/release-notes/${GITHUB_REF_NAME}.md"
+          title="$(head -n 1 "$notes" | sed 's/^# //')"
+          tail -n +3 "$notes" > /tmp/notes.md
+          gh release create "$GITHUB_REF_NAME" web/pdf/Jozve-Amar-Ehtemal-Najafi.pdf \
+            --title "$title" --notes-file /tmp/notes.md --verify-tag
