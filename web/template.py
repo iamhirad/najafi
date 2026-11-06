@@ -184,7 +184,9 @@ mjx-container[jax="SVG"] > svg { overflow: visible; min-height: 1px; min-width: 
 mjx-container[jax="SVG"][display="true"] { display: block; text-align: center; margin: 0; }
 mjx-container[jax="SVG"]:not([display]) { unicode-bidi: isolate; }
 main mjx-container[jax="SVG"]:not([display]) > svg { max-width: 100%; height: auto; }
-.dm { display: block; overflow-x: auto; overflow-y: hidden; margin: .9rem 0; padding: .35rem 0; -webkit-overflow-scrolling: touch; }
+.dm { display: block; overflow-x: auto; overflow-y: hidden; margin: .9rem 0; padding: .35rem 0; -webkit-overflow-scrolling: touch; direction: ltr; }
+/* a wide formula starts at the left edge so all of it can be scrolled to; a narrow one stays centered */
+.dm > mjx-container[jax="SVG"][display="true"] { width: max-content; min-width: 100%; }
 .dm::-webkit-scrollbar { height: 6px; } .dm::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 3px; }
 .merr { color: var(--warn); font-family: monospace; direction: ltr; unicode-bidi: isolate; }
 
@@ -313,9 +315,12 @@ body.quiz details.sol:not([open]) { background: var(--rule-2); }
 .hero h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(2.6rem, 1.6rem + 4vw, 4.2rem); line-height: 1.2; margin: .5rem 0 .7rem; text-wrap: balance; }
 .hero p { margin: .3rem 0; color: var(--ink-2); }
 .hero .who { color: var(--muted); font-size: .93rem; }
-.dl-row { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; margin-top: 1.1rem !important; }
+.dl-row { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; margin-top: .9rem !important; }
 .dl { display: inline-flex; align-items: center; gap: .5rem; padding: .55rem 1.1rem; border-radius: 999px; background: var(--accent); color: var(--surface); text-decoration: none; font-weight: 700; font-size: .95rem; }
 .dl:hover { filter: brightness(1.1); }
+.dl.alt { background: var(--accent-soft); color: var(--accent); }
+.dl .sigma { font-size: 1.15rem; line-height: 1; }
+.dl-sub { font-size: .88rem; font-weight: 600; }
 .dl svg { width: 1.15rem; height: 1.15rem; }
 .dl-meta { color: var(--muted); font-size: .85rem; }
 .hero-fig { text-align: center; }
@@ -353,6 +358,37 @@ body.quiz details.sol:not([open]) { background: var(--rule-2); }
 .howto h2 { font-family: var(--font-display); font-size: 1.4rem; margin: 0 0 .4rem; }
 .howto ul { margin: .3rem 0; padding-inline-start: 1.2rem; }
 .foot { margin-top: 3rem; color: var(--muted); font-size: .82rem; text-align: center; }
+
+/* ---------- formula summary ---------- */
+.tb-btn .sigma { font-size: 1.1rem; line-height: 1; font-weight: 700; }
+a.tb-btn { text-decoration: none; }
+@media (min-width: 1180px) { .page-summary .layout { grid-template-columns: 15rem minmax(0, 64rem); } }
+main.summary > p { max-width: 46rem; color: var(--ink-2); }
+main.summary h2.part-title { font-size: 2rem; margin: 3rem 0 .4rem; padding-bottom: .5rem; border-bottom: 2px solid var(--accent); }
+main.summary h2.part-title .h-num { font-size: .55em; }
+main.summary h3 { font-size: 1.1rem; margin: 1.8rem 0 .7rem; color: var(--ink-2); }
+.fgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 21rem), 1fr)); gap: .85rem; margin: 0 0 1rem; align-items: start; }
+.fcard { background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; padding: .7rem .95rem .55rem; min-width: 0; }
+.fwide { margin: .2rem 0 1.2rem; }
+.fcard-h { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .2rem .6rem; margin-bottom: .1rem; }
+.fcard-h h4 { margin: 0; font-size: .97rem; font-weight: 800; line-height: 1.65; color: var(--ink); }
+.frefs { display: inline-flex; flex-wrap: wrap; gap: .3rem; }
+.fref { font-size: .72rem; font-weight: 600; color: var(--accent); background: var(--accent-soft); border-radius: 999px; padding: .05rem .55rem; text-decoration: none; white-space: nowrap; line-height: 1.7; }
+.fref:hover { text-decoration: underline; }
+.fcard-b { font-size: .93rem; line-height: 1.85; min-width: 0; }
+.fcard-b > :first-child { margin-top: .25rem; }
+.fcard-b p { margin: .35rem 0; }
+.fcard-b ul, .fcard-b ol { margin: .3rem 0; padding-inline-start: 1.2rem; }
+.fcard-b li { margin: .15rem 0; }
+.fcard-b .dm { margin: .4rem 0; padding: .15rem 0; overflow: visible; }
+.fcard-b .dm mjx-container > svg { max-width: 100%; height: auto; }
+.fcard-b .dm:not(.scroll) > mjx-container[jax="SVG"][display="true"] { width: auto; min-width: 0; }
+.fcard-b .dm.scroll { overflow-x: auto; }
+.fcard-b .dm.scroll mjx-container > svg { max-width: none; }
+.fwide .table-wrap { margin: .5rem 0; }
+.fwide .table-wrap table { font-size: .88rem; }
+.fwide .table-wrap td, .fwide .table-wrap th { min-width: 3.2rem; padding: .4rem .6rem; }
+.chap.sum-link .chap-n { font-family: var(--font-body); font-size: 2rem; }
 """
 
 JS = r"""
@@ -413,6 +449,20 @@ JS = r"""
   }
   if (heads.length) { window.addEventListener('scroll', function () { window.requestAnimationFrame(spy); }, { passive: true }); spy(); }
 
+  // summary cards: shrink a wide formula a little, but let a very wide one scroll
+  var dms = document.querySelectorAll('.fcard-b .dm');
+  function fitFormulas() {
+    dms.forEach(function (dm) {
+      var svg = dm.querySelector('svg'); if (!svg) return;
+      dm.classList.remove('scroll');
+      var vb = svg.viewBox && svg.viewBox.baseVal, natural = 0;
+      var w = svg.getAttribute('width') || '';
+      if (/ex$/.test(w)) natural = parseFloat(w) * parseFloat(getComputedStyle(dm).fontSize) * 0.5;
+      if (natural > dm.clientWidth * 1.3) dm.classList.add('scroll');
+    });
+  }
+  if (dms.length) { fitFormulas(); window.addEventListener('resize', fitFormulas); }
+
   // remember the last chapter read; show it on the home page
   var page = document.body.getAttribute('data-page');
   if (page && page !== 'index') set('jz-last', page + '|' + document.body.getAttribute('data-label'));
@@ -438,11 +488,13 @@ ICONS = {
 }
 
 
-def topbar(page_label, show_toc=True, show_quiz=True):
+def topbar(page_label, show_toc=True, show_quiz=True, show_summary=True):
     b = ['<header class="topbar"><div class="topbar-in">',
          '<a class="brand" href="index.html"><span class="brand-mark">آ</span>'
          '<span class="brand-text"><b>آمار و احتمال مهندسی</b><span>%s</span></span></a>' % page_label,
          '<span class="spacer"></span>']
+    if show_summary:
+        b.append('<a class="tb-btn" href="summary.html" title="خلاصه فرمول‌ها و مفاهیم"><span class="sigma" aria-hidden="true">∑</span><span class="lbl">خلاصه فرمول‌ها</span></a>')
     if show_toc:
         b.append('<button class="tb-btn toc-btn" id="toc-btn" type="button" aria-expanded="false" aria-controls="toc">%s<span class="lbl">فهرست</span></button>' % ICONS['list'])
     if show_quiz:
@@ -471,3 +523,20 @@ def chapter_page(ch, prev, nxt, body, toc_html, defs, head_html):
             '<main>%s%s%s</main></div><script>%s</script></body></html>') % (
         title, FONTS, CSS, ch['file'][:-5], ch['label'], defs, topbar(ch['label']), ICONS['close'], toc_html,
         head_html, body, pager, JS)
+
+
+def summary_page(ch, body, toc_html, defs, head_html):
+    title = '%s · آمار و احتمال مهندسی' % ch['title_text']
+    back = ('<nav class="pager" aria-label="بازگشت"><a class="prev" href="index.html"><span class="dir">→ صفحه اول</span>'
+            '<span class="t">فهرست جلسه‌های جزوه</span></a></nav>')
+    return ('<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8">'
+            '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">'
+            '<meta name="claude:viewport-fit-sides" content="cover">'
+            '<title>%s</title>' + FAVICON.replace('%', '%%') + '%s<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}%s</style></head>'
+            '<body class="page-summary" data-page="summary" data-label="%s">%s%s'
+            '<div class="layout"><nav class="toc" id="toc" aria-label="فهرست خلاصه">'
+            '<button class="tb-btn toc-close" id="toc-close" type="button">%s<span>بستن</span></button>'
+            '<p class="toc-title">بخش‌های خلاصه</p>%s</nav>'
+            '<main class="summary">%s%s%s</main></div><script>%s</script></body></html>') % (
+        title, FONTS, CSS, ch['label'], defs, topbar(ch['label'], show_quiz=False, show_summary=False), ICONS['close'],
+        toc_html, head_html, body, back, JS)
