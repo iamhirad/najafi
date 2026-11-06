@@ -186,6 +186,14 @@ def build_index(chapters, site=None):
                     c['file'], numtxt, small, c['title_html'], secs, pills))
         parts.append('<section class="part"><div class="part-h"><h2>%s</h2><span>%s</span></div>'
                      '<ol class="chap-list">%s</ol></section>' % (name, sub, ''.join(items)))
+    import summary as summ
+    _, stoc, ncards = summ.load()
+    topics = '، '.join(re.sub(r'<span class="en"[^>]*>(.*?)</span>', r'\1', t['html']) for t in stoc if t['level'] == 2)
+    parts.append('<section class="part"><div class="part-h"><h2>پیوست</h2><span>مرور سریع پیش از امتحان</span></div>'
+                 '<ol class="chap-list"><li><a class="chap sum-link" href="summary.html"><div class="chap-n">∑<small>خلاصه</small></div>'
+                 '<div class="chap-b"><div class="chap-t">خلاصه فرمول‌ها و مفاهیم</div><div class="chap-s">%s</div>'
+                 '<div class="chap-c"><span class="pill fig">%s کارت فرمول و جدول</span></div></div></a></li></ol></section>' % (
+                     topics, FA(ncards)))
     hero_fig = figs.hero_binomial()
     body = (
         '<div class="page" dir="rtl" lang="fa">' + template.topbar('جزوه کامل درس', show_toc=False, show_quiz=False) +
@@ -216,8 +224,11 @@ def build_index(chapters, site=None):
     if site:
         body = body.replace('@@DL@@', (
             '<p class="dl-row"><a class="dl" href="%s" download>%s<span>دانلود نسخه PDF</span></a>'
-            '<span class="dl-meta">%s صفحه <span class="en" dir="ltr">A4</span> · %s مگابایت</span></p>') % (
-            site['pdf'], template.ICONS['download'], FA(site['pages']), FA(site['mb'])))
+            '<span class="dl-meta">%s صفحه <span class="en" dir="ltr">A4</span> · %s مگابایت</span></p>'
+            '<p class="dl-row"><a class="dl alt" href="summary.html"><span class="sigma" aria-hidden="true">∑</span><span>خلاصه فرمول‌ها و مفاهیم</span></a>'
+            '<a class="dl-sub" href="%s" download>دانلود <bdi>PDF</bdi> خلاصه (%s صفحه)</a></p>') % (
+            site['pdf'], template.ICONS['download'], FA(site['pages']), FA(site['mb']),
+            site['sum_pdf'], FA(site['sum_pages'])))
         desc = 'جزوه کامل درس آمار و احتمال مهندسی (دکتر امیر نجفی، دانشگاه صنعتی شریف): جلسات ۳ تا ۲۲ با توضیح کامل، مثال‌ها و تمرین‌های حل‌شده.'
         page = ('<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8">'
                 '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">'
@@ -230,7 +241,7 @@ def build_index(chapters, site=None):
                 '</head><body data-page="index">@@DEFS@@%s<script>%s</script></body></html>') % (
             desc, desc, site['url'] + 'og.png', site['url'], template.FAVICON, template.FONTS, template.CSS, body, template.JS)
     else:
-        body = body.replace('@@DL@@', '')
+        body = body.replace('@@DL@@', '<p class="dl-row"><a class="dl alt" href="summary.html"><span class="sigma" aria-hidden="true">∑</span><span>خلاصه فرمول‌ها و مفاهیم</span></a></p>')
         # the artifact publish skeleton supplies <html>/<head>/<body>; our wrapper carries dir/lang
         page = ('<title>جزوه آمار و احتمال مهندسی</title>'
                 '<meta name="claude:viewport-fit-sides" content="cover">' + template.FONTS +
@@ -256,6 +267,9 @@ def main():
         nxt = chapters[i + 1] if i + 1 < len(chapters) else None
         n = build_chapter(ch, prev, nxt, labels)
         print('built', ch['file'], '%.0f KB' % (n / 1024))
+    import summary as summ
+    summ.build_page(DIST)
+    print('built summary.html')
     build_index(chapters)
     print('built index.html')
 

@@ -29,6 +29,6 @@ jobs:
             fi
             title="$(head -n 1 "$notes" | sed 's/^# //')"
             tail -n +3 "$notes" > /tmp/notes.md
-            gh release create "$tag" web/pdf/Jozve-Amar-Ehtemal-Najafi.pdf \
+            gh release create "$tag" web/pdf/*.pdf \
               --target "$GITHUB_SHA" --title "$title" --notes-file /tmp/notes.md --latest
           done

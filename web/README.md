@@ -3,7 +3,8 @@
 | دستور | خروجی |
 | --- | --- |
 | `python3 build.py` | صفحه‌های وب در `dist/` (نسخه artifact) |
-| `python3 print.py` | فایل PDF در `pdf/` |
+| `python3 print.py` | فایل PDF جزوه در `pdf/` |
+| `python3 summary.py --pdf` | صفحه و PDF خلاصه فرمول‌ها |
 | `python3 site.py` | وب‌سایت کامل در `site/` (برای شاخه `gh-pages`) |
 
 اول یک بار `npm install` را اجرا کنید. پیش‌نیازها: Python 3 (beautifulsoup4، numpy، scipy، pypdf)، pandoc، Node 18+، Playwright و فونت وزیرمتن.

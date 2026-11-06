@@ -8,3 +8,4 @@ web/node_modules/
 web/__pycache__/
 web/pdf/jozve.html
 web/site/
+web/pdf/*.html

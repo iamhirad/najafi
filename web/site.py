@@ -1,6 +1,6 @@
 """Build the GitHub Pages website into web/site (full HTML documents + PDF).
 
-python3 site.py   (run print.py first so the PDF exists)
+python3 site.py   (run print.py and summary.py --pdf first so the PDFs exist)
 """
 import os
 import shutil
@@ -29,8 +29,13 @@ def main():
         nxt = chapters[i + 1] if i + 1 < len(chapters) else None
         build.build_chapter(ch, prev, nxt, labels)
     shutil.copy(pdf_src, os.path.join(SITE, PDF_NAME))
+    import summary as summ
+    sum_src = os.path.join(HERE, 'pdf', summ.PDF_NAME)
+    shutil.copy(sum_src, os.path.join(SITE, summ.PDF_NAME))
+    summ.build_page(SITE, site=True)
     info = {'pdf': PDF_NAME, 'pages': len(PdfReader(pdf_src).pages),
-            'mb': round(os.path.getsize(pdf_src) / 1e6), 'url': URL}
+            'mb': round(os.path.getsize(pdf_src) / 1e6), 'url': URL,
+            'sum_pdf': summ.PDF_NAME, 'sum_pages': len(PdfReader(sum_src).pages)}
     build.build_index(chapters, site=info)
     open(os.path.join(SITE, '.nojekyll'), 'w').close()
     # link-preview image

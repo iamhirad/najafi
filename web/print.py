@@ -76,6 +76,7 @@ main h4 { break-after: avoid; }
 figure.fig, .table-wrap, .callout, .flow { break-inside: avoid; }
 .dm { overflow: visible; break-inside: avoid; }
 .dm mjx-container > svg { max-width: 100%; height: auto; }
+.dm > mjx-container[jax="SVG"][display="true"] { width: auto; min-width: 0; }
 p, li { orphans: 3; widows: 3; }
 details.sol > summary { cursor: default; }
 details.sol > summary::before, details.sol > summary::after { display: none; content: none; }
