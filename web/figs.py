@@ -1051,6 +1051,202 @@ def _(fid):
 
 
 # ================================================================ API
+# ================================================================ session 23
+def _tpdf(x, nu):
+    c = math.exp(math.lgamma((nu + 1) / 2) - math.lgamma(nu / 2)) / math.sqrt(nu * PI)
+    return c * (1 + x * x / nu) ** (-(nu + 1) / 2)
+
+
+def _beta_pdf(x, a, b):
+    lb = math.lgamma(a) + math.lgamma(b) - math.lgamma(a + b)
+    with np.errstate(all='ignore'):
+        return np.where((x > 0) & (x < 1), np.exp((a - 1) * np.log(np.clip(x, 1e-12, 1)) +
+                                                   (b - 1) * np.log(np.clip(1 - x, 1e-12, 1)) - lb), 0.0)
+
+
+@fig('f23-1')
+def _(fid):
+    r = np.random.RandomState(1)
+    xb = r.normal(50, 2, 40)
+    h = 1.96 * 2
+    P = Plot(fid, w=540, h=330, x=(40.5, 59.5), y=(0, 41), xticks=[42, 44, 46, 48, 50, 52, 54, 56, 58], yticks=None,
+             xlabel='$\\mu$', margins=(14, None, 26, None))
+    P.line([(50, 0), (50, 41)], color='c3', sw=2, dash='6 4')
+    for i, m in enumerate(xb):
+        c = 'c2' if abs(m - 50) > h else 'c1'
+        P.line([(m - h, i + 1), (m + h, i + 1)], color=c, sw=2.2 if c == 'c2' else 1.7)
+        P.points([m], [i + 1], color=c, r=2.6)
+    P.math(50, 41.6, '\\mu=50', anchor='s', size=13, color='c3')
+    leg = legend([('بازه‌ای که $\\mu$ را می‌پوشاند', 'c1', 'line'), ('بازه‌ای که $\\mu$ را از دست می‌دهد', 'c2', 'line')])
+    return wrap(P.svg('پوشش بازه‌های اطمینان در تکرار آزمایش'), leg=leg)
+
+
+@fig('f23-2')
+def _(fid):
+    k = 1.96
+    P = Plot(fid, w=520, h=250, x=(-3.7, 3.7), y=(0, 0.45), xticks=[-k, 0, k], xticklabels=['-k', '0', 'k'],
+             yticks=None, xlabel='$z$')
+    P.area(gauss, -k, k, color='c1', op=.22)
+    P.area(gauss, -3.7, -k, color='c2', op=.55)
+    P.area(gauss, k, 3.7, color='c2', op=.55)
+    P.fn(gauss, color='var(--fig-ink)', sw=2.2)
+    for x in (-k, k):
+        P.line([(x, 0), (x, gauss(x))], color='c2', sw=1.4, dash='4 3')
+    P.math(0, 0.17, '1-\\delta', size=16, color='c1')
+    P.math(-2.75, 0.07, '\\delta/2', size=14, color='c2')
+    P.math(2.75, 0.07, '\\delta/2', size=14, color='c2')
+    P.arrow((-2.75, 0.055), (-2.25, 0.012), color='c2', sw=1.2, size=6)
+    P.arrow((2.75, 0.055), (2.25, 0.012), color='c2', sw=1.2, size=6)
+    return P.svg('ناحیه میانی و دو دم توزیع گاوسی استاندارد')
+
+
+@fig('f23-3')
+def _(fid):
+    P = Plot(fid, w=520, h=270, x=(-5, 5), y=(0, 0.42), xticks=list(range(-5, 6)), yticks=[0, .1, .2, .3, .4],
+             xlabel='$t$', grid=True)
+    P.fn(gauss, -5, 5, color='var(--fig-ink)', sw=2, dash='6 4')
+    items = [('$\\mathcal N(0,1)$', 'var(--fig-ink)', 'dash')]
+    for nu, c in ((1, 'c2'), (3, 'c4'), (10, 'c1')):
+        P.fn(lambda x, nu=nu: _tpdf(x, nu), -5, 5, color=c, sw=2.3)
+        items.append(('$t_{%d}$' % nu, c, 'line'))
+    return wrap(P.svg('چگالی توزیع t در برابر گاوسی'), leg=legend(items))
+
+
+# ================================================================ session 24
+@fig('f24-1')
+def _(fid):
+    from scipy.stats import norm
+    P = Plot(fid, w=520, h=270, x=(0.8, 1.0), y=(0, 15), xticks=[.8, .85, .9, .95, 1.0], yticks=[0, 3, 6, 9, 12, 15],
+             xlabel='$1-\\delta$', ylabel='$k$', grid=True)
+    P.fn(lambda x: 1 / math.sqrt(1 - x) if x < 1 else 99, 0.8, 0.9985, color='c2', sw=2.5, n=400)
+    P.fn(lambda x: norm.ppf(1 - (1 - x) / 2) if x < 1 else 9, 0.8, 0.9985, color='c1', sw=2.5, n=400)
+    P.line([(0.95, 0), (0.95, 15)], color='c7', sw=1.2, dash='4 4')
+    P.points([0.95, 0.95], [1 / math.sqrt(0.05), 1.96], color='c3', r=4.2)
+    P.math(0.947, 4.47, '4.47', anchor='e', size=13, color='c2')
+    P.math(0.947, 1.96, '1.96', anchor='se', size=13, color='c1')
+    leg = legend([('چبی‌شف: $1/\\sqrt\\delta$', 'c2', 'line'), ('گاوسی: $z_{\\delta/2}$', 'c1', 'line')])
+    return wrap(P.svg('ضریب k برحسب سطح اطمینان'), leg=leg)
+
+
+@fig('f24-2')
+def _(fid):
+    P = Plot(fid, w=520, h=270, x=(0, 1), y=(0, 4.2), xticks=[0, .2, .4, .5, .6, .7, .8, 1], yticks=[0, 1, 2, 3, 4],
+             xlabel='$p$', grid=True)
+    P.fn(lambda x: _beta_pdf(x, 5, 5), 0, 1, color='c1', sw=2.2, dash='6 4')
+    P.fn(lambda x: _beta_pdf(x, 8, 4), 0, 1, color='c4', sw=2.2, dash='2 3')
+    P.area(lambda x: _beta_pdf(x, 12, 8), 0, 1, color='c3', op=.18)
+    P.fn(lambda x: _beta_pdf(x, 12, 8), 0, 1, color='c3', sw=2.8)
+    leg = legend([('پیشین', 'c1', 'dash'), ('درست‌نمایی (نرمال‌شده)', 'c4', 'dot'), ('پسین', 'c3', 'line')])
+    return wrap(P.svg('پیشین، درست‌نمایی و پسین'), leg=leg)
+
+
+# ================================================================ session 25
+@fig('f25-1')
+def _(fid):
+    tau, d = 1.645, 2.6
+    P = Plot(fid, w=540, h=260, x=(-3.5, 6), y=(0, 0.47), xticks=[0, tau, d], xticklabels=['0', '\\tau', '\\mu_1'],
+             yticks=None, xlabel='$z$')
+    P.area(lambda x: gauss(x, d), -3.5, tau, color='c4', op=.45)
+    P.area(gauss, tau, 6, color='c2', op=.6)
+    P.fn(gauss, color='c1', sw=2.3)
+    P.fn(lambda x: gauss(x, d), color='c5', sw=2.3)
+    P.line([(tau, 0), (tau, 0.46)], color='var(--fig-ink)', sw=1.4, dash='5 4')
+    P.math(0, 0.425, 'H_0', size=15, color='c1')
+    P.math(d, 0.425, 'H_1', size=15, color='c5')
+    P.math(5.05, 0.1, '\\alpha', size=18, color='c2')
+    P.arrow((4.9, 0.085), (2.05, 0.02), color='c2', sw=1.2, size=6)
+    P.math(-1.0, 0.1, '\\beta', size=18, color='c4')
+    P.arrow((-0.82, 0.085), (0.95, 0.03), color='c4', sw=1.2, size=6)
+    P.text(4.75, 0.3, 'ناحیه رد H0', size=12.5, rtl=True)
+    P.arrow((tau + 0.1, 0.3), (3.75, 0.3), size=7)
+    return P.svg('خطای نوع اول و دوم')
+
+
+@fig('f25-2')
+def _(fid):
+    t = 1.96
+    P = Plot(fid, w=540, h=270, x=(-3.8, 3.8), y=(0, 0.5), xticks=[-t, 0, t], xticklabels=['-\\tau', '0', '\\tau'],
+             yticks=None, xlabel='$z_n$')
+    P.area(gauss, -3.8, -t, color='c2', op=.6)
+    P.area(gauss, t, 3.8, color='c2', op=.6)
+    P.fn(gauss, color='var(--fig-ink)', sw=2.2)
+    for x in (-t, t):
+        P.line([(x, 0), (x, 0.49)], color='c7', sw=1.3, dash='4 4')
+    P.math(0, 0.2, '1-\\alpha', size=16)
+    P.math(-2.7, 0.085, '\\frac{\\alpha}{2}', size=14, color='c2')
+    P.math(2.7, 0.085, '\\frac{\\alpha}{2}', size=14, color='c2')
+    P.arrow((-2.7, 0.06), (-2.2, 0.012), color='c2', sw=1.2, size=6)
+    P.arrow((2.7, 0.06), (2.2, 0.012), color='c2', sw=1.2, size=6)
+    P.text(-2.9, 0.47, 'رد H0', size=12.5, rtl=True, color='c2')
+    P.text(2.9, 0.47, 'رد H0', size=12.5, rtl=True, color='c2')
+    P.text(0, 0.47, 'عدم رد H0', size=12.5, rtl=True)
+    return P.svg('ناحیه رد دوطرفه')
+
+
+# ================================================================ session 26
+@fig('f26-1')
+def _(fid):
+    thr, obs = 1.645, 2.05
+    P = Plot(fid, w=560, h=290, x=(-4, 4.4), y=(0, 0.5), xticks=None, yticks=None, margins=(14, 14, 18, None))
+    P.area(gauss, obs, 4.4, color='c1', op=.75)
+    P.fn(gauss, -4, 4.4, color='c1', sw=2.6)
+    P.line([(thr, 0), (thr, 0.3)], color='var(--fig-ink)', sw=1.3, dash='5 4')
+    P.points([obs], [0.0], color='c3', r=5.5)
+    P.text(0, 0.465, 'مقدار درست تحت H0 و محتمل‌ترین مشاهده', size=12.5, rtl=True)
+    P.arrow((0, 0.45), (0, 0.41), size=7)
+    P.text(thr - 0.05, 0.33, 'آستانه معناداری ۹۵٪', size=12, rtl=True, anchor='middle')
+    P.text(3.35, 0.16, 'مقدار p مشاهده‌شده', size=12.5, rtl=True, color='c3')
+    P.arrow((3.2, 0.145), (2.45, 0.03), color='c3', sw=1.3, size=7)
+    P.text(0.9, 0.09, 'نتیجه مشاهده‌شده', size=12, rtl=True, color='c3')
+    P.arrow((1.35, 0.075), (1.95, 0.012), color='c3', sw=1.3, size=7)
+    P.text(-3.2, 0.06, 'بسیار نامحتمل', size=12, rtl=True)
+    P.text(3.7, 0.06, 'بسیار نامحتمل', size=12, rtl=True)
+    return P.svg('نمایش گرافیکی مقدار p')
+
+
+@fig('f26-2')
+def _(fid):
+    from scipy.stats import f as fdist
+    tc = 2.571
+    A = Plot(fid + 'a', w=300, h=220, x=(-5, 5), y=(0, 0.42), xticks=[-4, -2, 0, 2, 4], yticks=[0, .1, .2, .3, .4])
+    A.area(lambda x: _tpdf(x, 5), -5, -tc, color='var(--fig-ink)', op=.8)
+    A.area(lambda x: _tpdf(x, 5), tc, 5, color='var(--fig-ink)', op=.8)
+    A.fn(lambda x: _tpdf(x, 5), -5, 5, color='c1', sw=2.2)
+    B = Plot(fid + 'b', w=300, h=220, x=(0, 6), y=(0, 0.8), xticks=[0, 1, 2, 3, 4, 5, 6], yticks=[0, .2, .4, .6, .8])
+    fc = 2.978
+    B.area(lambda x: fdist.pdf(x, 10, 10), fc, 6, color='var(--fig-ink)', op=.8)
+    B.fn(lambda x: fdist.pdf(x, 10, 10), 0.001, 6, color='c5', sw=2.2)
+    return (wrap(A.svg('توزیع t'), title='توزیع $t$ (متقارن): دو دم') +
+            wrap(B.svg('توزیع F'), title='توزیع $F$ (نامتقارن): یک دم'))
+
+
+# ================================================================ session 27
+@fig('f27-1')
+def _(fid):
+    P = Plot(fid, w=540, h=270, x=(30, 120), y=(0, 0.072), xticks=[30, 50, 70, 79.6, 85, 100, 120],
+             xticklabels=['30', '50', '70', '79.6', '85', '100', '120'], yticks=None, xlabel='$\\theta$', tick_size=11.5)
+    P.fn(lambda x: gauss(x, 70, 10), color='c1', sw=2.2, dash='6 4')
+    P.fn(lambda x: gauss(x, 85, 7.5), color='c4', sw=2.2, dash='2 3')
+    P.area(lambda x: gauss(x, 79.6, 6), 30, 120, color='c3', op=.16)
+    P.fn(lambda x: gauss(x, 79.6, 6), color='c3', sw=2.8)
+    leg = legend([('پیشین $\\mathcal N(70,10^2)$', 'c1', 'dash'), ('درست‌نمایی $\\mathcal N(85,7.5^2)$', 'c4', 'dot'),
+                  ('پسین $\\mathcal N(79.6,6^2)$', 'c3', 'line')])
+    return wrap(P.svg('پیشین، درست‌نمایی و پسین گاوسی'), leg=leg)
+
+
+@fig('f27-2')
+def _(fid):
+    P = Plot(fid, w=540, h=270, x=(0.55, 1.0), y=(0, 16.5), xticks=[.6, .7, .8, .85, .9, 1.0], yticks=[0, 5, 10, 15],
+             xlabel='$p$', grid=True)
+    P.fn(lambda x: _beta_pdf(x, 17, 3), 0.55, 0.9999, color='c7', sw=2.2, dash='6 4', n=400)
+    P.fn(lambda x: _beta_pdf(x, 21, 3), 0.55, 0.9999, color='c4', sw=2.4, n=400)
+    P.area(lambda x: _beta_pdf(x, 109, 11), 0.55, 0.9999, color='c1', op=.15, n=400)
+    P.fn(lambda x: _beta_pdf(x, 109, 11), 0.55, 0.9999, color='c1', sw=2.6, n=400)
+    leg = legend([('پیشین $\\mathrm{Beta}(17,3)$', 'c7', 'dash'), ('پسین جراح الف $\\mathrm{Beta}(21,3)$', 'c4', 'line'),
+                  ('پسین جراح ب $\\mathrm{Beta}(109,11)$', 'c1', 'line')])
+    return wrap(P.svg('پسین‌های بتا برای دو جراح'), leg=leg)
+
+
 def render(fid):
     if fid not in REG:
         return '<div class="figph">%s</div>' % fid

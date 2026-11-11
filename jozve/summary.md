@@ -644,6 +644,170 @@ $$\Var(\hat\theta)\ge\frac{1}{nI(\theta)},\qquad I(\theta)=\E\Big[\Big(\frac{\pa
 کانال دودویی متقارن با $\varepsilon<\frac12$: MLE رشته ارسالی، نزدیک‌ترین کلمه کد (کمترین فاصله همینگ) به رشته دریافتی است.
 :::
 
+## استنباط آماری
+
+### تخمین بازه‌ای
+
+::: {.card t="بازه اطمینان" ref="23:s2 23:s2-3"}
+توابع $\theta_l(X_{1:n})\le\theta_u(X_{1:n})$ با
+$$\Prob\big(\theta_l\le\theta\le\theta_u\big)\ge1-\delta$$
+و کمترین طول $\theta_u-\theta_l$. سطح اطمینان: $1-\delta$.
+
+$\theta$ ثابت است و **دو سر بازه** تصادفی‌اند: در تکرار آزمایش، کسر $1-\delta$ بازه‌ها $\theta$ را می‌پوشانند.
+:::
+
+::: {.card t="میانگین گاوسی، σ معلوم" ref="23:s3"}
+$$\frac{\bar X_n-\mu}{\sigma/\sqrt n}\sim\mathcal N(0,1)\ \Rightarrow\ \bar X_n\pm z_{\delta/2}\frac{\sigma}{\sqrt n}$$
+$z_{\delta/2}=\Phi^{-1}(1-\frac\delta2)$: برای ۹۰٪، ۹۵٪ و ۹۹٪ به ترتیب $1.645$، $1.96$ و $2.576$. طول بازه $\propto\frac{1}{\sqrt n}$.
+:::
+
+::: {.card t="توزیع t استیودنت" ref="23:s4-2 23:s4-3"}
+$$T=\frac{Z}{\sqrt{V/\nu}}\sim t_\nu,\qquad Z\sim\mathcal N(0,1),\ V\sim\chi^2_\nu\ \text{مستقل}$$
+متقارن، دم سنگین‌تر از گاوسی، $\Var=\frac{\nu}{\nu-2}$، و $t_\nu\to\mathcal N(0,1)$. برای نمونه گاوسی:
+$$\frac{(n-1)\bar S_n^2}{\sigma^2}\sim\chi^2_{n-1},\qquad \bar X_n\perp\bar S_n^2$$
+:::
+
+::: {.card t="میانگین گاوسی، σ نامعلوم" ref="23:s4-4"}
+$$\frac{\bar X_n-\mu}{\bar S_n/\sqrt n}\sim t_{n-1}\ \Rightarrow\ \bar X_n\pm t_{n-1,\delta/2}\frac{\bar S_n}{\sqrt n}$$
+$\bar S_n^2=\frac1{n-1}\sum(X_i-\bar X_n)^2$. ضریب به $n$ هم وابسته است (برای ۹۵٪: $n=10$ ضریب $2.262$).
+:::
+
+::: {.card t="بازه چبی‌شف (توزیع دلخواه)" ref="24:s1"}
+با $\Var X\le\sigma^2$ و هر توزیع:
+$$\Prob\Big(|\bar X_n-\mu|\le\frac{\sigma}{\sqrt{n\delta}}\Big)\ge1-\delta$$
+تضمین‌شده ولی پهن: ضریب $\frac1{\sqrt\delta}$ (برای ۹۵٪: $4.47$ به جای $1.96$).
+:::
+
+::: {.card t="نسبت و تعداد نمونه" ref="23:s5 24:s4"}
+نسبت (با حد مرکزی): $\hat p\pm z_{\delta/2}\sqrt{\hat p(1-\hat p)/n}$.
+
+تعداد نمونه برای نصف طول $\varepsilon$: $n\ge\big(z_{\delta/2}\sigma/\varepsilon\big)^2$؛ برای نسبت با $\sigma\le\frac12$: ۹۵٪ و ±۳٪ یعنی $n=1068$.
+:::
+
+::: {.wide t="مقادیر بحرانی $z$ و $t$ (دوطرفه)" ref="23:s3-4 23:s4-4"}
+| سطح | $\nu=1$ | $\nu=2$ | $\nu=4$ | $\nu=9$ | $\nu=19$ | $\nu=29$ | $\nu=\infty$ ($z$) |
+|---|---|---|---|---|---|---|---|
+| ۹۰٪ | $6.314$ | $2.920$ | $2.132$ | $1.833$ | $1.729$ | $1.699$ | $1.645$ |
+| ۹۵٪ | $12.706$ | $4.303$ | $2.776$ | $2.262$ | $2.093$ | $2.045$ | $1.960$ |
+| ۹۹٪ | $63.657$ | $9.925$ | $4.604$ | $3.250$ | $2.861$ | $2.756$ | $2.576$ |
+
+آزمون یک‌طرفه در سطح $\alpha$ از ستون سطح $1-2\alpha$ استفاده می‌کند (مثلاً $z_{0.05}=1.645$).
+:::
+
+### تخمین بیزی
+
+::: {.card t="قانون بیز برای پارامتر" ref="24:s2-3 24:s2-4 24:s2-5"}
+مدل: $\theta\sim f_\theta$، سپس $X_{1:n}\given\theta$ به صورت i.i.d.
+$$f(\theta\given X_{1:n})=\frac{\prod_if(X_i\given\theta)\,f(\theta)}{\int\prod_if(X_i\given\theta')f(\theta')\dd\theta'}\propto\prod_if(X_i\given\theta)\,f(\theta)$$
+پسین ∝ درست‌نمایی × پیشین. نمونه‌ها فقط **به شرط** $\theta$ مستقل‌اند.
+:::
+
+::: {.card t="تخمین‌های نقطه‌ای از پسین" ref="24:s2-6 27:s1-1"}
+- میانگین پسین $\E[\theta\given D]$: کمینه خطای مربعی (MMSE)
+- میانه پسین: کمینه خطای قدرمطلق
+- مد پسین (MAP): کمینه احتمال خطا در حالت گسسته
+- اگر محاسبه سخت باشد: نمونه‌گیری MCMC
+
+بیز به زبان نسبت‌ها: نسبت پسین = نسبت درست‌نمایی × نسبت پیشین.
+:::
+
+::: {.card t="تخمین‌گر MAP" ref="24:s3 27:s1-2 27:s1-3"}
+$$\hat\theta_{\mathrm{MAP}}=\argmax_{\theta}\ \sum_{i=1}^n\log f(X_i\given\theta)+\log f(\theta)$$
+مخرج قانون بیز لازم نیست. پیشین یکنواخت: $\hat\theta_{\mathrm{MAP}}=\hat\theta_\ML$. جمله $\log f(\theta)$ نقش **تنظیم‌کننده** دارد (پیشین گاوسی: $L_2$، لاپلاس: $L_1$) و با $n\to\infty$ اثرش از بین می‌رود.
+:::
+
+::: {.card t="میانگین گاوسی با پیشین گاوسی" ref="27:s2 27:s2-1 27:s2-2"}
+$X_i\given\theta\sim\mathcal N(\theta,\sigma^2)$ و $\theta\sim\mathcal N(\mu_0,\sigma_0^2)$:
+$$\hat\theta_{\mathrm{MAP}}=\frac{\frac{n}{\sigma^2}\bar X_n+\frac{1}{\sigma_0^2}\mu_0}{\frac{n}{\sigma^2}+\frac{1}{\sigma_0^2}},\qquad \frac1{\tau_n^2}=\frac{n}{\sigma^2}+\frac1{\sigma_0^2}$$
+پسین $\mathcal N(\hat\theta_{\mathrm{MAP}},\tau_n^2)$؛ میانگین وزن‌دار با وزن دقت (معکوس واریانس) و دقت‌ها جمع می‌شوند.
+:::
+
+::: {.card t="بتا و دوجمله‌ای" ref="27:s3-2"}
+$p\sim\mathrm{Beta}(\alpha,\beta)$ و $k\given p\sim\mathrm{Bin}(n,p)$:
+$$p\given k\sim\mathrm{Beta}(\alpha+k,\ \beta+n-k)$$
+$$\hat p_{\mathrm{MAP}}=\frac{\alpha+k-1}{\alpha+\beta+n-2},\qquad \hat p_{\mathrm{PM}}=\frac{\alpha+k}{\alpha+\beta+n}$$
+$\alpha,\beta$ = شمارش‌های مجازی. پیشین یکنواخت: $\frac{k+1}{n+2}$ (قاعده لاپلاس).
+:::
+
+::: {.wide t="پیشین‌های مزدوج" ref="27:s3-1 27:s3-3"}
+| درست‌نمایی | پارامتر | پیشین | پسین پس از $n$ مشاهده |
+|---|---|---|---|
+| برنولی/دوجمله‌ای | $p$ | $\mathrm{Beta}(\alpha,\beta)$ | $\mathrm{Beta}(\alpha+\sum x_i,\ \beta+n-\sum x_i)$ |
+| پواسون | $\lambda$ | $\mathrm{Gamma}(a,b)$ | $\mathrm{Gamma}(a+\sum x_i,\ b+n)$ |
+| نمایی | $\lambda$ | $\mathrm{Gamma}(a,b)$ | $\mathrm{Gamma}(a+n,\ b+\sum x_i)$ |
+| گاوسی، $\sigma^2$ معلوم | $\mu$ | $\mathcal N(\mu_0,\sigma_0^2)$ | $\mathcal N(\hat\theta_{\mathrm{MAP}},\ \tau_n^2)$ |
+| چندجمله‌ای | $(p_1,\ldots,p_k)$ | $\mathrm{Dir}(\alpha_1,\ldots,\alpha_k)$ | $\mathrm{Dir}(\alpha_1+x_1,\ldots,\alpha_k+x_k)$ |
+
+مزدوج یعنی پیشین و پسین از یک خانواده‌اند؛ داده فقط پارامترها را به‌روز می‌کند.
+:::
+
+### آزمون فرض
+
+::: {.card t="اجزای آزمون" ref="25:s2-1 25:s2-2 25:s2-3"}
+- $H_0$ (باطل، معمولاً ساده): «اثری نیست»؛ $H_1$ (جایگزین، معمولاً مرکب)
+- آماره آزمون با توزیع معلوم **تحت** $H_0$
+- ناحیه رد، مقدار بحرانی، تصمیم: رد یا عدم رد $H_0$
+
+«عدم رد» به معنی اثبات $H_0$ نیست.
+:::
+
+::: {.card t="خطاها و توان" ref="25:s2-4"}
+$$\alpha=\Prob(\text{رد}\ H_0\given H_0),\qquad \beta=\Prob(\text{عدم رد}\ H_0\given H_1)$$
+توان $=1-\beta$ (حساسیت)؛ $1-\alpha$ = ویژگی. کاهش هم‌زمان هر دو فقط با افزایش $n$.
+:::
+
+::: {.card t="مقدار p" ref="25:s2-5 26:s1"}
+احتمال آماره‌ای حداقل به این اندازه افراطی، اگر $H_0$ درست باشد:
+$$\text{p}=\Prob\big(|Z|\ge|z_{\text{obs}}|\given H_0\big)$$
+رد $H_0$ در سطح $\alpha$ اگر و تنها اگر $\text{p}\le\alpha$. تحت $H_0$: $\text{p}\sim\mathcal U(0,1)$. مقدار p برابر $\Prob(H_0\given\text{داده})$ **نیست**.
+:::
+
+::: {.card t="آزمون z" ref="25:s3"}
+$\sigma$ معلوم، $H_0:\ \mu=\mu_0$:
+$$z_n=\frac{\sqrt n(\bar X_n-\mu_0)}{\sigma}\sim\mathcal N\Big(\frac{\sqrt n(\mu-\mu_0)}{\sigma},1\Big)$$
+دوطرفه: رد اگر $|z_n|\ge z_{\alpha/2}$ و $\text{p}=2(1-\Phi(|z|))$. یک‌طرفه: آستانه $z_\alpha$. رد دوطرفه معادل خارج بودن $\mu_0$ از بازه اطمینان است.
+:::
+
+::: {.card t="آزمون t" ref="26:s3"}
+$\sigma$ نامعلوم:
+$$t_n=\frac{\sqrt n(\bar X_n-\mu_0)}{\bar\sigma_n}\sim t_{n-1}\ \ (\text{تحت}\ H_0)$$
+مثل آزمون z ولی با CDF توزیع $t$: $\text{p}=2\big(1-F_{t,n-1}(|t|)\big)$.
+:::
+
+::: {.card t="آزمون‌های دونمونه‌ای" ref="26:s2 26:s3-2"}
+$$z=\frac{\bar X-\bar Y}{\sqrt{\sigma_X^2/n_1+\sigma_Y^2/n_2}},\qquad t=\frac{\bar X-\bar Y}{S_p\sqrt{\frac1{n_1}+\frac1{n_2}}}\sim t_{n_1+n_2-2}$$
+$S_p^2=\frac{(n_1-1)S_X^2+(n_2-1)S_Y^2}{n_1+n_2-2}$. داده جفتی: آزمون تک‌نمونه‌ای روی $D_i=X_i-Y_i$.
+:::
+
+::: {.card t="آزمون χ²" ref="26:s6-1"}
+$$X^2=\sum_{i=1}^k\frac{(x_i-m_i)^2}{m_i}=\sum_i\frac{x_i^2}{m_i}-n\ \xrightarrow{H_0}\ \chi^2_{k-1}$$
+$m_i=np_i$؛ یک‌طرفه (دم راست)؛ شرط تقریب $m_i\ge5$. استقلال در جدول $r\times c$: درجه آزادی $(r-1)(c-1)$.
+:::
+
+::: {.card t="فیشر و جایگشت" ref="26:s5 26:s6-2"}
+**فیشر (دقیق):** با حاشیه‌های ثابت، خانه $a$ فوق‌هندسی است:
+$$\Prob(a)=\frac{\binom{a+b}{a}\binom{c+d}{c}}{\binom{n}{a+c}}$$
+**جایگشت:** برچسب‌ها را بارها به تصادف جابه‌جا کنید؛ p = کسر جایگشت‌هایی با آماره حداقل به این اندازه افراطی.
+:::
+
+::: {.card t="لم نیمن–پیرسون" ref="26:s7"}
+برای $H_0:\ p$ در برابر $H_1:\ q$ (هر دو ساده)، پرتوان‌ترین آزمون با سطح $\alpha$:
+$$\prod_{i=1}^n\frac{q(X_i)}{p(X_i)}>\eta$$
+با $\alpha$ ثابت، $\beta_n\approx e^{-nD(p\|q)}$ (واگرایی کولبک–لایبلر).
+:::
+
+::: {.wide t="کدام آزمون؟" ref="25:s3 26:s2 26:s3 26:s5 26:s6"}
+| پرسش | داده | آزمون | توزیع آماره تحت $H_0$ |
+|---|---|---|---|
+| میانگین برابر $\mu_0$؟ | $\sigma$ معلوم یا $n$ بزرگ | z | $\mathcal N(0,1)$ |
+| میانگین برابر $\mu_0$؟ | $\sigma$ نامعلوم، داده گاوسی | t | $t_{n-1}$ |
+| دو میانگین برابر؟ | دو گروه مستقل | z یا t دونمونه‌ای | $\mathcal N(0,1)$ یا $t_{n_1+n_2-2}$ |
+| اثر قبل/بعد؟ | داده جفتی | t جفتی روی تفاضل‌ها | $t_{n-1}$ |
+| نسبت‌های دسته‌ها درست؟ | شمارش $k$ دسته | $\chi^2$ بهنجارش | $\chi^2_{k-1}$ (تقریبی) |
+| دو ویژگی دودویی مستقل؟ | جدول $2\times2$ کوچک | فیشر دقیق | فوق‌هندسی |
+| دو گروه متفاوت؟ | بدون فرض توزیع | جایگشت | توزیع جایگشتی |
+:::
+
 ## پیوست: روابط کمکی
 
 ### سری‌ها، انتگرال‌ها و جدول گاوسی
