@@ -177,6 +177,7 @@ mjx-container[jax="SVG"] > svg { overflow: visible; min-height: 1px; min-width: 
 mjx-container[jax="SVG"][display="true"] { display: block; text-align: center; margin: 0; }
 mjx-container[jax="SVG"]:not([display]) { unicode-bidi: isolate; }
 main mjx-container[jax="SVG"]:not([display]) > svg { max-width: 100%; height: auto; }
+@media screen { .table-wrap mjx-container[jax="SVG"]:not([display]) > svg { max-width: none; } }
 .dm { display: block; overflow-x: auto; overflow-y: hidden; margin: .9rem 0; padding: .35rem 0; -webkit-overflow-scrolling: touch; direction: ltr; }
 /* a wide formula starts at the left edge so all of it can be scrolled to; a narrow one stays centered */
 .dm > mjx-container[jax="SVG"][display="true"] { width: max-content; min-width: 100%; }
