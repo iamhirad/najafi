@@ -122,7 +122,7 @@ def head_html(ncards, pdf_link=None):
     if pdf_link:
         dl = ('<p class="dl-row"><a class="dl" href="%s" download>%s<span>دانلود PDF خلاصه</span></a></p>' % (
             pdf_link, template.ICONS['download']))
-    return ('<header class="ch-head"><div class="ch-eyebrow"><span class="ch-num">∑</span><span>پیوست جزوه · جلسات ۱ تا ۲۲</span></div>'
+    return ('<header class="ch-head"><div class="ch-eyebrow"><span class="ch-num">∑</span><span>پیوست جزوه · جلسات ۱ تا ۲۷</span></div>'
             '<h1 class="ch-title">%s</h1><div class="ch-meta"><span><b>%s</b> کارت فرمول و جدول</span>'
             '<span>هر کارت به جلسه مربوطش پیوند دارد</span></div>%s</header>') % (TITLE, FA(ncards), dl)
 

@@ -1,0 +1,369 @@
+% ===============================================================
+%  جلسه بیست‌وهفتم
+% ===============================================================
+\chapter{تخمین بیزی: نکات \lr{MAP} و توزیع‌های مزدوج}
+
+اسلایدهای این جلسه (که از ارائه همین درس در زمستان ۱۳۹۹ و بهار ۱۴۰۰ آمده‌اند) مبحث تخمین بیزی را ادامه می‌دهند. ابتدا مباحث جلسه قبل خود را مرور می‌کنند: تخمین‌گر مبتنی بر گشتاور \lr{(MoME)} با مثال‌های گاوسی، نمایی و یکنواخت (جلسه ۲۰ این جزوه) و مقدمات تخمین بیزی، یعنی مفهوم اطلاعات پیشین، مدل‌سازی پارامتر به صورت متغیر تصادفی، قانون بیز برای پارامترها و تعریف \lr{MAP} (جلسه ۲۴). مطالب جدید این فصل: \textbf{نکات مهم تخمین‌گر \lr{MAP}} و ارتباط آن با \lr{MLE}، مثال کامل \textbf{تخمین میانگین گاوسی با پیشین گاوسی}، و مفهوم \textbf{توزیع‌های مزدوج \lr{(Conjugate Priors)}} با مثال بتا--دوجمله‌ای. در پایان، مثال انتخاب جراح جلسه ۲۴ را به صورت کمّی حل می‌کنیم.
+
+\begin{summarybox}[خلاصه تخمین بیزی (جلسه ۲۴)]
+\begin{itemize}
+\item مدل تولید داده بیزی: $\theta\sim f_\theta(\theta)$ (پیشین)، سپس $X_1,\ldots,X_n\sim f_{X|\theta}(X\given\theta)$ به صورت \lr{i.i.d.} به شرط $\theta$.
+\item قانون بیز:
+\[
+f_{\theta|X_{1:n}}\big(\theta\given X_{1:n}\big)=\frac{\prod_{i=1}^nf_X(X_i\given\theta)\,f_\theta(\theta)}{f_{\underline X}(X_1,\ldots,X_n)}\ \propto\ \prod_{i=1}^nf_X(X_i\given\theta)\,f_\theta(\theta).
+\]
+\item تخمین‌های نقطه‌ای از پسین: میانگین پسین، \lr{MAP} (مد پسین)، یا نمونه‌گیری \lr{MCMC}.
+\item $\hat\theta_{\mathrm{MAP}}=\argmax_{\theta\in\Theta}\ \sum_{i=1}^n\log f(X_i\given\theta)+\log f(\theta)$.
+\end{itemize}
+\end{summarybox}
+
+\section{تخمین‌گر بیشینه توزیع پسین: برخی نکات}
+
+\begin{note}
+\notetitle \textbf{حالت گسسته.} مانند حالت \lr{MLE}، در صورت گسسته بودن هر یک از بخش‌ها (دادگان یا پارامترها) به جای \lr{PDF} از \lr{PMF} استفاده خواهد شد. مثلاً در مثال «سکه سالم یا دست‌کاری‌شده» جلسه ۲۴، هم داده‌ها (شیر/خط) و هم پارامتر ($\theta\in\{0.5,\ 0.8\}$) گسسته بودند و همه جا تابع جرم احتمال داشتیم.
+\end{note}
+
+\subsection{\lr{MAP} همان مد توزیع پسین است}
+تخمین‌گر \lr{MAP} در واقع \textbf{مد \lr{(mode)}} تابع توزیع پسین پارامتر است: نقطه‌ای که چگالی (یا جرم) پسین در آن بیشینه است. بنابراین از سه تخمین نقطه‌ای که از پسین می‌گیریم:
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{c|c|c}
+تخمین‌گر & ویژگی پسین & کمینه می‌کند\\\hline
+میانگین پسین & میانگین & خطای مربعی مورد انتظار\\
+میانه پسین & میانه & خطای قدرمطلق مورد انتظار\\
+\lr{MAP} & مد & (احتمال خطا، در حالت گسسته)
+\end{tabular}
+\end{center}
+اگر پسین متقارن و تک‌قله‌ای باشد (مثلاً گاوسی)، هر سه یکی می‌شوند. (سطر آخر: در حالت گسسته، \lr{MAP} احتمال اینکه تخمین \textbf{دقیقاً} غلط باشد، یعنی $\Prob(\hat\theta\neq\theta\given D)=1-\Prob(\theta=\hat\theta\given D)$، را کمینه می‌کند؛ به همین دلیل در آشکارسازی و مخابرات دیجیتال پرکاربرد است.)
+
+\subsection{پیشین یکنواخت: \lr{MAP} همان \lr{MLE} است}
+\begin{theorem}[\lr{MAP} با پیشین یکنواخت]
+در صورتی که توزیع پیشین پارامتر را در فضای پارامترها (یعنی $\Theta$) \textbf{یکنواخت} فرض کنیم، تخمین‌گرهای \lr{MAP} و \lr{MLE} دقیقاً یکی می‌شوند.
+\end{theorem}
+\begin{proof}
+اگر $f(\theta)=c$ برای همه $\theta\in\Theta$ (با $c>0$ ثابت)، آنگاه $\log f(\theta)=\log c$ ثابت است:
+\[
+\hat\theta_{\mathrm{MAP}}=\argmax_{\theta\in\Theta}\Big[\sum_{i=1}^n\log f(X_i\given\theta)+\log c\Big]=\argmax_{\theta\in\Theta}\sum_{i=1}^n\log f(X_i\given\theta)=\hat\theta_\ML ,
+\]
+چون افزودن یک ثابت به تابع هدف، محل بیشینه را تغییر نمی‌دهد.
+\end{proof}
+\textbf{شهود:} پیشین یکنواخت یعنی «پیش از دیدن داده هیچ مقداری را بر دیگری ترجیح نمی‌دهم»؛ پس تنها داده‌ها تصمیم می‌گیرند، و این همان فلسفه \lr{MLE} است. از این دید، \lr{MLE} حالت خاصی از \lr{MAP} است. (یک نکته فنی: پیشین یکنواخت روی فضای بی‌کران مثل $\R$ یک چگالی واقعی نیست، چون انتگرالش متناهی نمی‌شود؛ ولی می‌توان آن را حد پیشین‌های یکنواخت روی بازه‌های بزرگ‌تر و بزرگ‌تر، یا حد پیشین گاوسی با واریانس به سمت بی‌نهایت، در نظر گرفت.)
+
+\subsection{شباهت و تفاوت \lr{MAP} و \lr{MLE}}
+تخمین بیشینه توزیع پسین بسیار مشابه با تخمین‌گر \lr{MLE} است، اما با دو فرق مهم:
+\begin{itemize}
+\item \textbf{یک فرق اساسی، فلسفه این تخمین‌گر است} که در آن پارامتر به صورت یک متغیر تصادفی مدل‌سازی می‌شود؛ حال آنکه در مورد \lr{MLE}، مقادیر $\theta$ یقینی و صرفاً نامعلوم هستند.
+\item \textbf{مورد دیگر، اضافه شدن عبارت $\log f(\theta)$} به مقدار \lr{log-likelihood} است. این عبارت \textbf{تنظیمی \lr{(regularizer)}} صرفاً به $\theta$، و نه به داده‌ها، مربوط خواهد بود.
+\end{itemize}
+
+\begin{note}
+\notetitle \textbf{پیشین به عنوان جمله تنظیم‌کننده \lr{(Regularization)}.} معادلاً \lr{MAP} را می‌توان به صورت کمینه‌سازی نوشت:
+\[
+\hat\theta_{\mathrm{MAP}}=\argmin_\theta\ \Big[\underbrace{-\sum_{i=1}^n\log f(X_i\given\theta)}_{\text{برازش به داده}}\ \underbrace{-\log f(\theta)}_{\text{جریمه پیچیدگی}}\Big].
+\]
+جمله اول می‌خواهد مدل داده‌ها را خوب توضیح دهد و جمله دوم مقادیری از $\theta$ را که از نظر پیشین «نامعقول»اند جریمه می‌کند. این دقیقاً همان ایده \textbf{تنظیم} در یادگیری ماشین است: پیشین گاوسی $\theta\sim\mathcal N(0,\tau^2)$ جریمه $\frac{\theta^2}{2\tau^2}$ (تنظیم $L_2$ یا \lr{Ridge}) و پیشین لاپلاس $f(\theta)\propto e^{-|\theta|/b}$ جریمه $\frac{|\theta|}{b}$ (تنظیم $L_1$ یا \lr{Lasso}) می‌دهد. تنظیم از \textbf{بیش‌برازش \lr{(overfitting)}} به داده‌های کم جلوگیری می‌کند.
+\end{note}
+
+\section{مثال: تخمین میانگین توزیع گاوسی با داشتن اطلاعات پیشین}
+
+\begin{example}[پیشین گاوسی برای میانگین گاوسی]
+فرض کنید که قصد داریم میانگین یک توزیع گاوسی مانند $\mathcal N(\mu,\sigma^2)$ (با مقدار واریانس معلوم $\sigma^2$) را از روی $n$ نمونه \lr{i.i.d.} به دست آمده از آن، به صورت $X_1,\ldots,X_n$، تخمین بزنیم. در مورد میانگین نامعلوم $\mu$، می‌دانیم که خود از یک توزیع گاوسی با پارامترهای معلوم $\mathcal N(\mu_0,\sigma_0^2)$ نمونه‌گیری شده است. تخمین‌گر \lr{MAP} برای میانگین را بیابید.
+\begin{solution}
+پارامتر را $\theta=\mu$ می‌نامیم.
+
+\textbf{گام ۱: لگاریتم درست‌نمایی و پیشین.} چگالی هر نمونه به شرط $\theta$:
+\[
+f(X_i\given\theta)=\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(X_i-\theta)^2}{2\sigma^2}}
+\ \Rightarrow\ \log f(X_i\given\theta)=-\frac{1}{2\sigma^2}\big(X_i-\theta\big)^2+\text{const},
+\]
+\[
+f(\theta)=\frac{1}{\sqrt{2\pi}\sigma_0}e^{-\frac{(\theta-\mu_0)^2}{2\sigma_0^2}}
+\ \Rightarrow\ \log f(\theta)=-\frac{1}{2\sigma_0^2}\big(\theta-\mu_0\big)^2+\text{const},
+\]
+که «$\text{const}$» عباراتی است که به $\theta$ وابسته نیستند (مثل $-\log(\sqrt{2\pi}\sigma)$) و در بیشینه‌یابی نقشی ندارند.
+
+\textbf{گام ۲: تبدیل به کمینه‌سازی.} بیشینه کردن مجموع لگاریتم‌ها معادل کمینه کردن منفی آن است:
+\[
+\Rightarrow\quad\hat\theta_{\mathrm{MAP}}=\argmin_{\theta\in\R}\ \sum_{i=1}^n\frac{1}{2\sigma^2}\big(X_i-\theta\big)^2+\frac{1}{2\sigma_0^2}\big(\theta-\mu_0\big)^2 .
+\]
+(در اسلاید ضریب جمله اول به اشتباه $\frac{1}{2\sigma_0^2}$ نوشته شده؛ ضریب درست $\frac{1}{2\sigma^2}$ است، چون از درست‌نمایی داده‌ها می‌آید. جواب نهایی اسلاید با ضریب درست سازگار است.)
+
+\textbf{گام ۳: مشتق‌گیری.} تابع هدف یک چندجمله‌ای درجه دوم با ضریب مثبت برای $\theta^2$ (یعنی محدب) است؛ پس نقطه صفر شدن مشتق، کمینه سراسری است:
+\[
+\frac{\partial}{\partial\theta}\Big[\frac{1}{2\sigma^2}\sum_{i=1}^n\big(X_i-\theta\big)^2+\frac{1}{2\sigma_0^2}\big(\theta-\mu_0\big)^2\Big]
+=-\frac{1}{\sigma^2}\sum_{i=1}^n\big(X_i-\theta\big)+\frac{1}{\sigma_0^2}\big(\theta-\mu_0\big)=0 .
+\]
+با استفاده از $\sum_{i=1}^n(X_i-\theta)=n\bar X_n-n\theta$:
+\[
+-\frac{n\bar X_n}{\sigma^2}+\frac{n\theta}{\sigma^2}+\frac{\theta}{\sigma_0^2}-\frac{\mu_0}{\sigma_0^2}=0
+\quad\Rightarrow\quad
+\theta\Big(\frac{n}{\sigma^2}+\frac{1}{\sigma_0^2}\Big)=\frac{n}{\sigma^2}\bar X_n+\frac{1}{\sigma_0^2}\mu_0 .
+\]
+\textbf{گام ۴: جواب.}
+\[
+\boxed{\ \hat\theta_{\mathrm{MAP}}=\frac{\Big(\dfrac{n}{\sigma^2}\Big)\bar X_n+\Big(\dfrac{1}{\sigma_0^2}\Big)\mu_0}{\Big(\dfrac{n}{\sigma^2}\Big)+\Big(\dfrac{1}{\sigma_0^2}\Big)}\ }
+\]
+\end{solution}
+\end{example}
+
+\subsection{تفسیر جواب: میانگین وزن‌دار با وزن «دقت»}
+جواب تخمین‌گر \lr{MLE} صرفاً $\bar X_n$ است، در حالی که در تخمین‌گر \lr{MAP} با توزیع پیشین $\mathcal N(\mu_0,\sigma_0^2)$، با یک \textbf{میانگین وزن‌دار} میان $\bar X_n$ و $\mu_0$ طرف خواهیم بود. وزن‌ها معنای روشنی دارند: معکوس واریانس را \textbf{دقت \lr{(precision)}} می‌نامند.
+\begin{itemize}
+\item $\frac{n}{\sigma^2}=\frac{1}{\Var\bar X_n}$ دقت اطلاعاتی است که داده‌ها درباره $\theta$ می‌دهند (میانگین نمونه‌ای واریانس $\frac{\sigma^2}{n}$ دارد)؛
+\item $\frac{1}{\sigma_0^2}$ دقت اطلاعات پیشین است.
+\end{itemize}
+پس هر منبع به نسبت \textbf{دقتش} در تخمین سهم دارد. با تعریف
+\[
+\lambda_n\triangleq\frac{n/\sigma^2}{n/\sigma^2+1/\sigma_0^2}=\frac{n\sigma_0^2}{n\sigma_0^2+\sigma^2}\in(0,1),
+\qquad
+\hat\theta_{\mathrm{MAP}}=\lambda_n\bar X_n+(1-\lambda_n)\mu_0 .
+\]
+\begin{itemize}
+\item هر چقدر تعداد مشاهدات $n$ بیشتر، و یا واریانس توزیع درست‌نمایی ($\sigma^2$) کوچک‌تر باشد، اطلاعات \lr{(information)} ما از بخش \lr{likelihood} یا درست‌نمایی قابل اتکاتر بوده و تخمین‌گر به مقدار $\bar X_n$ نزدیک‌تر خواهد شد ($\lambda_n\to1$). به ویژه وقتی $n\to\infty$، $\hat\theta_{\mathrm{MAP}}\to\bar X_n=\hat\theta_\ML$.
+\item هر چقدر واریانس توزیع پیشین ($\sigma_0^2$) کوچک‌تر باشد نیز بدین معنی است که از اطلاعات پیشین بسیار مطمئن هستیم و لذا تخمین‌گر به $\mu_0$ نزدیک‌تر می‌گردد ($\lambda_n\to0$).
+\item اگر $\sigma_0^2\to\infty$ (پیشین «کاملاً پهن»، یعنی تقریباً یکنواخت)، $\lambda_n\to1$ و دوباره به \lr{MLE} می‌رسیم؛ سازگار با قضیه پیشین یکنواخت.
+\end{itemize}
+این دقیقاً کمّی‌سازی شهود مثال جراحان در جلسه ۲۴ است: «با داده کم به پیشین تکیه کن، با داده زیاد به داده‌ها».
+
+\subsection{توزیع پسین کامل}
+در این مثال می‌توانیم کل توزیع پسین را هم به دست آوریم. منفی لگاریتم پسین (تا یک ثابت) تابعی درجه دوم از $\theta$ است:
+\[
+-\log f(\theta\given X_{1:n})=\frac{1}{2}\Big(\frac{n}{\sigma^2}+\frac{1}{\sigma_0^2}\Big)\theta^2-\Big(\frac{n\bar X_n}{\sigma^2}+\frac{\mu_0}{\sigma_0^2}\Big)\theta+\text{const}
+=\frac{\big(\theta-\hat\theta_{\mathrm{MAP}}\big)^2}{2\tau_n^2}+\text{const},
+\qquad\frac{1}{\tau_n^2}=\frac{n}{\sigma^2}+\frac{1}{\sigma_0^2}
+\]
+(با کامل کردن مربع: ضریب $\theta^2$ برابر $\frac{1}{2\tau_n^2}$ است و نقطه کمینه همان $\hat\theta_{\mathrm{MAP}}$). یک تابع نمایی با توان درجه دوم منفی، چگالی گاوسی است؛ پس
+\[
+\theta\given X_{1:n}\ \sim\ \mathcal N\big(\hat\theta_{\mathrm{MAP}},\ \tau_n^2\big),\qquad\frac{1}{\tau_n^2}=\frac{n}{\sigma^2}+\frac{1}{\sigma_0^2}.
+\]
+دو نتیجه زیبا:
+\begin{itemize}
+\item \textbf{دقت‌ها جمع می‌شوند:} دقت پسین = دقت داده + دقت پیشین. پس پسین همیشه از هر دو منبع باریک‌تر (مطمئن‌تر) است.
+\item چون پسین گاوسی (متقارن و تک‌قله‌ای) است، \lr{MAP}، میانگین پسین و میانه پسین هر سه یکی‌اند.
+\end{itemize}
+همچنین پیشین گاوسی بود و پسین هم گاوسی شد: این اولین مثال ما از \textbf{توزیع‌های مزدوج} است که در بخش بعد تعریف می‌کنیم.
+
+\begin{example}[تخمین توانایی یک دانشجو]
+نمره «توانایی واقعی» دانشجویان یک کلاس، بر اساس سوابق، تقریباً $\mathcal N(70,\ 10^2)$ است. نمره هر آزمون یک دانشجو برابر توانایی واقعی او به اضافه نویز گاوسی با انحراف معیار $\sigma=15$ است. دانشجویی در $n=4$ آزمون میانگین $85$ گرفته است. (الف) \lr{MLE} و \lr{MAP} توانایی او را بیابید. (ب) انحراف معیار پسین و یک بازه ۹۵٪ بیزی بسازید.
+\begin{solution}
+(الف) $\hat\theta_\ML=\bar x=85$. برای \lr{MAP}: دقت داده $\frac{n}{\sigma^2}=\frac{4}{225}=0.01778$ و دقت پیشین $\frac1{\sigma_0^2}=\frac1{100}=0.01$:
+\[
+\lambda_4=\frac{0.01778}{0.01778+0.01}=0.64,\qquad\hat\theta_{\mathrm{MAP}}=0.64\times85+0.36\times70=54.4+25.2=79.6 .
+\]
+تخمین از $85$ به سمت میانگین کلاس «جمع» شده است، چون ۴ آزمون پرنویز شواهد کاملاً قطعی‌ای نیستند. (این پدیده را \textbf{انقباض \lr{(shrinkage)}} می‌نامند؛ ممکن است بخشی از نمره بالا خوش‌شانسی بوده باشد.)
+
+(ب) $\frac{1}{\tau^2}=0.02778$، پس $\tau^2=36$ و $\tau=6$. بازه‌ای که ۹۵٪ احتمال پسین را دارد:
+\[
+79.6\pm1.96\times6=[67.8,\ 91.4].
+\]
+برخلاف بازه اطمینان جلسه ۲۳، اینجا می‌توان (در چارچوب مدل بیزی) گفت: «با احتمال ۹۵٪ توانایی این دانشجو در این بازه است»، چون $\theta$ متغیر تصادفی است. چنین بازه‌ای را \textbf{بازه باورپذیری \lr{(credible interval)}} می‌نامند. توجه کنید که این بازه از بازه اطمینان کلاسیک $85\pm1.96\times7.5=[70.3,\ 99.7]$ باریک‌تر است، چون اطلاعات پیشین را هم به کار گرفته است.
+\end{solution}
+\end{example}
+
+\begin{center}
+\begin{tikzpicture}
+\end{tikzpicture}\\
+{\small مثال تخمین توانایی دانشجو: پیشین $\mathcal N(70,10^2)$، درست‌نمایی (به صورت تابعی از $\theta$ و نرمال‌شده) $\mathcal N(85,7.5^2)$ و پسین $\mathcal N(79.6,6^2)$. پسین بین دو منحنی دیگر و باریک‌تر از هر دو است.}
+\end{center}
+
+\section{توزیع‌های مزدوج \lr{(Conjugate Priors)}}
+
+\subsection{تعریف}
+\begin{itemize}
+\item فرض کنید مطابق با مدل تولید داده \lr{(Data Generation Model)} در یک سناریو \lr{Bayesian} عمل می‌کنیم:
+\begin{itemize}
+\item از توزیع پیشین $f_\theta(\theta)$ یک پارامتر (یک یا چندبعدی) نمونه‌گیری می‌کنیم.
+\item از توزیع درست‌نمایی \lr{(likelihood distribution)} به صورت $f_{X|\theta}(X_{1:n}\given\theta)$، مجموعه دادگان $D=\{X_1,\ldots,X_n\}$ را به دست خواهیم آورد.
+\item توزیع پسین پارامتر به شرط دادگان به صورت $f_{\theta|D}(\theta\given D)$ خواهد بود.
+\end{itemize}
+\item دقت کنید که در این سناریو، \textbf{توزیع پیشین} و \textbf{توزیع درست‌نمایی} (مراحل ۱ و ۲) می‌توانند به دلخواه ما و بر اساس نیاز و مدل‌سازی فرض شوند. اما \textbf{توزیع پسین} با فرض دانستن این دو توزیع به صورت \textbf{یکتا} تعیین خواهد شد (طبق قانون بیز).
+\end{itemize}
+
+\begin{definition}[توزیع‌های مزدوج]
+در صورتی که توزیع پیشین $f_\theta(\theta)$ و توزیع پسین $f_{\theta|D}(\theta\given D)$ از \textbf{یک خانواده از توزیع‌ها} شدند (مثلاً هر دو گاوسی شدند، یا هر دو نمایی شدند و \ldots) در اصطلاح می‌گوییم:
+\begin{center}
+توزیع پیشین $f_\theta(\theta)$ و توزیع درست‌نمایی $f_{X|\theta}(X\given\theta)$ \lr{conjugate} یکدیگر هستند.
+\end{center}
+یا معادلاً گفته می‌شود:
+\begin{center}
+توزیع پیشین $f_\theta(\theta)$ یک \lr{conjugate prior} برای توزیع درست‌نمایی $f_{X|\theta}(X\given\theta)$ است.
+\end{center}
+\end{definition}
+مثال بخش قبل: پیشین گاوسی برای میانگین، با درست‌نمایی گاوسی (واریانس معلوم)، پسین گاوسی داد؛ پس توزیع گاوسی، \lr{conjugate prior} میانگین توزیع گاوسی است. «خانواده» یعنی همان شکل تابعی با پارامترهای (احتمالاً) متفاوت: داده‌ها فقط \textbf{پارامترهای} پیشین را به‌روز می‌کنند ($\mu_0\to\hat\theta_{\mathrm{MAP}}$ و $\sigma_0^2\to\tau_n^2$).
+
+\subsection{مثال: توزیع بتا و دوجمله‌ای}
+\begin{definition}[توزیع بتا]
+متغیر تصادفی $p\in[0,1]$ توزیع \textbf{بتا} با پارامترهای $\alpha,\beta>0$ دارد، $p\sim\mathrm{Beta}(\alpha,\beta)$، اگر
+\[
+f(p)=\frac{p^{\alpha-1}(1-p)^{\beta-1}}{B(\alpha,\beta)},\qquad0\le p\le1,\qquad B(\alpha,\beta)=\int_0^1t^{\alpha-1}(1-t)^{\beta-1}\dd t=\frac{\Gamma(\alpha)\Gamma(\beta)}{\Gamma(\alpha+\beta)} .
+\]
+\end{definition}
+ویژگی‌ها (بدون اثبات طولانی؛ میانگین با یک انتگرال و اتحاد $\Gamma(x+1)=x\Gamma(x)$ به دست می‌آید):
+\[
+\E p=\frac{\alpha}{\alpha+\beta},\qquad\text{مد}=\frac{\alpha-1}{\alpha+\beta-2}\ \ (\alpha,\beta>1),\qquad\Var p=\frac{\alpha\beta}{(\alpha+\beta)^2(\alpha+\beta+1)} .
+\]
+$\mathrm{Beta}(1,1)$ همان توزیع یکنواخت روی $[0,1]$ است. با بزرگ شدن $\alpha+\beta$ (با نسبت ثابت)، واریانس کم و توزیع متمرکزتر می‌شود. این توزیع برای مدل‌سازی یک «احتمال» نامعلوم بسیار طبیعی است، چون تکیه‌گاهش دقیقاً $[0,1]$ است.
+
+\begin{theorem}[مزدوج بودن بتا و دوجمله‌ای]
+فرض کنید احتمال شیر آمدن یک سکه بایاس‌دار از توزیع $\mathrm{Beta}(\alpha,\beta)$ پیروی کند:
+\[
+p\sim\mathrm{Beta}(\alpha,\beta).
+\]
+این سکه تصادفی را $n$ بار به صورت مستقل پرتاب می‌کنیم و نتیجه $k$ بار شیر و $n-k$ بار خط می‌شود:
+\[
+k\given p\sim\mathrm{Binomial}(n,p).
+\]
+آنگاه توزیع پسین احتمال شیر آمدن $p$ به شرط مشاهدات دوباره یک توزیع بتا خواهد شد، اما پارامترهای آن بر حسب داده‌ها تغییر خواهد کرد:
+\[
+\boxed{\ p\given k\sim\mathrm{Beta}\big(\alpha+k,\ \beta+n-k\big)\ }
+\]
+\end{theorem}
+\begin{proof}
+طبق قانون بیز (پسین $\propto$ درست‌نمایی $\times$ پیشین):
+\[
+f(p\given k)\ \propto\ \underbrace{\binom nkp^k(1-p)^{n-k}}_{\text{درست‌نمایی}}\cdot\underbrace{\frac{p^{\alpha-1}(1-p)^{\beta-1}}{B(\alpha,\beta)}}_{\text{پیشین}}
+\ \propto\ p^{\alpha+k-1}(1-p)^{\beta+n-k-1},\qquad0\le p\le1 .
+\]
+(ثابت‌های $\binom nk$ و $B(\alpha,\beta)$ به $p$ وابسته نیستند و در تناسب حذف می‌شوند.) عبارت سمت راست دقیقاً «هسته» چگالی $\mathrm{Beta}(\alpha+k,\beta+n-k)$ است. چون پسین باید یک چگالی (با انتگرال ۱) باشد، ثابت نرمال‌سازی آن ناگزیر همان $\frac{1}{B(\alpha+k,\beta+n-k)}$ است؛ پس بدون محاسبه هیچ انتگرالی، پسین مشخص شد.
+\end{proof}
+
+در این حالت گفته می‌شود:
+\begin{itemize}
+\item توزیع‌های \lr{Beta} و \lr{Binomial} نسبت به یکدیگر \lr{conjugate} هستند، یا
+\item توزیع \lr{Beta}، برای پارامتر $p$ در توزیع $\mathrm{Binomial}(n,p)$ یک \lr{conjugate prior} است.
+\end{itemize}
+
+\textbf{تفسیر بسیار شهودی: شمارش‌های مجازی.} پیشین $\mathrm{Beta}(\alpha,\beta)$ مثل این است که پیش از آزمایش، «در ذهن خود» $\alpha$ شیر و $\beta$ خط دیده باشیم (دقیق‌تر: $\alpha-1$ و $\beta-1$). به‌روزرسانی بیزی فقط شمارش‌های واقعی را به شمارش‌های مجازی اضافه می‌کند: شیرها به $\alpha$ و خط‌ها به $\beta$. هرچه $\alpha+\beta$ بزرگ‌تر باشد، پیشین «وزن» بیشتری دارد و داده بیشتری برای تغییر آن لازم است.
+
+\textbf{سه تخمین نقطه‌ای:}
+\[
+\hat p_\ML=\frac{k}{n},\qquad
+\hat p_{\mathrm{MAP}}=\frac{\alpha+k-1}{\alpha+\beta+n-2},\qquad
+\hat p_{\mathrm{PM}}=\frac{\alpha+k}{\alpha+\beta+n}.
+\]
+(\lr{MAP} مد و $\hat p_{\mathrm{PM}}$ میانگین توزیع پسین بتا است.) میانگین پسین را می‌توان به شکل میانگین وزن‌دار نوشت:
+\[
+\hat p_{\mathrm{PM}}=\frac{\alpha+\beta}{\alpha+\beta+n}\cdot\underbrace{\frac{\alpha}{\alpha+\beta}}_{\text{میانگین پیشین}}+\frac{n}{\alpha+\beta+n}\cdot\underbrace{\frac kn}_{\hat p_\ML},
+\]
+که دقیقاً همان ساختار مثال گاوسی است: با $n\to\infty$ وزن داده به ۱ میل می‌کند. با پیشین یکنواخت $\mathrm{Beta}(1,1)$: $\hat p_{\mathrm{MAP}}=\frac kn=\hat p_\ML$ (سازگار با قضیه پیشین یکنواخت) و $\hat p_{\mathrm{PM}}=\frac{k+1}{n+2}$ (\textbf{قاعده توالی لاپلاس}).
+
+\begin{example}[انتخاب جراح: حل کمّی]
+به مثال جلسه ۲۴ برمی‌گردیم. جراح «الف» ۴ عمل با ۴ موفقیت و جراح «ب» ۱۰۰ عمل با ۹۲ موفقیت دارد. هر دو از یک دانشکده فارغ‌التحصیل شده‌اند و سوابق فارغ‌التحصیلان این دانشکده نشان می‌دهد نرخ موفقیت آنان حدود $0.85$ است؛ این اطلاع را با پیشین $\mathrm{Beta}(17,3)$ مدل می‌کنیم (میانگین $\frac{17}{20}=0.85$، معادل «۲۰ عمل مجازی با ۱۷ موفقیت»). کدام جراح بهتر است؟
+\begin{solution}
+\textbf{پسین‌ها} (طبق قضیه مزدوج بودن):
+\[
+\text{الف}:\ \mathrm{Beta}(17+4,\ 3+0)=\mathrm{Beta}(21,3),\qquad
+\text{ب}:\ \mathrm{Beta}(17+92,\ 3+8)=\mathrm{Beta}(109,11).
+\]
+\textbf{تخمین‌ها:}
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{c|c|c|c|c}
+جراح & \lr{MLE} & \lr{MAP} & میانگین پسین & انحراف معیار پسین\\\hline
+الف & $\frac44=1.000$ & $\frac{20}{22}=0.909$ & $\frac{21}{24}=0.875$ & $0.066$\\
+ب & $\frac{92}{100}=0.920$ & $\frac{108}{118}=0.915$ & $\frac{109}{120}=0.908$ & $0.026$
+\end{tabular}
+\end{center}
+(انحراف معیارها از فرمول واریانس بتا: برای الف $\sqrt{\frac{21\times3}{24^2\times25}}=0.066$ و برای ب $\sqrt{\frac{109\times11}{120^2\times121}}=0.026$.)
+
+\textbf{نتیجه:} \lr{MLE} جراح «الف» را انتخاب می‌کرد، اما هم \lr{MAP} و هم میانگین پسین جراح «ب» را بهتر می‌دانند. پیشین، ۴ موفقیت «الف» را به سمت $0.85$ کشیده (۴ مشاهده در برابر ۲۰ مشاهده مجازی وزن کمی دارد)، در حالی که ۱۰۰ مشاهده «ب» بر پیشین غلبه کرده و تخمینش نزدیک $0.92$ مانده است. انحراف معیار پسین هم نشان می‌دهد که درباره «ب» حدود ۲٫۵ برابر مطمئن‌تریم. این همان شهود جلسه ۲۴ بود، که اکنون کمّی شده است.
+\end{solution}
+\end{example}
+
+\begin{center}
+\begin{tikzpicture}
+\end{tikzpicture}\\
+{\small مثال انتخاب جراح: پیشین $\mathrm{Beta}(17,3)$، پسین جراح الف $\mathrm{Beta}(21,3)$ (پهن، چون داده کم است) و پسین جراح ب $\mathrm{Beta}(109,11)$ (باریک و متمرکز حول $0.91$).}
+\end{center}
+
+\subsection{کاربردهای توزیع‌های مزدوج}
+\begin{itemize}
+\item در بسیاری از کاربردهای عملی، مدل تولید داده‌ها به شرط پارامترها توسط طبیعت مشخص گردیده و به ما تحمیل می‌گردد. اما معمولاً توزیع پیشین توسط آماردان تعیین شده و قید خاصی روی خانواده آن نیست.
+\begin{itemize}
+\item صرفاً اطلاعاتی در مورد محل تجمع احتمال در فضای پارامترهای $\Theta$ و میزان پراکندگی آنان در دسترس خواهد بود.
+\end{itemize}
+\item استفاده از \lr{conjugate prior} یک توزیع به منظور مدل‌سازی اطلاعات پیشین درباره پارامترهای آن، باعث می‌گردد تا توزیع پسین فرم \textbf{تحلیلی و مشخصی} پیدا کرده و بسیاری از محاسبات بعدی را راحت می‌کند.
+\end{itemize}
+مثلاً در مثال جراح، اطلاع پیشین فقط «حدود $0.85$ با اطمینان متوسط» بود؛ از میان همه توزیع‌هایی که با این اطلاع سازگارند، $\mathrm{Beta}(17,3)$ را انتخاب کردیم چون محاسبه پسین را به «جمع کردن شمارش‌ها» تبدیل می‌کند. بدون مزدوج بودن، باید انتگرال مخرج قانون بیز را عددی حساب می‌کردیم یا از \lr{MCMC} استفاده می‌کردیم. مزیت دیگر: پسین هم از همان خانواده است، پس برای داده‌های بعدی می‌تواند دوباره نقش پیشین را بازی کند (به‌روزرسانی ترتیبی جلسه ۲۴) و فرمول‌ها تغییر نمی‌کنند.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{c|c|c|c}
+درست‌نمایی & پارامتر & پیشین مزدوج & پسین پس از $n$ مشاهده\\\hline
+برنولی/دوجمله‌ای & $p$ & $\mathrm{Beta}(\alpha,\beta)$ & $\mathrm{Beta}\big(\alpha+\sum x_i,\ \beta+n-\sum x_i\big)$\\
+پواسون & $\lambda$ & $\mathrm{Gamma}(a,b)$ & $\mathrm{Gamma}\big(a+\sum x_i,\ b+n\big)$\\
+نمایی & $\lambda$ & $\mathrm{Gamma}(a,b)$ & $\mathrm{Gamma}\big(a+n,\ b+\sum x_i\big)$\\
+گاوسی ($\sigma^2$ معلوم) & $\mu$ & $\mathcal N(\mu_0,\sigma_0^2)$ & $\mathcal N\big(\hat\theta_{\mathrm{MAP}},\ \tau_n^2\big)$\\
+چندجمله‌ای/دسته‌ای & $(p_1,\ldots,p_k)$ & $\mathrm{Dirichlet}(\alpha_1,\ldots,\alpha_k)$ & $\mathrm{Dirichlet}\big(\alpha_1+x_1,\ldots,\alpha_k+x_k\big)$
+\end{tabular}
+\end{center}
+در این جدول $\mathrm{Gamma}(a,b)$ چگالی $\frac{b^a}{\Gamma(a)}\lambda^{a-1}e^{-b\lambda}$ برای $\lambda>0$ دارد (میانگین $a/b$)؛ اثبات دو سطر پواسون و نمایی در تمرین‌ها آمده است.
+
+\section{تمرین‌های تکمیلی}
+
+\begin{exercise}[مزدوج پواسون و گاما]
+نمونه‌های $X_1,\ldots,X_n$ به شرط $\lambda$ \lr{i.i.d.} از $\mathrm{Poisson}(\lambda)$ هستند و $\lambda\sim\mathrm{Gamma}(a,b)$. (الف) پسین را بیابید. (ب) \lr{MAP} و میانگین پسین را بنویسید و حالت $a=1$ را با تمرین پواسون جلسه ۲۴ مقایسه کنید.
+\end{exercise}
+\begin{solution}
+(الف)
+\[
+f(\lambda\given D)\propto\prod_{i=1}^n\frac{\lambda^{x_i}e^{-\lambda}}{x_i!}\cdot\lambda^{a-1}e^{-b\lambda}\propto\lambda^{a+\sum_ix_i-1}e^{-(b+n)\lambda},
+\]
+که هسته $\mathrm{Gamma}\big(a+\sum_ix_i,\ b+n\big)$ است.
+
+(ب) مد گاما $\frac{a'-1}{b'}$ و میانگین آن $\frac{a'}{b'}$ است:
+\[
+\hat\lambda_{\mathrm{MAP}}=\frac{a+\sum_ix_i-1}{b+n},\qquad\hat\lambda_{\mathrm{PM}}=\frac{a+\sum_ix_i}{b+n}.
+\]
+با $a=1$، پیشین $\mathrm{Gamma}(1,b)$ همان $\mathrm{Exp}(b)$ است و $\hat\lambda_{\mathrm{MAP}}=\frac{\sum_ix_i}{n+b}$؛ دقیقاً همان جواب تمرین جلسه ۲۴ (با $\beta=b$). تفسیر شمارش مجازی: $a$ «رویداد مجازی» در $b$ «بازه مجازی».
+\end{solution}
+
+\begin{exercise}[مزدوج نمایی و گاما]
+طول عمر لامپ‌ها به شرط $\lambda$ \lr{i.i.d.} از $\mathrm{Exp}(\lambda)$ است و $\lambda\sim\mathrm{Gamma}(a,b)$. پسین را بیابید. اگر $a=2$، $b=1000$ ساعت و طول عمر ۵ لامپ مجموعاً $4000$ ساعت باشد، میانگین پسین $\lambda$ و تخمین \lr{MLE} را مقایسه کنید.
+\end{exercise}
+\begin{solution}
+\[
+f(\lambda\given D)\propto\prod_{i=1}^n\lambda e^{-\lambda x_i}\cdot\lambda^{a-1}e^{-b\lambda}=\lambda^{a+n-1}e^{-(b+\sum_ix_i)\lambda}
+\quad\Rightarrow\quad\mathrm{Gamma}\Big(a+n,\ b+\sum_ix_i\Big).
+\]
+عددی: پسین $\mathrm{Gamma}(7,\ 5000)$ با میانگین $\frac{7}{5000}=0.0014$ در ساعت (عمر متوسط حدود $714$ ساعت). \lr{MLE}: $\hat\lambda_\ML=\frac{n}{\sum_ix_i}=\frac{5}{4000}=0.00125$ (عمر متوسط $800$ ساعت). پیشین (با میانگین $\frac{2}{1000}=0.002$، یعنی عمر $500$ ساعت) تخمین را به سمت خود کشیده است.
+\end{solution}
+
+\begin{exercise}[احتمال شیر بعدی]
+احتمال شیر آمدن سکه‌ای $p\sim\mathrm{Beta}(\alpha,\beta)$ است و در $n$ پرتاب $k$ شیر دیده‌ایم. احتمال اینکه پرتاب بعدی شیر باشد چقدر است؟
+\end{exercise}
+\begin{solution}
+با قانون احتمال کل روی $p$ (به شرط داده‌ها) و استقلال شرطی پرتاب بعدی از قبلی‌ها به شرط $p$:
+\[
+\Prob(X_{n+1}=1\given D)=\int_0^1\Prob(X_{n+1}=1\given p)f(p\given D)\dd p=\int_0^1p\,f(p\given D)\dd p=\E[p\given D]=\frac{\alpha+k}{\alpha+\beta+n}.
+\]
+پیش‌بینی بیزی همان میانگین پسین است. با پیشین یکنواخت: $\frac{k+1}{n+2}$؛ مثلاً اگر ۱۰ بار از ۱۰ بار شیر آمده باشد، احتمال شیر بعدی $\frac{11}{12}$ است و نه ۱ (که \lr{MLE} می‌گفت)؛ هرگز با داده متناهی به یقین مطلق نمی‌رسیم.
+\end{solution}
+
+\begin{exercise}[به‌روزرسانی ترتیبی با بتا]
+با پیشین $\mathrm{Beta}(1,1)$، سکه سه بار پرتاب می‌شود: شیر، شیر، خط. پسین را پس از هر پرتاب بنویسید و نشان دهید با پردازش یکجا یکی است.
+\end{exercise}
+\begin{solution}
+هر شیر $\alpha$ و هر خط $\beta$ را یکی زیاد می‌کند:
+\[
+\mathrm{Beta}(1,1)\xrightarrow{\ \text{شیر}\ }\mathrm{Beta}(2,1)\xrightarrow{\ \text{شیر}\ }\mathrm{Beta}(3,1)\xrightarrow{\ \text{خط}\ }\mathrm{Beta}(3,2).
+\]
+پردازش یکجا: $k=2$، $n=3$، پس $\mathrm{Beta}(1+2,\ 1+1)=\mathrm{Beta}(3,2)$؛ یکسان. (ترتیب مشاهدات هم اهمیتی ندارد، چون فقط شمارش‌ها مهم‌اند.)
+\end{solution}
+
+\begin{exercise}[چه زمانی داده بر پیشین غلبه می‌کند؟]
+در مثال گاوسی، چند مشاهده لازم است تا وزن داده‌ها $\lambda_n$ حداقل $0.9$ شود؟ برای مثال دانشجو ($\sigma=15$، $\sigma_0=10$) عدد آن را حساب کنید.
+\end{exercise}
+\begin{solution}
+\[
+\lambda_n=\frac{n\sigma_0^2}{n\sigma_0^2+\sigma^2}\ge0.9\iff n\sigma_0^2\ge0.9n\sigma_0^2+0.9\sigma^2\iff n\ge\frac{9\sigma^2}{\sigma_0^2}.
+\]
+عددی: $n\ge\frac{9\times225}{100}=20.25$، یعنی $21$ آزمون. نسبت $\frac{\sigma^2}{\sigma_0^2}$ «ارزش پیشین برحسب تعداد مشاهده» است: پیشین در اینجا هم‌ارز $2.25$ مشاهده است.
+\end{solution}
+
+\begin{exercise}[پیشین گاوسی و تنظیم]
+نشان دهید \lr{MAP} میانگین گاوسی با پیشین $\mathcal N(0,\sigma_0^2)$ همان جواب مسئله کمینه‌سازی $\sum_i(X_i-\theta)^2+\gamma\theta^2$ است و $\gamma$ را بیابید.
+\end{exercise}
+\begin{solution}
+با $\mu_0=0$، تابع هدف \lr{MAP} (پس از ضرب در عدد مثبت $2\sigma^2$) برابر $\sum_i(X_i-\theta)^2+\frac{\sigma^2}{\sigma_0^2}\theta^2$ است؛ پس $\gamma=\frac{\sigma^2}{\sigma_0^2}$. جواب: $\hat\theta=\frac{\sum_iX_i}{n+\gamma}$ (انقباض به سمت صفر). این ساده‌ترین نمونه رگرسیون \lr{Ridge} است: ضریب تنظیم همان نسبت واریانس نویز به واریانس پیشین است.
+\end{solution}
