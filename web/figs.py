@@ -1247,6 +1247,162 @@ def _(fid):
     return wrap(P.svg('پسین‌های بتا برای دو جراح'), leg=leg)
 
 
+# ================================================================ math toolbox 1
+@fig('f101-1')
+def _(fid):
+    f = lambda x: x * x * exp(-x) / 2
+    a, b = 1.5, 4.0
+    P = Plot(fid, w=520, h=250, x=(0, 10), y=(0, 0.3), xticks=[0, a, b, 10], xticklabels=['0', 'a', 'b', ''],
+             yticks=None, xlabel='$x$')
+    P.area(f, a, b, color='c1', op=.35)
+    P.fn(f, 0, 10, color='var(--fig-ink)', sw=2.3)
+    for x in (a, b):
+        P.line([(x, 0), (x, f(x))], color='c1', sw=1.3, dash='4 3')
+    P.math(2.75, 0.09, '\\mathbb P(a\\le X\\le b)', size=14, color='c1')
+    P.math(6.6, 0.16, 'f_X(x)', size=15)
+    return P.svg('احتمال به عنوان مساحت')
+
+
+@fig('f101-2')
+def _(fid):
+    P = Plot(fid, w=520, h=260, x=(1, 7), y=(0, 1.05), xticks=[1, 2, 3, 4, 5, 6, 7], yticks=[0, .25, .5, .75, 1],
+             xlabel='$x$', grid=True)
+    P.fn(lambda x: 1 / x, 1, 7, color='c2', sw=2.4)
+    P.fn(lambda x: 1 / x ** 2, 1, 7, color='c1', sw=2.4)
+    P.fn(lambda x: exp(-(x - 1)), 1, 7, color='c3', sw=2.4)
+    leg = legend([('$1/x$ (مساحت دم بی‌نهایت)', 'c2', 'line'), ('$1/x^2$ (مساحت ۱)', 'c1', 'line'),
+                  ('$e^{-(x-1)}$ (مساحت ۱)', 'c3', 'line')])
+    return wrap(P.svg('سرعت میرایی دم'), leg=leg)
+
+
+@fig('f101-3')
+def _(fid):
+    g = lambda z: z * gauss(z)
+    P = Plot(fid, w=520, h=250, x=(-4, 4), y=(-0.28, 0.28), axes='middle', xticks=[-3, -2, -1, 1, 2, 3], yticks=None,
+             xlabel='$z$')
+    P.area(g, 0, 4, color='c1', op=.35)
+    P.area(g, -4, 0, color='c2', op=.35)
+    P.fn(g, -4, 4, color='var(--fig-ink)', sw=2.3)
+    P.math(1.1, 0.11, '+', size=20, color='c1')
+    P.math(-1.1, -0.11, '-', size=20, color='c2')
+    P.math(2.6, 0.2, 'z\\,\\phi(z)', size=15)
+    return P.svg('تابع فرد')
+
+
+# ================================================================ math toolbox 2
+def _square(fid, w=300, h=300, ticks=(0, .5, 1), labels=None):
+    return Plot(fid, w=w, h=h, x=(0, 1.12), y=(0, 1.12), equal=True, xticks=list(ticks), yticks=list(ticks),
+                xticklabels=labels, xlabel='$x$', ylabel='$y$')
+
+
+@fig('f102-1')
+def _(fid):
+    P = _square(fid, w=340, h=330, ticks=(0, .6, 1), labels=['0', 'x', '1'])
+    P.polyfill([(0, 0), (1, 0), (1, 1)], color='c1', op=.18)
+    P.line([(0, 0), (1, 1)], color='c1', sw=2.2)
+    P.line([(1, 0), (1, 1)], color='c1', sw=1.4)
+    P.line([(0, 0), (1, 0.5)], color='c2', sw=1.6, dash='5 4')
+    P.polyfill([(0.585, 0), (0.615, 0), (0.615, 0.615), (0.585, 0.585)], color='c3', op=.75)
+    P.math(0.55, 0.78, 'y=x', size=14, color='c1')
+    P.math(0.9, 0.34, 'y=x/2', size=13, color='c2')
+    P.arrow((0.36, 0.25), (0.575, 0.3), color='c3', sw=1.2, size=6)
+    P.math(0.3, 0.25, 'dx', size=13, color='c3')
+    return P.svg('ناحیه مثلثی و برش عمودی')
+
+
+@fig('f102-2')
+def _(fid):
+    A = _square(fid + 'a', w=280, h=280)
+    A.polyfill([(0, 0), (0, 1), (1, 1)], color='c1', op=.18)
+    A.line([(0, 0), (1, 1)], color='c1', sw=2)
+    A.polyfill([(0.335, 0.35), (0.365, 0.35), (0.365, 1), (0.335, 1)], color='c3', op=.75)
+    A.math(0.72, 0.6, 'y=x', size=13, color='c1')
+    B = _square(fid + 'b', w=280, h=280)
+    B.polyfill([(0, 0), (0, 1), (1, 1)], color='c1', op=.18)
+    B.line([(0, 0), (1, 1)], color='c1', sw=2)
+    B.polyfill([(0, 0.635), (0.65, 0.635), (0.65, 0.665), (0, 0.665)], color='c4', op=.8)
+    B.math(0.72, 0.6, 'y=x', size=13, color='c1')
+    return (wrap(A.svg('برش عمودی'), title='برش عمودی: $x$ ثابت، $y$ از $x$ تا ۱') +
+            wrap(B.svg('برش افقی'), title='برش افقی: $y$ ثابت، $x$ از ۰ تا $y$'))
+
+
+@fig('f102-3')
+def _(fid):
+    P = _square(fid, w=340, h=330, ticks=(0, .25, 1), labels=['0', '1/4', '1'])
+    P.polyfill([(0, 0), (1, 0), (1, 1), (0, 1)], color='c2', op=.08)
+    P.polyfill([(0, 0), (0.25, 0), (1, 0.75), (1, 1), (0.75, 1), (0, 0.25)], color='c1', op=.35)
+    P.line([(0, 0), (1, 1)], color='c1', sw=1.2, dash='4 4')
+    P.math(0.22, 0.82, 'y-x>\\tfrac14', size=13, color='c2')
+    P.math(0.78, 0.18, 'x-y>\\tfrac14', size=13, color='c2')
+    return P.svg('مسئله قرار ملاقات')
+
+
+@fig('f102-4')
+def _(fid):
+    out = ''
+    for z, poly in ((0.6, [(0, 0), (0.6, 0), (0, 0.6)]), (1.4, [(0, 0), (1, 0), (1, 0.4), (0.4, 1), (0, 1)])):
+        P = _square(fid + ('a' if z < 1 else 'b'), w=260, h=260)
+        P.polyfill([(0, 0), (1, 0), (1, 1), (0, 1)], color='c7', op=.06, stroke='var(--fig-ink)', sw=1)
+        P.polyfill(poly, color='c1', op=.35)
+        xa, xb = max(0, z - 1.12), min(1.12, z)
+        P.line([(xa, z - xa), (xb, z - xb)], color='c2', sw=1.8)
+        P.math(min(z, 1) * 0.55 + 0.05, max(z - 1, 0) * 0.5 + 0.2, 'x+y\\le z', size=13, color='c1')
+        out += wrap(P.svg('x+y<=z'), title='$z=%s$' % z)
+    return out
+
+
+@fig('f102-5')
+def _(fid):
+    P = Plot(fid, w=420, h=340, x=(-0.08, 1.45), y=(-0.08, 1.2), equal=True, xticks=None, yticks=None,
+             xlabel='$x$', ylabel='$y$')
+    t1, t2, r1, r2 = 0.5, 0.78, 0.9, 1.15
+    arc = lambda r, a, b, n=40: [(r * math.cos(t), r * math.sin(t)) for t in np.linspace(a, b, n)]
+    P.polyfill(arc(r1, t1, t2) + arc(r2, t2, t1), color='c1', op=.38, stroke='c1', sw=1.6)
+    for t in (t1, t2):
+        P.line([(0, 0), (1.35 * math.cos(t), 1.35 * math.sin(t))], color='var(--fig-ink)', sw=1.1, dash='4 3')
+    P.curve([p[0] for p in arc(r1, 0, t1)], [p[1] for p in arc(r1, 0, t1)], color='c7', sw=1, dash='3 3')
+    P.curve([p[0] for p in arc(0.25, t1, t2)], [p[1] for p in arc(0.25, t1, t2)], color='c2', sw=1.6)
+    P.math(0.3 * math.cos((t1 + t2) / 2) + 0.06, 0.3 * math.sin((t1 + t2) / 2), 'd\\theta', size=13, color='c2', anchor='w')
+    P.math(1.03 * math.cos(t1) + 0.08, 1.03 * math.sin(t1) - 0.05, 'dr', size=14, color='c1')
+    P.math(1.2 * math.cos((t1 + t2) / 2), 1.2 * math.sin((t1 + t2) / 2) + 0.07, 'r\\,d\\theta', size=14, color='c1')
+    P.math(0.5 * math.cos(t1) + 0.06, 0.5 * math.sin(t1) - 0.06, 'r', size=14)
+    return P.svg('عنصر مساحت قطبی')
+
+
+# ================================================================ math toolbox 3
+@fig('f103-1')
+def _(fid):
+    P = Plot(fid, w=520, h=280, x=(-2, 2), y=(-1.5, 7.5), axes='middle', xticks=[-2, -1, 1, 2], yticks=[2, 4, 6],
+             xlabel='$x$', grid=True)
+    P.fn(lambda x: 1 + x, color='c2', sw=1.8)
+    P.fn(lambda x: 1 + x + x * x / 2, color='c4', sw=1.8)
+    P.fn(lambda x: 1 + x + x * x / 2 + x ** 3 / 6, color='c1', sw=1.8, dash='6 4')
+    P.fn(lambda x: math.exp(x), color='var(--fig-ink)', sw=2.6)
+    leg = legend([('$e^x$', 'var(--fig-ink)', 'line'), ('درجه ۱: $1+x$', 'c2', 'line'),
+                  ('درجه ۲', 'c4', 'line'), ('درجه ۳', 'c1', 'dash')])
+    return wrap(P.svg('بسط تیلور'), leg=leg)
+
+
+@fig('f103-2')
+def _(fid):
+    f = lambda x: 0.35 * x * x + 0.2
+    x1, x2 = 0.6, 2.8
+    m = (x1 + x2) / 2
+    P = Plot(fid, w=480, h=280, x=(0, 3.2), y=(0, 3.6), xticks=[x1, m, x2], xticklabels=['x_1', '\\mathbb E X', 'x_2'],
+             yticks=None)
+    P.fn(f, 0, 3.15, color='var(--fig-ink)', sw=2.4)
+    P.line([(x1, f(x1)), (x2, f(x2))], color='c2', sw=1.8)
+    P.line([(m, 0), (m, (f(x1) + f(x2)) / 2)], color='c7', sw=1.2, dash='4 3')
+    for x in (x1, x2):
+        P.line([(x, 0), (x, f(x))], color='c7', sw=1, dash='2 3')
+    P.points([x1, x2], [f(x1), f(x2)], color='var(--fig-ink)', r=3.5)
+    P.points([m], [(f(x1) + f(x2)) / 2], color='c2', r=5)
+    P.points([m], [f(m)], color='c1', r=5)
+    P.math(m - 0.08, (f(x1) + f(x2)) / 2 + 0.18, '\\mathbb E f(X)', size=14, color='c2', anchor='e')
+    P.math(m + 0.08, f(m) - 0.2, 'f(\\mathbb E X)', size=14, color='c1', anchor='w')
+    return P.svg('نامساوی ینسن')
+
+
 def render(fid):
     if fid not in REG:
         return '<div class="figph">%s</div>' % fid

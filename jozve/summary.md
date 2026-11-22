@@ -812,19 +812,19 @@ $$\prod_{i=1}^n\frac{q(X_i)}{p(X_i)}>\eta$$
 
 ### سری‌ها، انتگرال‌ها و جدول گاوسی
 
-::: {.card t="سری‌ها" ref=""}
+::: {.card t="سری‌ها" ref="103:s2 103:s3"}
 $$\sum_{k=0}^\infty x^k=\frac1{1-x},\qquad \sum_{k=1}^\infty kx^{k-1}=\frac1{(1-x)^2}\qquad(|x|<1)$$
 $$\sum_{k=1}^nk=\frac{n(n+1)}2,\qquad \sum_{k=1}^nk^2=\frac{n(n+1)(2n+1)}6$$
 $$e^x=\sum_{k=0}^\infty\frac{x^k}{k!},\qquad \Big(1+\frac xn\Big)^n\to e^x$$
 :::
 
-::: {.card t="انتگرال‌ها و توابع خاص" ref=""}
+::: {.card t="انتگرال‌ها و توابع خاص" ref="101:s8 101:s9"}
 $$\int_{-\infty}^{\infty}e^{-x^2/2}\dd x=\sqrt{2\pi},\qquad \int_0^\infty x^ne^{-\lambda x}\dd x=\frac{n!}{\lambda^{n+1}}$$
 $$\Gamma(a)=\int_0^\infty x^{a-1}e^{-x}\dd x,\quad \Gamma(n)=(n-1)!,\quad \Gamma\big(\tfrac12\big)=\sqrt\pi$$
 $$B(a,b)=\int_0^1x^{a-1}(1-x)^{b-1}\dd x=\frac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)}$$
 :::
 
-::: {.card t="تقریب‌ها و کران‌ها" ref="3:s6-1 5:s3"}
+::: {.card t="تقریب‌ها و کران‌ها" ref="3:s6-1 5:s3 103:s4 103:s5"}
 $$n!\approx\sqrt{2\pi n}\Big(\frac ne\Big)^n,\qquad \binom nr\le\Big(\frac{ne}{r}\Big)^r,\qquad 1-x\le e^{-x}$$
 :::
 
@@ -834,4 +834,54 @@ $$n!\approx\sqrt{2\pi n}\Big(\frac ne\Big)^n,\qquad \binom nr\le\Big(\frac{ne}{r
 | $\Phi(z)$ | $0.6915$ | $0.8413$ | $0.8997$ | $0.9332$ | $0.9500$ | $0.9750$ | $0.9772$ | $0.9900$ | $0.9950$ | $0.9987$ |
 
 $\Prob(\lvert Z\rvert<1)=0.6827$، $\Prob(\lvert Z\rvert<2)=0.9545$ و $\Prob(\lvert Z\rvert<3)=0.9973$.
+:::
+
+### جعبه‌ابزار ریاضی: انتگرال و حسابان
+
+::: {.card t="تکنیک‌های انتگرال‌گیری" ref="101:s3 101:s4 101:s5"}
+**جانشانی:** $\int f(g(x))g'(x)\dd x=\int f(u)\dd u$ (حدود را هم عوض کنید).
+
+**جزءبه‌جزء:** $\int u\dd v=uv-\int v\dd u$؛ $u$ را چیزی بگیرید که با مشتق ساده شود.
+
+**فرمول دم:** برای $X\ge0$: $\E X=\int_0^\infty\Prob(X>x)\dd x$.
+:::
+
+::: {.card t="ناسره و تقارن" ref="101:s6 101:s7"}
+$\int_1^\infty x^{-p}\dd x<\infty$ اگر و تنها اگر $p>1$؛ $\lim x^ne^{-\lambda x}=0$.
+
+تابع فرد: $\int_{-a}^af=0$ (به شرط همگرایی)؛ زوج: $2\int_0^af$. کوشی میانگین ندارد.
+:::
+
+::: {.card t="قاعده لایب‌نیتس" ref="101:s10"}
+$$\frac{\dd}{\dd x}\int_{a(x)}^{b(x)}f(t)\dd t=f(b)\,b'-f(a)\,a'$$
+$$\frac{\dd}{\dd s}\int f(x,s)\dd x=\int\frac{\partial f}{\partial s}\dd x$$
+کاربرد: $f_Y$ از $F_Y$، چگالی بیشینه، $M_X^{(n)}(0)=\E X^n$.
+:::
+
+::: {.card t="انتگرال دوگانه و حدود" ref="102:s2 102:s3 102:s4"}
+$\Prob((X,Y)\in A)=\iint_Af\dd x\dd y$. حدود درونی تابع متغیر بیرونی، حدود بیرونی ثابت. ناحیه را رسم کنید؛ اگر انتگرال درونی سخت است ترتیب را عوض کنید.
+
+چگالی جداپذیر روی ناحیه حاصل‌ضربی یعنی استقلال.
+:::
+
+::: {.card t="قطبی و ژاکوبین" ref="102:s6 102:s7"}
+$$\dd x\dd y=r\dd r\dd\theta,\qquad f_{U,V}(u,v)=f_{X,Y}\big(x(u,v),y(u,v)\big)\,|J|$$
+$J=\det\frac{\partial(x,y)}{\partial(u,v)}$. نمونه‌ها: $X\pm Y$ برای گاوسی‌های مستقل، $(X+Y,\frac{X}{X+Y})$ برای نمایی‌ها.
+:::
+
+::: {.card t="تحدب و نامساوی‌ها" ref="103:s6"}
+ینسن: اگر $f$ محدب باشد، $\E f(X)\ge f(\E X)$. کوشی–شوارتز: $(\E XY)^2\le\E X^2\E Y^2$.
+
+$1-x\le e^{-x}$ و $\ln x\le x-1$ (پس $D(p\|q)\ge0$).
+:::
+
+::: {.card t="بهینه‌سازی" ref="103:s7"}
+یک متغیر: $f'=0$، علامت $f''$، مرزها. چند متغیر: گرادیان صفر و هسین (بیشینه: $f_{xx}<0$ و $\det H>0$). مقید: $\nabla f=\lambda\nabla g$ (لاگرانژ).
+
+تبدیل صعودی (مثل $\log$) محل بیشینه را حفظ می‌کند.
+:::
+
+::: {.card t="ماتریس ۲×۲ و کوواریانس" ref="103:s8"}
+$$\begin{bmatrix}a&b\\c&d\end{bmatrix}^{-1}=\frac{1}{ad-bc}\begin{bmatrix}d&-b\\-c&a\end{bmatrix}$$
+$\mathrm{Cov}(A\mathbf X)=A\Sigma A^T$، $\Var(\mathbf a^T\mathbf X)=\mathbf a^T\Sigma\mathbf a$، $\det\Sigma=\sigma_X^2\sigma_Y^2(1-\rho^2)$.
 :::

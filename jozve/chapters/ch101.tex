@@ -1,0 +1,622 @@
+% ===============================================================
+%  جعبه‌ابزار ریاضی ۱
+% ===============================================================
+\chapter{مشتق و انتگرال یگانه}
+
+این بخش و دو بخش بعدی یک \textbf{جعبه‌ابزار ریاضی} برای این درس هستند. هدف، مرور همه ابزارهای حسابان است که در جلسه‌ها پیوسته به کار می‌روند، اما در اسلایدها «بدیهی» فرض می‌شوند: مشتق، انتگرال یگانه و تکنیک‌های آن، انتگرال ناسره، توابع گاما و بتا، انتگرال گاوسی و مشتق‌گیری از انتگرال. هر ابزار با مثال‌هایی آمده که \textbf{مستقیماً از خود درس} گرفته شده‌اند (نرمال‌سازی چگالی، میانگین و واریانس، تابع مولد گشتاور، درست‌نمایی و \ldots)، تا روشن باشد هر فرمول دقیقاً کجا به کار می‌آید. هر جا چگالی یک توزیع لازم است، فرمولش را کامل آورده‌ایم تا این بخش مستقل از جلسه‌ها قابل مطالعه باشد.
+
+\begin{summarybox}[این ابزارها کجای درس به کار می‌روند؟]
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{>{\raggedright\arraybackslash}p{4.6cm}|>{\raggedright\arraybackslash}p{8.6cm}}
+ابزار & کاربرد در درس\\\hline
+انتگرال معین و قضیه اساسی & احتمال از روی چگالی، \lr{CDF} و رابطه $f=F'$ (جلسه ۷)\\
+جانشانی & استانداردسازی گاوسی، تبدیل متغیر تصادفی (جلسه‌های ۹ و ۱۲)\\
+جزءبه‌جزء & میانگین و واریانس نمایی و گاما، گشتاورهای گاوسی (جلسه‌های ۱۰ و ۱۱)\\
+انتگرال ناسره & وجود میانگین (کوشی، پارتو)، تابع مولد گشتاور (جلسه‌های ۱۰ و ۱۱)\\
+گاما و بتا & توزیع‌های گاما، $\chi^2$، بتا و تخمین بیزی (جلسه‌های ۱۷ و ۲۷)\\
+انتگرال گاوسی & ثابت نرمال‌سازی و \lr{MGF} گاوسی، پسین گاوسی (جلسه‌های ۹، ۱۱ و ۲۷)\\
+قاعده لایب‌نیتس & چگالی $g(X)$، بیشینه و کمینه، مشتق \lr{MGF} (جلسه‌های ۱۲ و ۱۷)
+\end{tabular}
+\end{center}
+\end{summarybox}
+
+\section{چرا احتمال پیوسته یعنی انتگرال؟}
+
+در حالت گسسته، احتمال یک رویداد \textbf{مجموع} احتمال نقاط آن است: $\Prob(X\in A)=\sum_{x\in A}P_X(x)$. در حالت پیوسته احتمال هر نقطه صفر است و به جای تابع جرم، \textbf{چگالی} $f_X(x)$ داریم؛ احتمال یک بازه برابر \textbf{مساحت} زیر نمودار چگالی روی آن بازه است:
+\[
+\Prob(a\le X\le b)=\int_a^bf_X(x)\dd x .
+\]
+تقریباً هر محاسبه‌ای در احتمال پیوسته، یک انتگرال است. جدول زیر این تناظر را نشان می‌دهد: هر جا در حالت گسسته $\sum$ داشتیم، در حالت پیوسته $\int\ldots\dd x$ داریم.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{c|c|c}
+مفهوم & گسسته & پیوسته\\\hline
+نرمال بودن & $\sum_xP_X(x)=1$ & $\int_{-\infty}^{\infty}f_X(x)\dd x=1$\\
+تابع توزیع تجمعی & $F_X(x)=\sum_{t\le x}P_X(t)$ & $F_X(x)=\int_{-\infty}^xf_X(t)\dd t$\\
+امید ریاضی & $\E g(X)=\sum_xg(x)P_X(x)$ & $\E g(X)=\int_{-\infty}^{\infty}g(x)f_X(x)\dd x$\\
+تابع مولد گشتاور & $\sum_xe^{tx}P_X(x)$ & $\int e^{tx}f_X(x)\dd x$
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tikzpicture}
+\end{tikzpicture}\\
+{\small احتمال $\Prob(a\le X\le b)$ برابر مساحت ناحیه سایه‌خورده زیر چگالی است. کل مساحت زیر منحنی برابر ۱ است و $F_X(x)$ مساحت سمت چپ نقطه $x$ است.}
+\end{center}
+
+\textbf{شهود مجموع ریمانی.} انتگرال در اصل حد یک مجموع است: بازه را به تکه‌های کوچک به طول $\Delta x$ تقسیم می‌کنیم؛ احتمال افتادن $X$ در تکه‌ای حول $x_i$ تقریباً $f_X(x_i)\Delta x$ است (ارتفاع × پهنا). جمع این احتمال‌ها و میل دادن $\Delta x\to0$ دقیقاً انتگرال را می‌دهد:
+\[
+\Prob(a\le X\le b)\approx\sum_if_X(x_i)\,\Delta x\ \xrightarrow{\ \Delta x\to0\ }\ \int_a^bf_X(x)\dd x .
+\]
+به همین دلیل است که $f_X(x)$ خودش احتمال نیست (می‌تواند از ۱ بزرگ‌تر باشد) ولی $f_X(x)\Delta x$ «احتمال یک تکه کوچک» است.
+
+\section{مرور مشتق}
+
+\subsection{تعریف و معنا}
+مشتق، \textbf{نرخ تغییر لحظه‌ای} یک تابع است:
+\[
+f'(x)=\lim_{h\to0}\frac{f(x+h)-f(x)}{h}.
+\]
+از نظر هندسی، شیب خط مماس بر نمودار در نقطه $x$ است. در این درس سه کاربرد اصلی دارد: به دست آوردن چگالی از تابع توزیع ($f=F'$)، یافتن بیشینه (مد چگالی، \lr{MLE}، \lr{MAP}) و محاسبه گشتاورها از تابع مولد گشتاور.
+
+\subsection{جدول مشتق‌ها و قواعد}
+\begin{center}
+\renewcommand{\arraystretch}{1.55}
+\begin{tabular}{c|c||c|c}
+$f(x)$ & $f'(x)$ & $f(x)$ & $f'(x)$\\\hline
+$x^n$ & $nx^{n-1}$ & $\ln x$ & $\dfrac1x$\\
+$e^{ax}$ & $ae^{ax}$ & $a^x$ & $a^x\ln a$\\
+$\sqrt x$ & $\dfrac{1}{2\sqrt x}$ & $\dfrac1x$ & $-\dfrac1{x^2}$\\
+$\sin x$ & $\cos x$ & $\arctan x$ & $\dfrac1{1+x^2}$
+\end{tabular}
+\end{center}
+\textbf{قواعد:}
+\[
+(af+bg)'=af'+bg',\qquad (fg)'=f'g+fg',\qquad \Big(\frac fg\Big)'=\frac{f'g-fg'}{g^2},\qquad \big(f(g(x))\big)'=f'\big(g(x)\big)\,g'(x).
+\]
+آخری \textbf{قاعده زنجیره‌ای} است: مشتق تابع بیرونی (در نقطه تابع درونی) ضرب در مشتق تابع درونی.
+
+\begin{example}[مشتق چگالی گاوسی و مد آن]
+مشتق $\phi(x)=\frac{1}{\sqrt{2\pi}}e^{-x^2/2}$ را حساب کنید و نشان دهید بیشینه آن در $x=0$ است.
+\begin{solution}
+با قاعده زنجیره‌ای: تابع بیرونی $e^u$ (مشتقش $e^u$) و تابع درونی $u=-\frac{x^2}{2}$ (مشتقش $-x$):
+\[
+\phi'(x)=\frac{1}{\sqrt{2\pi}}e^{-x^2/2}\cdot(-x)=-x\,\phi(x).
+\]
+چون $\phi(x)>0$، علامت $\phi'$ همان علامت $-x$ است: برای $x<0$ مثبت (تابع صعودی) و برای $x>0$ منفی (نزولی)؛ پس بیشینه (مد) در $x=0$ است. این رابطه ساده $\phi'=-x\phi$ در محاسبه گشتاورهای گاوسی (بخش جزءبه‌جزء) بسیار به کار می‌آید.
+\end{solution}
+\end{example}
+
+\begin{example}[مشتق لگاریتمی و مد توزیع گاما]
+چگالی $f(x)=xe^{-x}$ برای $x>0$ (توزیع گاما با پارامتر شکل ۲) را در نظر بگیرید. مد آن را بیابید.
+\begin{solution}
+\textbf{روش ۱ (قاعده ضرب):} $f'(x)=1\cdot e^{-x}+x\cdot(-e^{-x})=(1-x)e^{-x}$ که در $x=1$ صفر می‌شود؛ قبل از آن مثبت و بعد از آن منفی است. پس مد $x=1$.
+
+\textbf{روش ۲ (مشتق لگاریتمی):} چون $\ln$ تابعی صعودی است، $f$ و $\ln f$ در یک نقطه بیشینه می‌شوند. $\ln f(x)=\ln x-x$ و $(\ln f)'=\frac1x-1=0\Rightarrow x=1$. این همان ترفندی است که در \lr{MLE} استفاده می‌کنیم: حاصل‌ضرب‌ها با گرفتن لگاریتم به مجموع تبدیل می‌شوند و مشتق‌گیری آسان می‌شود. به طور کلی $(\ln f)'=\frac{f'}{f}$.
+\end{solution}
+\end{example}
+
+\section{انتگرال معین، تابع اولیه و قضیه اساسی}
+
+\subsection{قضیه اساسی حسابان}
+\begin{theorem}[قضیه اساسی حسابان]
+\begin{enumerate}
+\item اگر $f$ پیوسته باشد و $F(x)=\int_a^xf(t)\dd t$، آنگاه $F'(x)=f(x)$.
+\item اگر $G$ یک تابع اولیه $f$ باشد ($G'=f$)، آنگاه $\int_a^bf(x)\dd x=G(b)-G(a)$.
+\end{enumerate}
+\end{theorem}
+بند ۱ در احتمال یعنی: \textbf{چگالی، مشتق تابع توزیع تجمعی است} ($f_X=F_X'$)، چون $F_X(x)=\int_{-\infty}^xf_X(t)\dd t$. شهود: وقتی $x$ کمی جلو می‌رود، مساحت انباشته به اندازه «ارتفاع منحنی × جابه‌جایی» زیاد می‌شود. بند ۲ روش محاسبه است: کافی است تابعی پیدا کنیم که مشتقش $f$ باشد.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.6}
+\begin{tabular}{c|c||c|c}
+$f(x)$ & $\int f(x)\dd x$ & $f(x)$ & $\int f(x)\dd x$\\\hline
+$x^n\ (n\neq-1)$ & $\dfrac{x^{n+1}}{n+1}$ & $\dfrac1x$ & $\ln|x|$\\
+$e^{ax}$ & $\dfrac{e^{ax}}{a}$ & $\lambda e^{-\lambda x}$ & $-e^{-\lambda x}$\\
+$\dfrac1{1+x^2}$ & $\arctan x$ & $xe^{-x^2/2}$ & $-e^{-x^2/2}$
+\end{tabular}
+\end{center}
+(به هر تابع اولیه می‌توان یک ثابت دلخواه $C$ افزود؛ در انتگرال معین این ثابت حذف می‌شود.)
+
+\subsection{خواص انتگرال}
+\[
+\int_a^b(\alpha f+\beta g)=\alpha\int_a^bf+\beta\int_a^bg,\qquad
+\int_a^bf=\int_a^cf+\int_c^bf,\qquad
+f\le g\ \Rightarrow\ \int_a^bf\le\int_a^bg .
+\]
+خاصیت اول (\textbf{خطی بودن}) دلیل خطی بودن امید ریاضی است: $\E(aX+b)=a\E X+b$. خاصیت دوم امکان شکستن انتگرال روی توابع \textbf{چندضابطه‌ای} را می‌دهد. خاصیت سوم (\textbf{یکنوایی}) پایه اثبات نامساوی‌هایی مثل مارکوف است.
+
+\begin{example}[میانگین و واریانس توزیع یکنواخت]
+برای $X\sim\mathcal U(a,b)$ با چگالی $f(x)=\frac{1}{b-a}$ روی $[a,b]$، مقادیر $\E X$ و $\Var X$ را بیابید.
+\begin{solution}
+\textbf{میانگین:}
+\[
+\E X=\int_a^bx\cdot\frac{1}{b-a}\dd x=\frac{1}{b-a}\Big[\frac{x^2}{2}\Big]_a^b=\frac{b^2-a^2}{2(b-a)}=\frac{(b-a)(b+a)}{2(b-a)}=\frac{a+b}{2}.
+\]
+\textbf{گشتاور دوم:} با اتحاد $b^3-a^3=(b-a)(a^2+ab+b^2)$:
+\[
+\E X^2=\frac{1}{b-a}\Big[\frac{x^3}{3}\Big]_a^b=\frac{b^3-a^3}{3(b-a)}=\frac{a^2+ab+b^2}{3}.
+\]
+\textbf{واریانس:}
+\[
+\Var X=\E X^2-(\E X)^2=\frac{4(a^2+ab+b^2)-3(a+b)^2}{12}=\frac{a^2-2ab+b^2}{12}=\frac{(b-a)^2}{12}.
+\]
+\end{solution}
+\end{example}
+
+\begin{example}[چگالی چندضابطه‌ای: توزیع مثلثی]
+$f(x)=c\,(1-|x|)$ برای $-1\le x\le1$ (و صفر در بیرون). (الف) $c$ را بیابید. (ب) تابع توزیع تجمعی را بنویسید. (ج) $\Prob(|X|>\frac12)$ را حساب کنید.
+\begin{solution}
+\textbf{نکته کلیدی:} $|x|$ چندضابطه‌ای است: برای $x<0$ برابر $-x$ و برای $x\ge0$ برابر $x$. پس انتگرال را در $0$ می‌شکنیم.
+
+(الف)
+\[
+\int_{-1}^1c(1-|x|)\dd x=c\int_{-1}^0(1+x)\dd x+c\int_0^1(1-x)\dd x=c\cdot\frac12+c\cdot\frac12=c=1 .
+\]
+(از نظر هندسی هم مساحت مثلثی با قاعده ۲ و ارتفاع ۱ برابر ۱ است.)
+
+(ب) برای $-1\le x\le0$: $F(x)=\int_{-1}^x(1+t)\dd t=\Big[t+\frac{t^2}{2}\Big]_{-1}^x=\frac{(1+x)^2}{2}$.
+برای $0\le x\le1$: $F(x)=F(0)+\int_0^x(1-t)\dd t=\frac12+x-\frac{x^2}{2}=1-\frac{(1-x)^2}{2}$.
+(برای $x<-1$ داریم $F=0$ و برای $x>1$ داریم $F=1$.)
+
+(ج) با متمم و تقارن:
+\[
+\Prob\Big(|X|>\frac12\Big)=1-\Big[F\Big(\frac12\Big)-F\Big(-\frac12\Big)\Big]=1-\Big[\Big(1-\frac18\Big)-\frac18\Big]=\frac14 .
+\]
+\end{solution}
+\end{example}
+
+\begin{note}
+\notetitle \textbf{توابع نشانگر.} در این درس چگالی‌ها را اغلب با تابع نشانگر می‌نویسیم، مثلاً $f(x;\theta)=\frac1\theta\ind_{0\le x\le\theta}$. قاعده عملی: انتگرال یک عبارت ضرب در $\ind_{A}$ یعنی انتگرال همان عبارت \textbf{فقط روی ناحیه $A$}. حاصل‌ضرب دو نشانگر، نشانگر \textbf{اشتراک} است: $\ind_{x\ge0}\ind_{x\le\theta}=\ind_{0\le x\le\theta}$. این قاعده در انتگرال دوگانه (ریاضی ۲) برای تعیین حدود انتگرال حیاتی است.
+\end{note}
+
+\section{روش جانشانی (تغییر متغیر)}
+\begin{theorem}[جانشانی]
+اگر $u=g(x)$ مشتق‌پذیر باشد، آنگاه
+\[
+\int_a^bf\big(g(x)\big)\,g'(x)\dd x=\int_{g(a)}^{g(b)}f(u)\dd u .
+\]
+\end{theorem}
+این همان قاعده زنجیره‌ای است که از سمت انتگرال خوانده شده است. دستورالعمل عملی: (۱) $u$ را انتخاب کنید، (۲) $\dd u=g'(x)\dd x$ را بنویسید، (۳) \textbf{حدود انتگرال را هم عوض کنید}، (۴) انتگرال جدید را حساب کنید.
+
+\begin{example}[نرمال‌سازی توزیع رایلی]
+نشان دهید $f(x)=\frac{x}{\sigma^2}e^{-x^2/(2\sigma^2)}$ برای $x\ge0$ یک چگالی است.
+\begin{solution}
+قرار می‌دهیم $u=\frac{x^2}{2\sigma^2}$؛ پس $\dd u=\frac{x}{\sigma^2}\dd x$ (دقیقاً ضریب پشت نمایی!). حدود: $x=0\Rightarrow u=0$ و $x\to\infty\Rightarrow u\to\infty$:
+\[
+\int_0^\infty\frac{x}{\sigma^2}e^{-x^2/(2\sigma^2)}\dd x=\int_0^\infty e^{-u}\dd u=\big[-e^{-u}\big]_0^\infty=0-(-1)=1 .
+\]
+\textbf{درس کلی:} وقتی در انتگرال یک تابع از $g(x)$ ضرب در «تقریباً» $g'(x)$ دیدید، جانشانی $u=g(x)$ را امتحان کنید.
+\end{solution}
+\end{example}
+
+\begin{example}[استانداردسازی گاوسی]
+اگر $X\sim\mathcal N(\mu,\sigma^2)$ با چگالی $\frac{1}{\sigma\sqrt{2\pi}}e^{-(x-\mu)^2/(2\sigma^2)}$ باشد، نشان دهید $\Prob(a\le X\le b)=\Phi\big(\frac{b-\mu}{\sigma}\big)-\Phi\big(\frac{a-\mu}{\sigma}\big)$ که $\Phi$ تابع توزیع گاوسی استاندارد است.
+\begin{solution}
+با $u=\frac{x-\mu}{\sigma}$ داریم $\dd u=\frac{\dd x}{\sigma}$، یعنی $\dd x=\sigma\dd u$. حدود: $x=a\Rightarrow u=\frac{a-\mu}{\sigma}$ و $x=b\Rightarrow u=\frac{b-\mu}{\sigma}$:
+\[
+\int_a^b\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}\dd x=\int_{\frac{a-\mu}{\sigma}}^{\frac{b-\mu}{\sigma}}\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{u^2}{2}}\,\sigma\dd u=\int_{\frac{a-\mu}{\sigma}}^{\frac{b-\mu}{\sigma}}\phi(u)\dd u=\Phi\Big(\frac{b-\mu}{\sigma}\Big)-\Phi\Big(\frac{a-\mu}{\sigma}\Big).
+\]
+$\sigma$ مخرج با $\sigma$ حاصل از $\dd x$ ساده شد. به همین دلیل فقط یک جدول (برای $\Phi$) برای همه گاوسی‌ها کافی است.
+\end{solution}
+\end{example}
+
+\begin{example}[توزیع کوشی]
+نشان دهید $f(x)=\frac{1}{\pi(1+x^2)}$ روی کل $\R$ یک چگالی است و $F(x)$ را بیابید.
+\begin{solution}
+از جدول، $\int\frac{\dd x}{1+x^2}=\arctan x$ و $\arctan$ از $-\frac\pi2$ (در $-\infty$) تا $\frac\pi2$ (در $+\infty$) تغییر می‌کند:
+\[
+\int_{-\infty}^\infty\frac{\dd x}{\pi(1+x^2)}=\frac1\pi\Big[\frac\pi2-\Big(-\frac\pi2\Big)\Big]=1,\qquad
+F(x)=\frac1\pi\Big(\arctan x+\frac\pi2\Big)=\frac12+\frac{\arctan x}{\pi}.
+\]
+\end{solution}
+\end{example}
+
+\begin{note}
+\notetitle \textbf{جانشانی و تبدیل متغیر تصادفی.} اگر $Y=aX+b$ با $a>0$، آنگاه $F_Y(y)=\Prob(aX+b\le y)=F_X\big(\frac{y-b}{a}\big)$ و با مشتق‌گیری (قاعده زنجیره‌ای) $f_Y(y)=\frac1af_X\big(\frac{y-b}{a}\big)$. برای $a<0$ جهت نامساوی عوض می‌شود و در نهایت $f_Y(y)=\frac{1}{|a|}f_X\big(\frac{y-b}{a}\big)$. ضریب $\frac1{|a|}$ همان ضریبی است که در جانشانی از $\dd x=\frac{\dd y}{a}$ می‌آید: کشیدن محور به اندازه $|a|$، چگالی را به همان نسبت کوتاه می‌کند تا مساحت ۱ بماند. (جلسه ۱۲ و ژاکوبین در ریاضی ۲.)
+\end{note}
+
+\section{انتگرال‌گیری جزءبه‌جزء}
+\begin{theorem}[جزءبه‌جزء]
+\[
+\int_a^bu(x)\,v'(x)\dd x=\Big[u(x)v(x)\Big]_a^b-\int_a^bu'(x)\,v(x)\dd x,
+\qquad\text{یا به اختصار}\qquad\int u\dd v=uv-\int v\dd u .
+\]
+\end{theorem}
+\textbf{اثبات:} از قاعده ضرب، $(uv)'=u'v+uv'$. از دو طرف روی $[a,b]$ انتگرال می‌گیریم: $[uv]_a^b=\int u'v+\int uv'$ و جمله‌ها را جابه‌جا می‌کنیم.
+
+\textbf{انتخاب $u$:} قسمتی را $u$ بگیرید که با مشتق‌گیری \textbf{ساده‌تر} شود (مثل $x^n$ که درجه‌اش کم می‌شود) و قسمتی را $\dd v$ بگیرید که انتگرالش آسان باشد (مثل $e^{-\lambda x}$).
+
+\begin{example}[میانگین و واریانس توزیع نمایی]
+برای $X\sim\mathrm{Exp}(\lambda)$ با چگالی $\lambda e^{-\lambda x}$ ($x\ge0$)، $\E X$ و $\Var X$ را بیابید.
+\begin{solution}
+\textbf{میانگین:} $u=x$ و $\dd v=\lambda e^{-\lambda x}\dd x$؛ پس $\dd u=\dd x$ و $v=-e^{-\lambda x}$:
+\[
+\E X=\int_0^\infty x\lambda e^{-\lambda x}\dd x=\Big[-xe^{-\lambda x}\Big]_0^\infty+\int_0^\infty e^{-\lambda x}\dd x=0+\frac1\lambda=\frac1\lambda .
+\]
+جمله مرزی صفر است: در $x=0$ مقدارش صفر است و در $x\to\infty$، $xe^{-\lambda x}\to0$ (نمایی از هر چندجمله‌ای سریع‌تر به صفر می‌رود؛ بخش بعد).
+
+\textbf{گشتاور دوم:} $u=x^2$، $\dd v$ مثل قبل:
+\[
+\E X^2=\Big[-x^2e^{-\lambda x}\Big]_0^\infty+\int_0^\infty2xe^{-\lambda x}\dd x=0+\frac2\lambda\int_0^\infty x\lambda e^{-\lambda x}\dd x=\frac2\lambda\cdot\frac1\lambda=\frac{2}{\lambda^2}.
+\]
+(در قدم آخر، انتگرال باقی‌مانده را به شکل $\E X$ نوشتیم.) پس $\Var X=\frac{2}{\lambda^2}-\frac{1}{\lambda^2}=\frac{1}{\lambda^2}$.
+\end{solution}
+\end{example}
+
+\begin{theorem}[فرمول طلایی گشتاورهای نمایی]
+برای عدد صحیح $n\ge0$ و $\lambda>0$:
+\[
+\int_0^\infty x^ne^{-\lambda x}\dd x=\frac{n!}{\lambda^{n+1}}.
+\]
+\end{theorem}
+\begin{proof}
+با استقرا. برای $n=0$: $\int_0^\infty e^{-\lambda x}\dd x=\frac1\lambda$. فرض کنید برای $n-1$ درست باشد. با $u=x^n$ و $\dd v=e^{-\lambda x}\dd x$ (یعنی $v=-\frac1\lambda e^{-\lambda x}$):
+\[
+\int_0^\infty x^ne^{-\lambda x}\dd x=\underbrace{\Big[-\frac{x^n}{\lambda}e^{-\lambda x}\Big]_0^\infty}_{=0}+\frac n\lambda\int_0^\infty x^{n-1}e^{-\lambda x}\dd x=\frac n\lambda\cdot\frac{(n-1)!}{\lambda^n}=\frac{n!}{\lambda^{n+1}} .
+\]
+\end{proof}
+نتیجه فوری: برای $X\sim\mathrm{Exp}(\lambda)$، $\E X^n=\lambda\cdot\frac{n!}{\lambda^{n+1}}=\frac{n!}{\lambda^n}$.
+
+\begin{example}[گشتاورهای گاوسی استاندارد]
+با $Z\sim\mathcal N(0,1)$ نشان دهید $\E Z^2=1$ و $\E Z^4=3$.
+\begin{solution}
+از مثال مشتق گاوسی می‌دانیم $\phi'(z)=-z\phi(z)$؛ پس $z\phi(z)\dd z=\dd(-\phi(z))$. این دقیقاً شکل مناسب برای $\dd v$ است.
+
+\textbf{گشتاور دوم:} $\E Z^2=\int z\cdot z\phi(z)\dd z$ با $u=z$ و $v=-\phi(z)$:
+\[
+\E Z^2=\Big[-z\phi(z)\Big]_{-\infty}^{\infty}+\int_{-\infty}^{\infty}\phi(z)\dd z=0+1=1 .
+\]
+\textbf{گشتاور چهارم:} $u=z^3$، همان $v$:
+\[
+\E Z^4=\Big[-z^3\phi(z)\Big]_{-\infty}^{\infty}+\int_{-\infty}^{\infty}3z^2\phi(z)\dd z=0+3\E Z^2=3 .
+\]
+به همین ترتیب $\E Z^{2k}=(2k-1)\E Z^{2k-2}$، یعنی $\E Z^{2k}=(2k-1)(2k-3)\cdots3\cdot1$.
+\end{solution}
+\end{example}
+
+\begin{example}[فرمول دم برای امید ریاضی]
+نشان دهید برای متغیر تصادفی نامنفی $X$ با میانگین متناهی:
+\[
+\E X=\int_0^\infty\big(1-F_X(x)\big)\dd x=\int_0^\infty\Prob(X>x)\dd x .
+\]
+\begin{solution}
+با $u=x$ و $\dd v=f_X(x)\dd x$ و انتخاب هوشمندانه $v=-(1-F_X(x))$ (که مشتقش $f_X$ است و در بی‌نهایت صفر می‌شود):
+\[
+\E X=\int_0^\infty xf_X(x)\dd x=\Big[-x\big(1-F_X(x)\big)\Big]_0^\infty+\int_0^\infty\big(1-F_X(x)\big)\dd x .
+\]
+جمله مرزی در $x=0$ صفر است و در بی‌نهایت هم صفر است، چون $x(1-F(x))=x\int_x^\infty f\le\int_x^\infty tf(t)\dd t\to0$ (دم یک انتگرال همگرا). \textbf{بررسی:} برای نمایی، $1-F(x)=e^{-\lambda x}$ و $\int_0^\infty e^{-\lambda x}\dd x=\frac1\lambda$؛ درست است. (این فرمول در جلسه ۲۲ برای میانگین بیشینه نمونه‌ها مفید است؛ تمرین‌ها را ببینید.)
+\end{solution}
+\end{example}
+
+\section{انتگرال‌های ناسره}
+
+\subsection{تعریف}
+وقتی بازه انتگرال بی‌کران است (مثل $[0,\infty)$) یا تابع در یک سر بازه بی‌کران می‌شود، انتگرال را با \textbf{حد} تعریف می‌کنیم:
+\[
+\int_a^\infty f(x)\dd x\triangleq\lim_{b\to\infty}\int_a^bf(x)\dd x,\qquad
+\int_{-\infty}^\infty f=\int_{-\infty}^cf+\int_c^\infty f .
+\]
+اگر حد متناهی باشد، انتگرال \textbf{همگرا} است. در حالت دوطرفه، \textbf{هر دو} نیمه باید جداگانه همگرا باشند.
+
+\subsection{آزمون‌های همگرایی}
+\begin{itemize}
+\item \textbf{آزمون $p$:} $\int_1^\infty\frac{\dd x}{x^p}$ همگراست اگر و تنها اگر $p>1$؛ و $\int_0^1\frac{\dd x}{x^p}$ همگراست اگر و تنها اگر $p<1$. (برای $p\neq1$: $\int_1^b x^{-p}\dd x=\frac{b^{1-p}-1}{1-p}$ که برای $p>1$ به $\frac{1}{p-1}$ میل می‌کند و برای $p<1$ بی‌کران است؛ برای $p=1$: $\ln b\to\infty$.)
+\item \textbf{مقایسه:} اگر $0\le f\le g$ و $\int g$ همگرا باشد، $\int f$ هم همگراست؛ اگر $\int f$ واگرا باشد، $\int g$ هم واگراست.
+\item \textbf{نمایی بر چندجمله‌ای غلبه می‌کند:} برای هر $n$ و $\lambda>0$، $\lim_{x\to\infty}x^ne^{-\lambda x}=0$ (با $n$ بار قاعده هوپیتال). به همین دلیل همه گشتاورهای توزیع‌های نمایی، گاما و گاوسی متناهی‌اند.
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}
+\end{tikzpicture}\\
+{\small سرعت میرایی دم سه تابع. مساحت زیر $1/x$ تا بی‌نهایت واگراست، اما مساحت زیر $1/x^2$ (برابر ۱) و $e^{-(x-1)}$ (برابر ۱) متناهی است. وجود یا عدم وجود میانگین یک توزیع دقیقاً به همین سرعت میرایی دم بستگی دارد.}
+\end{center}
+
+\begin{example}[توزیع پارتو: میانگین کی وجود دارد؟]
+چگالی پارتو $f(x)=\alpha x^{-\alpha-1}$ برای $x\ge1$ (با $\alpha>0$). نشان دهید $\E X$ فقط برای $\alpha>1$ متناهی است و آن را حساب کنید.
+\begin{solution}
+\[
+\E X=\int_1^\infty x\cdot\alpha x^{-\alpha-1}\dd x=\alpha\int_1^\infty x^{-\alpha}\dd x .
+\]
+طبق آزمون $p$ (با $p=\alpha$)، این انتگرال فقط برای $\alpha>1$ همگراست و مقدارش $\alpha\cdot\frac{1}{\alpha-1}=\frac{\alpha}{\alpha-1}$ است. برای $\alpha\le1$ میانگین بی‌نهایت است، با اینکه خود چگالی (برای هر $\alpha>0$) نرمال است. به همین ترتیب $\E X^2=\alpha\int_1^\infty x^{1-\alpha}\dd x$ فقط برای $\alpha>2$ متناهی است.
+\end{solution}
+\end{example}
+
+\begin{example}[کوشی میانگین ندارد]
+نشان دهید برای توزیع کوشی $\E|X|=\infty$، و بنابراین $\E X$ تعریف نمی‌شود.
+\begin{solution}
+\[
+\E|X|=\int_{-\infty}^\infty\frac{|x|}{\pi(1+x^2)}\dd x=\frac2\pi\int_0^\infty\frac{x}{1+x^2}\dd x=\frac2\pi\lim_{b\to\infty}\frac12\ln(1+b^2)=\infty
+\]
+(با جانشانی $u=1+x^2$). شهود: برای $x$ بزرگ، $\frac{x}{1+x^2}\approx\frac1x$ و دم $\frac1x$ انتگرال‌پذیر نیست.
+\end{solution}
+\end{example}
+
+\begin{warning}
+\warntitle ممکن است وسوسه شوید بگویید «چون $\frac{x}{\pi(1+x^2)}$ فرد است، $\E X=0$». اما $\lim_{b\to\infty}\int_{-b}^{b}$ (که صفر است) با تعریف انتگرال ناسره یکی نیست؛ اگر بازه را نامتقارن بگیریم، مثلاً $\int_{-b}^{2b}$، حد برابر $\frac{\ln4}{2\pi}\neq0$ می‌شود. وقتی دو نیمه جداگانه واگرا باشند، انتگرال تعریف نمی‌شود. به همین دلیل قانون اعداد بزرگ برای کوشی برقرار نیست.
+\end{warning}
+
+\section{تقارن: توابع زوج و فرد}
+\begin{itemize}
+\item تابع $f$ \textbf{زوج} است اگر $f(-x)=f(x)$ (مثل $x^2$، $e^{-x^2/2}$، $|x|$) و \textbf{فرد} است اگر $f(-x)=-f(x)$ (مثل $x$، $x^3$، $x\,e^{-x^2/2}$).
+\item برای $f$ زوج: $\int_{-a}^af=2\int_0^af$. برای $f$ فرد (به شرط همگرایی): $\int_{-a}^af=0$.
+\item حاصل‌ضرب زوج در فرد، فرد است؛ زوج در زوج و فرد در فرد، زوج است.
+\end{itemize}
+\textbf{اثبات بند فرد:} با جانشانی $u=-x$ در نیمه منفی: $\int_{-a}^0f(x)\dd x=\int_a^0f(-u)(-\dd u)=\int_0^af(-u)\dd u=-\int_0^af(u)\dd u$، که نیمه مثبت را دقیقاً خنثی می‌کند.
+
+\begin{center}
+\begin{tikzpicture}
+\end{tikzpicture}\\
+{\small تابع فرد $z\phi(z)$: مساحت مثبت (سمت راست) و مساحت منفی (سمت چپ) دقیقاً برابرند و یکدیگر را خنثی می‌کنند؛ به همین دلیل $\E Z=0$.}
+\end{center}
+
+\begin{example}[توزیع لاپلاس]
+برای چگالی $f(x)=\frac12e^{-|x|}$ روی $\R$، نرمال بودن، $\E X$، $\E X^2$ و $\E|X|$ را حساب کنید.
+\begin{solution}
+$f$ زوج است؛ پس $\int_{-\infty}^\infty f=2\int_0^\infty\frac12e^{-x}\dd x=1$.
+
+$xf(x)$ فرد است و $\int|x|f(x)\dd x<\infty$ (پایین را ببینید)؛ پس $\E X=0$.
+
+$x^2f(x)$ زوج است: $\E X^2=2\int_0^\infty\frac12x^2e^{-x}\dd x=\int_0^\infty x^2e^{-x}\dd x=\frac{2!}{1^3}=2$ (فرمول طلایی). پس $\Var X=2$.
+
+$|x|f(x)$ زوج است: $\E|X|=\int_0^\infty xe^{-x}\dd x=1$.
+\end{solution}
+\end{example}
+
+\begin{example}[تقارن تابع $\Phi$]
+نشان دهید $\Phi(-z)=1-\Phi(z)$.
+\begin{solution}
+با جانشانی $u=-t$ و زوج بودن $\phi$:
+\[
+\Phi(-z)=\int_{-\infty}^{-z}\phi(t)\dd t=\int_{z}^{\infty}\phi(u)\dd u=1-\int_{-\infty}^z\phi(u)\dd u=1-\Phi(z).
+\]
+به همین دلیل جدول $\Phi$ فقط برای $z\ge0$ لازم است.
+\end{solution}
+\end{example}
+
+\section{تابع گاما و تابع بتا}
+
+\begin{definition}[تابع گاما]
+برای $a>0$:
+\[
+\Gamma(a)\triangleq\int_0^\infty x^{a-1}e^{-x}\dd x .
+\]
+\end{definition}
+انتگرال برای $a>0$ همگراست: نزدیک صفر $x^{a-1}$ با $a-1>-1$ انتگرال‌پذیر است (آزمون $p$) و در بی‌نهایت نمایی غالب است.
+
+\begin{theorem}[ویژگی‌های گاما]
+\begin{enumerate}
+\item $\Gamma(a+1)=a\,\Gamma(a)$ و $\Gamma(1)=1$؛ پس برای $n$ صحیح مثبت $\Gamma(n)=(n-1)!$.
+\item $\Gamma\big(\frac12\big)=\sqrt\pi$.
+\item برای $\lambda>0$: $\displaystyle\int_0^\infty x^{a-1}e^{-\lambda x}\dd x=\frac{\Gamma(a)}{\lambda^a}$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(۱) جزءبه‌جزء با $u=x^a$ و $\dd v=e^{-x}\dd x$: $\Gamma(a+1)=\big[-x^ae^{-x}\big]_0^\infty+a\int_0^\infty x^{a-1}e^{-x}\dd x=a\Gamma(a)$. همچنین $\Gamma(1)=\int_0^\infty e^{-x}\dd x=1$؛ پس $\Gamma(n)=(n-1)(n-2)\cdots1\cdot\Gamma(1)=(n-1)!$.
+
+(۲) با جانشانی $x=\frac{u^2}{2}$ (یعنی $\dd x=u\dd u$):
+\[
+\Gamma\Big(\frac12\Big)=\int_0^\infty x^{-1/2}e^{-x}\dd x=\int_0^\infty\frac{\sqrt2}{u}e^{-u^2/2}\,u\dd u=\sqrt2\int_0^\infty e^{-u^2/2}\dd u=\sqrt2\cdot\frac{\sqrt{2\pi}}{2}=\sqrt\pi ,
+\]
+با استفاده از انتگرال گاوسی $\int_{-\infty}^\infty e^{-u^2/2}\dd u=\sqrt{2\pi}$ (بخش بعد) و زوج بودن.
+
+(۳) با جانشانی $u=\lambda x$: $\int_0^\infty\big(\frac u\lambda\big)^{a-1}e^{-u}\frac{\dd u}{\lambda}=\frac{1}{\lambda^a}\Gamma(a)$.
+\end{proof}
+
+بند ۳ مهم‌ترین فرمول عملی است: \textbf{هر انتگرال به شکل «توان × نمایی» روی $[0,\infty)$ یک تابع گاماست}. فرمول طلایی بخش قبل حالت خاص $a=n+1$ آن است.
+
+\begin{example}[نرمال‌سازی و میانگین توزیع گاما]
+چگالی گاما $f(x)=\frac{\lambda^a}{\Gamma(a)}x^{a-1}e^{-\lambda x}$ برای $x>0$ است. نرمال بودن و $\E X$ را نشان دهید.
+\begin{solution}
+طبق بند ۳: $\int_0^\infty x^{a-1}e^{-\lambda x}\dd x=\frac{\Gamma(a)}{\lambda^a}$؛ ضرب در $\frac{\lambda^a}{\Gamma(a)}$ می‌دهد ۱. برای میانگین، توان یکی زیاد می‌شود ($a\to a+1$):
+\[
+\E X=\frac{\lambda^a}{\Gamma(a)}\int_0^\infty x^{a}e^{-\lambda x}\dd x=\frac{\lambda^a}{\Gamma(a)}\cdot\frac{\Gamma(a+1)}{\lambda^{a+1}}=\frac{a\Gamma(a)}{\Gamma(a)\lambda}=\frac a\lambda .
+\]
+\textbf{الگوی کلی:} «ثابت نرمال‌سازی را بشناس، سپس گشتاور را با عوض کردن پارامتر به یک ثابت نرمال‌سازی دیگر تبدیل کن». این ترفند در درس بارها تکرار می‌شود.
+\end{solution}
+\end{example}
+
+\begin{definition}[تابع بتا]
+برای $a,b>0$:
+\[
+B(a,b)\triangleq\int_0^1x^{a-1}(1-x)^{b-1}\dd x=\frac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)} .
+\]
+\end{definition}
+(اثبات تساوی دوم به انتگرال دوگانه نیاز دارد و در ریاضی ۲ آمده است.) برای اعداد صحیح: $\int_0^1x^k(1-x)^{m}\dd x=\frac{k!\,m!}{(k+m+1)!}$.
+
+\begin{example}[میانگین توزیع بتا]
+برای $p\sim\mathrm{Beta}(\alpha,\beta)$ با چگالی $\frac{p^{\alpha-1}(1-p)^{\beta-1}}{B(\alpha,\beta)}$ نشان دهید $\E p=\frac{\alpha}{\alpha+\beta}$.
+\begin{solution}
+\[
+\E p=\frac{1}{B(\alpha,\beta)}\int_0^1p^{\alpha}(1-p)^{\beta-1}\dd p=\frac{B(\alpha+1,\beta)}{B(\alpha,\beta)}=\frac{\Gamma(\alpha+1)\Gamma(\beta)}{\Gamma(\alpha+\beta+1)}\cdot\frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}=\frac{\alpha\Gamma(\alpha)}{(\alpha+\beta)\Gamma(\alpha+\beta)}\cdot\frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)}=\frac{\alpha}{\alpha+\beta}.
+\]
+(از $\Gamma(x+1)=x\Gamma(x)$ هم در صورت و هم در مخرج استفاده شد.)
+\end{solution}
+\end{example}
+
+\begin{example}[پیشین یکنواخت و احتمال $k$ شیر]
+احتمال شیر یک سکه $p\sim\mathcal U(0,1)$ است و سکه $n$ بار پرتاب می‌شود. احتمال (بدون شرط) اینکه دقیقاً $k$ شیر بیاید چقدر است؟
+\begin{solution}
+با قانون احتمال کل روی $p$:
+\[
+\Prob(K=k)=\int_0^1\binom nkp^k(1-p)^{n-k}\cdot1\dd p=\binom nk\frac{k!\,(n-k)!}{(n+1)!}=\frac{n!}{k!(n-k)!}\cdot\frac{k!(n-k)!}{(n+1)!}=\frac{1}{n+1}.
+\]
+نتیجه زیبا: همه مقادیر $k=0,1,\ldots,n$ هم‌احتمال‌اند. (این همان مخرج قانون بیز در مثال بتا--دوجمله‌ای جلسه ۲۷ با پیشین یکنواخت است.)
+\end{solution}
+\end{example}
+
+\section{انتگرال گاوسی}
+\begin{theorem}[انتگرال گاوسی]
+\[
+\int_{-\infty}^{\infty}e^{-x^2/2}\dd x=\sqrt{2\pi},\qquad\text{و برای}\ a>0:\quad\int_{-\infty}^{\infty}e^{-ax^2+bx}\dd x=\sqrt{\frac\pi a}\;e^{\frac{b^2}{4a}} .
+\]
+\end{theorem}
+تابع $e^{-x^2/2}$ تابع اولیه مقدماتی ندارد، پس این انتگرال با روش‌های این بخش حل نمی‌شود؛ اثبات زیبای آن با \textbf{انتگرال دوگانه و مختصات قطبی} در ریاضی ۲ آمده است. فرمول دوم را از اولی با \textbf{مربع کامل} به دست می‌آوریم:
+\[
+-ax^2+bx=-a\Big(x^2-\frac bax\Big)=-a\Big(x-\frac{b}{2a}\Big)^2+\frac{b^2}{4a}.
+\]
+پس با جانشانی $u=\sqrt{2a}\big(x-\frac{b}{2a}\big)$ (یعنی $\dd x=\frac{\dd u}{\sqrt{2a}}$):
+\[
+\int e^{-ax^2+bx}\dd x=e^{\frac{b^2}{4a}}\int e^{-u^2/2}\frac{\dd u}{\sqrt{2a}}=e^{\frac{b^2}{4a}}\frac{\sqrt{2\pi}}{\sqrt{2a}}=\sqrt{\frac\pi a}\,e^{\frac{b^2}{4a}} .
+\]
+
+\begin{example}[تابع مولد گشتاور گاوسی]
+برای $X\sim\mathcal N(\mu,\sigma^2)$ نشان دهید $M_X(t)=\E e^{tX}=e^{\mu t+\sigma^2t^2/2}$.
+\begin{solution}
+\[
+M_X(t)=\int_{-\infty}^\infty e^{tx}\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}\dd x .
+\]
+توان را مربع کامل می‌کنیم:
+\[
+tx-\frac{(x-\mu)^2}{2\sigma^2}=-\frac{x^2-2\mu x-2\sigma^2tx+\mu^2}{2\sigma^2}=-\frac{\big(x-(\mu+\sigma^2t)\big)^2}{2\sigma^2}+\mu t+\frac{\sigma^2t^2}{2}.
+\]
+(بررسی: بسط $(x-\mu-\sigma^2t)^2$ برابر $x^2-2\mu x-2\sigma^2tx+\mu^2+2\mu\sigma^2t+\sigma^4t^2$ است؛ دو جمله اضافه پس از تقسیم بر $-2\sigma^2$ همان $-\mu t-\frac{\sigma^2t^2}{2}$ هستند که با جمله‌های بیرون خنثی می‌شوند.) پس
+\[
+M_X(t)=e^{\mu t+\frac{\sigma^2t^2}{2}}\underbrace{\int\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-(\mu+\sigma^2t))^2}{2\sigma^2}}\dd x}_{=1\ \text{(چگالی}\ \mathcal N(\mu+\sigma^2t,\sigma^2))}=e^{\mu t+\frac{\sigma^2t^2}{2}} .
+\]
+ترفند «تبدیل انتگرال به چگالی یک توزیع دیگر که انتگرالش ۱ است» را به خاطر بسپارید.
+\end{solution}
+\end{example}
+
+\section{مشتق‌گیری از انتگرال: قاعده لایب‌نیتس}
+
+\begin{theorem}[قاعده لایب‌نیتس]
+\begin{enumerate}
+\item \textbf{حدود متغیر:}
+\[
+\frac{\dd}{\dd x}\int_{a(x)}^{b(x)}f(t)\dd t=f\big(b(x)\big)\,b'(x)-f\big(a(x)\big)\,a'(x).
+\]
+\item \textbf{پارامتر در انتگرالده} (تحت شرایط نظم، مثلاً کراندار بودن مشتق با یک تابع انتگرال‌پذیر):
+\[
+\frac{\dd}{\dd s}\int f(x,s)\dd x=\int\frac{\partial f(x,s)}{\partial s}\dd x .
+\]
+\end{enumerate}
+\end{theorem}
+\textbf{اثبات بند ۱:} اگر $G$ تابع اولیه $f$ باشد، $\int_{a(x)}^{b(x)}f=G(b(x))-G(a(x))$ و با قاعده زنجیره‌ای، مشتق آن $G'(b)b'-G'(a)a'=f(b)b'-f(a)a'$ است.
+
+\begin{example}[چگالی $Y=X^2$ و توزیع $\chi^2$ با یک درجه آزادی]
+اگر $X$ چگالی $f_X$ داشته باشد، چگالی $Y=X^2$ را بیابید و آن را برای $X\sim\mathcal N(0,1)$ بنویسید.
+\begin{solution}
+برای $y>0$:
+\[
+F_Y(y)=\Prob(X^2\le y)=\Prob(-\sqrt y\le X\le\sqrt y)=\int_{-\sqrt y}^{\sqrt y}f_X(t)\dd t .
+\]
+با لایب‌نیتس ($b(y)=\sqrt y$ با $b'=\frac{1}{2\sqrt y}$ و $a(y)=-\sqrt y$ با $a'=-\frac{1}{2\sqrt y}$):
+\[
+f_Y(y)=f_X(\sqrt y)\frac{1}{2\sqrt y}-f_X(-\sqrt y)\Big(-\frac{1}{2\sqrt y}\Big)=\frac{f_X(\sqrt y)+f_X(-\sqrt y)}{2\sqrt y}.
+\]
+برای گاوسی استاندارد: $f_Y(y)=\frac{2\phi(\sqrt y)}{2\sqrt y}=\frac{1}{\sqrt{2\pi y}}e^{-y/2}$ برای $y>0$؛ این چگالی $\chi^2(1)$ است (همان گاما با $a=\frac12$ و $\lambda=\frac12$؛ با $\Gamma(\frac12)=\sqrt\pi$ بررسی کنید).
+\end{solution}
+\end{example}
+
+\begin{example}[چگالی بیشینه $n$ نمونه]
+اگر $X_1,\ldots,X_n$ مستقل با تابع توزیع $F$ و چگالی $f$ باشند، چگالی $M=\max_iX_i$ را بیابید.
+\begin{solution}
+$F_M(x)=\Prob(\text{همه}\ X_i\le x)=F(x)^n$. با قاعده زنجیره‌ای (و $F'=f$): $f_M(x)=nF(x)^{n-1}f(x)$. برای $\mathcal U(0,\theta)$: $f_M(x)=\frac{n x^{n-1}}{\theta^n}$ (جلسه ۲۲).
+\end{solution}
+\end{example}
+
+\begin{example}[گشتاورها با مشتق‌گیری نسبت به پارامتر]
+فقط با دانستن $\int_0^\infty e^{-\lambda x}\dd x=\frac1\lambda$، فرمول $\int_0^\infty x^ne^{-\lambda x}\dd x=\frac{n!}{\lambda^{n+1}}$ را بدون جزءبه‌جزء به دست آورید.
+\begin{solution}
+از دو طرف نسبت به $\lambda$ مشتق می‌گیریم (بند ۲ لایب‌نیتس). سمت چپ: $\int\frac{\partial}{\partial\lambda}e^{-\lambda x}\dd x=-\int xe^{-\lambda x}\dd x$؛ سمت راست: $-\frac{1}{\lambda^2}$. پس $\int xe^{-\lambda x}=\frac{1}{\lambda^2}$. با تکرار $n$ بار، هر بار یک $x$ در انتگرالده و یک ضریب در سمت راست ظاهر می‌شود:
+\[
+(-1)^n\int_0^\infty x^ne^{-\lambda x}\dd x=\frac{\dd^n}{\dd\lambda^n}\lambda^{-1}=(-1)^n\,n!\,\lambda^{-n-1}.
+\]
+همین ایده دلیل این است که از تابع مولد گشتاور گشتاورها به دست می‌آیند: $M_X'(t)=\frac{\dd}{\dd t}\E e^{tX}=\E\big[Xe^{tX}\big]$، پس $M_X'(0)=\E X$ و به طور کلی $M_X^{(n)}(0)=\E X^n$.
+\end{solution}
+\end{example}
+
+\begin{summarybox}[جدول انتگرال‌های پرکاربرد درس]
+\begin{center}
+\renewcommand{\arraystretch}{1.7}
+\begin{tabular}{c|c}
+انتگرال & مقدار\\\hline
+$\int_0^\infty x^ne^{-\lambda x}\dd x$ & $\dfrac{n!}{\lambda^{n+1}}$\\
+$\int_0^\infty x^{a-1}e^{-\lambda x}\dd x$ & $\dfrac{\Gamma(a)}{\lambda^a}$\\
+$\int_{-\infty}^\infty e^{-x^2/2}\dd x$ & $\sqrt{2\pi}$\\
+$\int_{-\infty}^\infty e^{-ax^2+bx}\dd x$ & $\sqrt{\pi/a}\;e^{b^2/(4a)}$\\
+$\int_{-\infty}^\infty x^{2k}\phi(x)\dd x$ & $(2k-1)(2k-3)\cdots1$\\
+$\int_0^1x^{a-1}(1-x)^{b-1}\dd x$ & $\dfrac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)}$\\
+$\int_1^\infty x^{-p}\dd x$ & $\dfrac{1}{p-1}$ (فقط اگر $p>1$)
+\end{tabular}
+\end{center}
+\end{summarybox}
+
+\section{تمرین‌های تکمیلی}
+
+\begin{exercise}[چگالی چندجمله‌ای]
+$f(x)=cx^2$ برای $0\le x\le2$. (الف) $c$، (ب) $F(x)$ و میانه، (ج) $\E X$ و $\Var X$ را بیابید.
+\end{exercise}
+\begin{solution}
+(الف) $\int_0^2cx^2\dd x=c\cdot\frac83=1\Rightarrow c=\frac38$.
+(ب) $F(x)=\int_0^x\frac38t^2\dd t=\frac{x^3}{8}$ برای $0\le x\le2$. میانه: $\frac{m^3}{8}=\frac12\Rightarrow m=\sqrt[3]4\approx1.587$.
+(ج) $\E X=\frac38\int_0^2x^3\dd x=\frac38\cdot4=\frac32$؛ $\E X^2=\frac38\int_0^2x^4\dd x=\frac38\cdot\frac{32}{5}=\frac{12}{5}$؛ $\Var X=\frac{12}{5}-\frac94=\frac{3}{20}$.
+\end{solution}
+
+\begin{exercise}[میانگین و واریانس رایلی]
+برای چگالی رایلی $f(x)=\frac{x}{\sigma^2}e^{-x^2/(2\sigma^2)}$ ($x\ge0$)، نشان دهید $\E X=\sigma\sqrt{\pi/2}$ و $\E X^2=2\sigma^2$.
+\end{exercise}
+\begin{solution}
+\textbf{میانگین:} $\E X=\frac{1}{\sigma^2}\int_0^\infty x^2e^{-x^2/(2\sigma^2)}\dd x$. انتگرالده زوج است، پس برابر نصف انتگرال روی $\R$ است. می‌دانیم $\int_{-\infty}^\infty x^2\frac{1}{\sigma\sqrt{2\pi}}e^{-x^2/(2\sigma^2)}\dd x=\sigma^2$ (واریانس $\mathcal N(0,\sigma^2)$)، پس $\int_{-\infty}^\infty x^2e^{-x^2/(2\sigma^2)}\dd x=\sigma^3\sqrt{2\pi}$. در نتیجه
+\[
+\E X=\frac{1}{\sigma^2}\cdot\frac{\sigma^3\sqrt{2\pi}}{2}=\sigma\sqrt{\frac\pi2}.
+\]
+\textbf{گشتاور دوم:} با $u=\frac{x^2}{2\sigma^2}$ (یعنی $x^2=2\sigma^2u$ و $\frac{x}{\sigma^2}\dd x=\dd u$): $\E X^2=\int_0^\infty2\sigma^2ue^{-u}\dd u=2\sigma^2\Gamma(2)=2\sigma^2$.
+\end{solution}
+
+\begin{exercise}[انتگرال گاوسی نیمه]
+با استفاده از انتگرال گاوسی، $\int_0^\infty e^{-x^2}\dd x$ و $\Gamma\big(\frac52\big)$ را حساب کنید.
+\end{exercise}
+\begin{solution}
+با $x=\frac{u}{\sqrt2}$: $\int_0^\infty e^{-x^2}\dd x=\frac{1}{\sqrt2}\int_0^\infty e^{-u^2/2}\dd u=\frac{1}{\sqrt2}\cdot\frac{\sqrt{2\pi}}{2}=\frac{\sqrt\pi}{2}$. همچنین $\Gamma\big(\frac52\big)=\frac32\cdot\frac12\cdot\Gamma\big(\frac12\big)=\frac{3\sqrt\pi}{4}$.
+\end{solution}
+
+\begin{exercise}[پارتو با $\alpha=3$]
+برای چگالی پارتو $f(x)=3x^{-4}$ ($x\ge1$)، $\E X$ و $\Var X$ را حساب کنید.
+\end{exercise}
+\begin{solution}
+$\E X=3\int_1^\infty x^{-3}\dd x=3\cdot\frac12=\frac32$. $\E X^2=3\int_1^\infty x^{-2}\dd x=3$. پس $\Var X=3-\frac94=\frac34$. (برای $\alpha=2$ میانگین ۲ است ولی واریانس بی‌نهایت.)
+\end{solution}
+
+\begin{exercise}[انتگرال بتا]
+$\int_0^1x^3(1-x)^2\dd x$ را یک بار با تابع بتا و یک بار با بسط مستقیم حساب کنید.
+\end{exercise}
+\begin{solution}
+\textbf{بتا:} $B(4,3)=\frac{3!\,2!}{6!}=\frac{12}{720}=\frac1{60}$.
+\textbf{مستقیم:} $x^3(1-2x+x^2)=x^3-2x^4+x^5$ و $\int_0^1=\frac14-\frac25+\frac16=\frac{15-24+10}{60}=\frac1{60}$.
+\end{solution}
+
+\begin{exercise}[توزیع لگ‌نرمال]
+اگر $X\sim\mathcal N(0,1)$ و $Y=e^X$، چگالی $Y$ و $\E Y$ را بیابید.
+\end{exercise}
+\begin{solution}
+برای $y>0$: $F_Y(y)=\Prob(X\le\ln y)=\Phi(\ln y)$. با قاعده زنجیره‌ای: $f_Y(y)=\phi(\ln y)\cdot\frac1y=\frac{1}{y\sqrt{2\pi}}e^{-(\ln y)^2/2}$. برای میانگین لازم نیست با این چگالی انتگرال بگیریم: $\E Y=\E e^{X}=M_X(1)=e^{1/2}$ (\lr{MGF} گاوسی با $t=1$).
+\end{solution}
+
+\begin{exercise}[فرمول دم و بیشینه یکنواخت]
+با فرمول دم $\E M=\int_0^\infty\Prob(M>x)\dd x$، میانگین بیشینه $n$ نمونه مستقل از $\mathcal U(0,1)$ را حساب کنید.
+\end{exercise}
+\begin{solution}
+$\Prob(M>x)=1-x^n$ برای $0\le x\le1$ و صفر برای $x>1$. پس $\E M=\int_0^1(1-x^n)\dd x=1-\frac{1}{n+1}=\frac{n}{n+1}$؛ همان نتیجه جلسه ۲۲ (با $\theta=1$)، بدون نیاز به چگالی بیشینه.
+\end{solution}
+
+\begin{exercise}[بی‌حافظگی نمایی با انتگرال]
+برای $X\sim\mathrm{Exp}(\lambda)$، با محاسبه انتگرال‌ها نشان دهید $\Prob(X>s+t\given X>s)=\Prob(X>t)$.
+\end{exercise}
+\begin{solution}
+$\Prob(X>x)=\int_x^\infty\lambda e^{-\lambda u}\dd u=\big[-e^{-\lambda u}\big]_x^\infty=e^{-\lambda x}$. پس
+\[
+\Prob(X>s+t\given X>s)=\frac{\Prob(X>s+t)}{\Prob(X>s)}=\frac{e^{-\lambda(s+t)}}{e^{-\lambda s}}=e^{-\lambda t}=\Prob(X>t).
+\]
+(رویداد $X>s+t$ زیرمجموعه $X>s$ است، پس اشتراکشان همان $X>s+t$ است.)
+\end{solution}
+
+\begin{exercise}[میانه پسین با لایب‌نیتس]
+نشان دهید تابع $h(c)=\int_{-\infty}^c(c-t)f(t)\dd t+\int_c^\infty(t-c)f(t)\dd t$ (جلسه ۲۴) مشتق $h'(c)=2F(c)-1$ دارد.
+\end{exercise}
+\begin{solution}
+این حالت ترکیبی لایب‌نیتس است: هم حد و هم انتگرالده به $c$ وابسته‌اند. برای جمله اول: جمله مرزی $(c-c)f(c)\cdot1=0$ و مشتق انتگرالده $\int_{-\infty}^cf(t)\dd t=F(c)$. برای جمله دوم: جمله مرزی $-(c-c)f(c)=0$ و مشتق انتگرالده $\int_c^\infty(-1)f(t)\dd t=-(1-F(c))$. جمع: $F(c)-1+F(c)=2F(c)-1$.
+\end{solution}

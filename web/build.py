@@ -26,12 +26,15 @@ ORDINAL = {3: 'سوم', 4: 'چهارم', 5: 'پنجم', 6: 'ششم', 7: 'هفت�
            17: 'هفدهم', 18: 'هجدهم', 19: 'نوزدهم', 20: 'بیستم', 21: 'بیست‌ویکم', 22: 'بیست‌ودوم',
            23: 'بیست‌وسوم', 24: 'بیست‌وچهارم', 25: 'بیست‌وپنجم', 26: 'بیست‌وششم', 27: 'بیست‌وهفتم'}
 
+MATH_ORDINAL = {1: 'اول', 2: 'دوم', 3: 'سوم'}
+
 PARTS = [
     ('مبانی احتمال', 'فضای احتمال، احتمال شرطی و استقلال', [0, 3, 4, 5]),
     ('متغیر تصادفی', 'توزیع‌ها، میانگین، گشتاورها و تبدیل‌ها', [6, 7, 8, 9, 10, 11, 12]),
     ('چند متغیر تصادفی', 'توزیع مشترک، همبستگی، جمع و قضایای حدی', [13, 14, 15, 16, 17]),
     ('آمار و تخمین', 'نامساوی‌ها، آمار، تخمین و درست‌نمایی', [18, 19, 20, 21, 22]),
     ('استنباط آماری', 'بازه اطمینان، تخمین بیزی و آزمون فرض', [23, 24, 25, 26, 27]),
+    ('جعبه‌ابزار ریاضی', 'مشتق و انتگرال، انتگرال دوگانه، سری‌ها، بهینه‌سازی و ماتریس‌ها', [101, 102, 103]),
 ]
 
 
@@ -95,7 +98,8 @@ def render_math(page):
 def load_chapters(only=None):
     labels = {}
     chapters = []
-    for f in sorted(glob.glob(os.path.join(SRC, 'ch*.tex'))):
+    files = glob.glob(os.path.join(SRC, 'ch*.tex'))
+    for f in sorted(files, key=lambda p: int(re.search(r'ch(\d+)\.tex', p).group(1))):
         chap = int(re.search(r'ch(\d+)\.tex', f).group(1))
         tex, figsrc = convert.preprocess(open(f, encoding='utf-8').read(), chap)
         html, warn = convert.run_pandoc(tex)
@@ -107,8 +111,11 @@ def load_chapters(only=None):
             title_html = 'مرور پیش‌نیازها'
             label = 'پیش‌درآمد'
             eyebrow = 'پیش‌درآمد · جلسات اول و دوم'
+        elif convert.is_math(chap):
+            label = convert.chap_label(chap)
+            eyebrow = 'جعبه‌ابزار ریاضی · بخش %s' % MATH_ORDINAL[chap - convert.MATH_BASE]
         else:
-            label = 'جلسه %s' % FA(chap)
+            label = convert.chap_label(chap)
             eyebrow = 'جلسه %s' % ORDINAL[chap]
         soup = res['soup']
         counts = {
@@ -144,7 +151,7 @@ def chapter_head(ch):
     for key, word in (('def', 'تعریف'), ('thm', 'قضیه'), ('ex', 'مثال'), ('exr', 'تمرین'), ('fig', 'شکل')):
         if c[key]:
             meta.append('<span><b>%s</b> %s</span>' % (FA(c[key]), word))
-    num = '' if ch['num'] == 0 else '<span class="ch-num">%s</span>' % FA(ch['num'])
+    num = '' if ch['num'] == 0 else '<span class="ch-num">%s</span>' % convert.tag(ch['num'])
     return ('<header class="ch-head"><div class="ch-eyebrow">%s<span>%s</span></div>'
             '<h1 class="ch-title">%s</h1><div class="ch-meta">%s</div></header>') % (
         num, ch['eyebrow'], ch['title_html'], ''.join(meta))
@@ -179,8 +186,8 @@ def build_index(chapters, site=None):
                 pills += '<span class="pill exr">%s تمرین</span>' % FA(k['exr'])
             if k['fig']:
                 pills += '<span class="pill fig">%s شکل</span>' % FA(k['fig'])
-            numtxt = 'پیش' if n == 0 else FA(n)
-            small = 'جلسات ۱ و ۲' if n == 0 else 'جلسه'
+            numtxt = 'پیش' if n == 0 else convert.tag(n)
+            small = 'جلسات ۱ و ۲' if n == 0 else ('ریاضی' if convert.is_math(n) else 'جلسه')
             items.append(
                 '<li><a class="chap" href="%s"><div class="chap-n">%s<small>%s</small></div>'
                 '<div class="chap-b"><div class="chap-t">%s</div><div class="chap-s">%s</div>'
@@ -202,7 +209,7 @@ def build_index(chapters, site=None):
         '<div class="home"><section class="hero"><div>'
         '<div class="hero-k">دانشکده مهندسی کامپیوتر · دانشگاه صنعتی شریف</div>'
         '<h1>آمار و احتمال مهندسی</h1>'
-        '<p>جزوه کامل درس بر اساس اسلایدهای جلسات سوم تا بیست‌وهفتم: توضیح کامل هر مبحث، همه مثال‌ها و پرسش‌های اسلایدها با حل قدم‌به‌قدم، و تمرین‌های تکمیلی حل‌شده.</p>'
+        '<p>جزوه کامل درس بر اساس اسلایدهای جلسات سوم تا بیست‌وهفتم: توضیح کامل هر مبحث، همه مثال‌ها و پرسش‌های اسلایدها با حل قدم‌به‌قدم، و تمرین‌های تکمیلی حل‌شده؛ به همراه «جعبه‌ابزار ریاضی» برای مرور انتگرال‌ها، سری‌ها و بهینه‌سازی.</p>'
         '<p class="who">مدرس: دکتر امیر نجفی · زمستان ۱۴۰۴ و بهار ۱۴۰۵</p>'
         '@@DL@@'
         '</div><figure class="hero-fig">%s<figcaption>توزیع دوجمله‌ای: احتمال \\(k\\) شیر در \\(n=20\\) پرتاب سکه سالم، و منحنی گاوسی که قضیه حد مرکزی پیش‌بینی می‌کند</figcaption></figure></section>'
@@ -228,10 +235,11 @@ def build_index(chapters, site=None):
             '<p class="dl-row"><a class="dl" href="%s" download>%s<span>دانلود نسخه PDF</span></a>'
             '<span class="dl-meta">%s صفحه <span class="en" dir="ltr">A4</span> · %s مگابایت</span></p>'
             '<p class="dl-row"><a class="dl alt" href="summary.html"><span class="sigma" aria-hidden="true">∑</span><span>خلاصه فرمول‌ها و مفاهیم</span></a>'
-            '<a class="dl-sub" href="%s" download>دانلود <bdi>PDF</bdi> خلاصه (%s صفحه)</a></p>') % (
+            '<a class="dl-sub" href="%s" download>دانلود <bdi>PDF</bdi> خلاصه (%s صفحه)</a></p>'
+            '<p class="dl-row"><a class="dl alt" href="ch101.html"><span class="sigma" aria-hidden="true">∫</span><span>جعبه‌ابزار ریاضی</span></a><span class="dl-meta">مرور انتگرال یگانه و دوگانه، سری‌ها و بهینه‌سازی</span></p>') % (
             site['pdf'], template.ICONS['download'], FA(site['pages']), FA(site['mb']),
             site['sum_pdf'], FA(site['sum_pages'])))
-        desc = 'جزوه کامل درس آمار و احتمال مهندسی (دکتر امیر نجفی، دانشگاه صنعتی شریف): جلسات ۳ تا ۲۷ با توضیح کامل، مثال‌ها و تمرین‌های حل‌شده.'
+        desc = 'جزوه کامل درس آمار و احتمال مهندسی (دکتر امیر نجفی، دانشگاه صنعتی شریف): جلسات ۳ تا ۲۷ با توضیح کامل، مثال‌ها و تمرین‌های حل‌شده، و جعبه‌ابزار ریاضی.'
         page = ('<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8">'
                 '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">'
                 '<title>جزوه آمار و احتمال مهندسی</title>'
@@ -243,7 +251,7 @@ def build_index(chapters, site=None):
                 '</head><body data-page="index">@@DEFS@@%s<script>%s</script></body></html>') % (
             desc, desc, site['url'] + 'og.png', site['url'], template.FAVICON, template.FONTS, template.CSS, body, template.JS)
     else:
-        body = body.replace('@@DL@@', '<p class="dl-row"><a class="dl alt" href="summary.html"><span class="sigma" aria-hidden="true">∑</span><span>خلاصه فرمول‌ها و مفاهیم</span></a></p>')
+        body = body.replace('@@DL@@', '<p class="dl-row"><a class="dl alt" href="summary.html"><span class="sigma" aria-hidden="true">∑</span><span>خلاصه فرمول‌ها و مفاهیم</span></a></p><p class="dl-row"><a class="dl alt" href="ch101.html"><span class="sigma" aria-hidden="true">∫</span><span>جعبه‌ابزار ریاضی</span></a><span class="dl-meta">مرور انتگرال یگانه و دوگانه، سری‌ها و بهینه‌سازی</span></p>')
         # the artifact publish skeleton supplies <html>/<head>/<body>; our wrapper carries dir/lang
         page = ('<title>جزوه آمار و احتمال مهندسی</title>'
                 '<meta name="claude:viewport-fit-sides" content="cover">' + template.FONTS +
