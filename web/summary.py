@@ -37,7 +37,7 @@ def ref_chips(ref, absolute):
         href = '%s#%s' % (convert.page_name(ch), sid)
         if absolute:
             href = SITE_URL + href
-        label = 'پیش‌درآمد' if ch == 0 else 'جلسه %s' % FA(ch)
+        label = convert.chap_label(ch)
         out.append('<a class="fref" href="%s">%s</a>' % (href, label))
     return '<span class="frefs">%s</span>' % ''.join(out) if out else ''
 

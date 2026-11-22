@@ -1,0 +1,427 @@
+% ===============================================================
+%  جعبه‌ابزار ریاضی ۲
+% ===============================================================
+\chapter{انتگرال دوگانه، تغییر متغیر و ژاکوبین}
+
+از جلسه ۱۳ به بعد با \textbf{دو یا چند} متغیر تصادفی سروکار داریم: چگالی مشترک، چگالی حاشیه‌ای، کوواریانس، توزیع جمع و نسبت، آماره‌های ترتیبی و توزیع‌های مشترکاً گاوسی. ابزار اصلی همه این‌ها \textbf{انتگرال دوگانه} است. در این بخش، انتگرال دوگانه را از پایه مرور می‌کنیم و مهم‌ترین مهارت آن را تمرین می‌کنیم: \textbf{تعیین درست حدود انتگرال برای یک ناحیه}. سپس مختصات قطبی (و اثبات انتگرال گاوسی)، تغییر متغیر کلی با \textbf{ژاکوبین} و کاربردش در یافتن چگالی تبدیل‌های دومتغیره را می‌بینیم.
+
+\section{انتگرال دوگانه: احتمال به عنوان حجم}
+اگر $(X,Y)$ چگالی مشترک $f_{X,Y}(x,y)\ge0$ داشته باشند، احتمال اینکه نقطه تصادفی $(X,Y)$ در ناحیه $A$ از صفحه بیفتد، \textbf{حجم} زیر رویه $z=f_{X,Y}(x,y)$ و بالای ناحیه $A$ است:
+\[
+\Prob\big((X,Y)\in A\big)=\iint_Af_{X,Y}(x,y)\dd x\dd y,\qquad \iint_{\R^2}f_{X,Y}(x,y)\dd x\dd y=1 .
+\]
+شهود دقیقاً مانند حالت یک‌بعدی است: صفحه را به مستطیل‌های کوچک $\Delta x\times\Delta y$ تقسیم می‌کنیم؛ احتمال افتادن در هر مستطیل تقریباً $f(x_i,y_j)\Delta x\Delta y$ (ارتفاع × مساحت قاعده) است و انتگرال حد مجموع آن‌هاست.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.6}
+\begin{tabular}{c|c}
+مفهوم (جلسه‌های ۱۳ تا ۱۷) & انتگرال دوگانه\\\hline
+چگالی حاشیه‌ای & $f_X(x)=\int_{-\infty}^{\infty}f_{X,Y}(x,y)\dd y$\\
+امید یک تابع & $\E g(X,Y)=\iint g(x,y)f_{X,Y}(x,y)\dd x\dd y$\\
+کوواریانس & $\Cov(X,Y)=\E XY-\E X\,\E Y$\\
+مقایسه دو متغیر & $\Prob(X<Y)=\iint_{x<y}f_{X,Y}\dd x\dd y$\\
+توزیع جمع & $F_{X+Y}(z)=\iint_{x+y\le z}f_{X,Y}\dd x\dd y$
+\end{tabular}
+\end{center}
+
+\section{انتگرال تکراری و قضیه فوبینی}
+\begin{theorem}[فوبینی]
+اگر $f$ روی مستطیل $[a,b]\times[c,d]$ انتگرال‌پذیر باشد (برای چگالی‌ها، که نامنفی‌اند، همواره برقرار است)، آنگاه
+\[
+\iint_{[a,b]\times[c,d]}f(x,y)\dd x\dd y=\int_a^b\Big(\int_c^df(x,y)\dd y\Big)\dd x=\int_c^d\Big(\int_a^bf(x,y)\dd x\Big)\dd y .
+\]
+\end{theorem}
+یعنی انتگرال دوگانه را می‌توان به صورت \textbf{دو انتگرال یگانه پشت سر هم} حساب کرد. در انتگرال درونی، متغیر بیرونی مثل یک \textbf{عدد ثابت} رفتار می‌کند. شهود: حجم را به برش‌های نازک موازی محور $y$ تقسیم می‌کنیم؛ انتگرال درونی مساحت هر برش (به ازای $x$ ثابت) است و انتگرال بیرونی این مساحت‌ها را جمع می‌زند.
+
+\textbf{حالت جداپذیر.} اگر $f(x,y)=g(x)h(y)$ و ناحیه مستطیل باشد، انتگرال به حاصل‌ضرب دو انتگرال یگانه تبدیل می‌شود: $\iint g(x)h(y)=\Big(\int g\Big)\Big(\int h\Big)$. در احتمال، این همان \textbf{استقلال} است: $X$ و $Y$ مستقل‌اند اگر و تنها اگر چگالی مشترک به صورت حاصل‌ضرب تابعی از $x$ و تابعی از $y$ تجزیه شود (روی یک ناحیه مستطیلی)؛ و آنگاه $\E[g(X)h(Y)]=\E g(X)\,\E h(Y)$.
+
+\begin{example}[چگالی مشترک روی مربع واحد]
+$f(x,y)=c(x+y)$ برای $0\le x,y\le1$. (الف) $c$، (ب) $f_X$، (ج) $\E X$، $\E XY$ و $\Cov(X,Y)$ را بیابید.
+\begin{solution}
+(الف) انتگرال درونی نسبت به $y$ (با $x$ ثابت): $\int_0^1(x+y)\dd y=x+\frac12$. سپس $\int_0^1\big(x+\frac12\big)\dd x=\frac12+\frac12=1$؛ پس $c=1$.
+
+(ب) همان انتگرال درونی: $f_X(x)=\int_0^1(x+y)\dd y=x+\frac12$ برای $0\le x\le1$ (و به دلیل تقارن، $f_Y(y)=y+\frac12$).
+
+(ج)
+\[
+\E X=\int_0^1x\Big(x+\frac12\Big)\dd x=\frac13+\frac14=\frac{7}{12},
+\]
+\[
+\E XY=\int_0^1\!\!\int_0^1xy(x+y)\dd y\dd x=\int_0^1\Big(\frac{x^2}{2}+\frac{x}{3}\Big)\dd x=\frac16+\frac16=\frac13 ,
+\]
+(انتگرال درونی: $\int_0^1(x^2y+xy^2)\dd y=\frac{x^2}{2}+\frac x3$.)
+\[
+\Cov(X,Y)=\frac13-\Big(\frac{7}{12}\Big)^2=\frac{48-49}{144}=-\frac{1}{144}.
+\]
+کوواریانس منفی است و $X,Y$ مستقل نیستند: $x+y$ را نمی‌توان به صورت $g(x)h(y)$ نوشت.
+\end{solution}
+\end{example}
+
+\section{ناحیه‌های غیرمستطیلی: تعیین حدود انتگرال}
+در احتمال، ناحیه‌ها تقریباً هیچ‌گاه مستطیل نیستند: «$X<Y$»، «$X+Y\le z$»، «$0<y<x<1$». مهم‌ترین مهارت، نوشتن درست حدود است.
+
+\textbf{دستورالعمل گام‌به‌گام:}
+\begin{enumerate}
+\item ناحیه را \textbf{رسم کنید}: همه نامساوی‌ها (از جمله تکیه‌گاه چگالی و شرط رویداد) را روی صفحه بکشید و اشتراکشان را سایه بزنید.
+\item ترتیب را انتخاب کنید. اگر انتگرال درونی نسبت به $y$ است (\textbf{برش عمودی}): یک $x$ ثابت در نظر بگیرید و ببینید خط عمودی در آن $x$ از کجا وارد ناحیه می‌شود ($y=g_1(x)$) و از کجا خارج ($y=g_2(x)$).
+\item حدود بیرونی، کوچک‌ترین و بزرگ‌ترین $x$ در کل ناحیه است (اعداد ثابت).
+\item اگر مرز ناحیه در طول بازه $x$ «عوض شود» (مثلاً شکسته باشد)، انتگرال بیرونی را به چند قسمت بشکنید.
+\end{enumerate}
+\[
+\iint_Af=\int_{x_{\min}}^{x_{\max}}\Big(\int_{g_1(x)}^{g_2(x)}f(x,y)\dd y\Big)\dd x
+\qquad\text{یا}\qquad
+\int_{y_{\min}}^{y_{\max}}\Big(\int_{h_1(y)}^{h_2(y)}f(x,y)\dd x\Big)\dd y .
+\]
+\textbf{قانون طلایی:} حدود انتگرال درونی می‌توانند به متغیر بیرونی وابسته باشند، اما حدود انتگرال بیرونی \textbf{همیشه عدد ثابت‌اند}.
+
+\begin{example}[ناحیه مثلثی: بیشینه و کمینه دو نمونه یکنواخت]
+$f(x,y)=2$ روی مثلث $0<y<x<1$ (این چگالی مشترک بیشینه و کمینه دو نمونه مستقل $\mathcal U(0,1)$ است؛ جلسه ۱۷). (الف) نرمال بودن را بررسی کنید. (ب) چگالی‌های حاشیه‌ای را بیابید. (ج) $\Prob(X>2Y)$ را حساب کنید.
+\begin{solution}
+(الف) برش عمودی: به ازای $x$ ثابت در $(0,1)$، $y$ از $0$ تا $x$ تغییر می‌کند:
+\[
+\int_0^1\!\!\int_0^x2\dd y\dd x=\int_0^12x\dd x=1 .
+\]
+(ب) $f_X(x)=\int_0^x2\dd y=2x$ برای $0<x<1$ (چگالی بیشینه). برای $f_Y$ برش افقی: به ازای $y$ ثابت، $x$ از $y$ تا $1$: $f_Y(y)=\int_y^12\dd x=2(1-y)$ (چگالی کمینه).
+
+(ج) شرط $x>2y$ یعنی $y<\frac x2$. اشتراک با ناحیه: به ازای $x$ ثابت، $y$ از $0$ تا $\frac x2$ (چون $\frac x2<x$):
+\[
+\Prob(X>2Y)=\int_0^1\!\!\int_0^{x/2}2\dd y\dd x=\int_0^1x\dd x=\frac12 .
+\]
+\end{solution}
+\end{example}
+
+\begin{center}
+\begin{tikzpicture}
+\end{tikzpicture}\\
+{\small ناحیه $0<y<x<1$ و یک برش عمودی: به ازای $x$ ثابت، $y$ از $0$ (خط پایین) تا $x$ (قطر) تغییر می‌کند. خط‌چین مرز $y=x/2$ است که رویداد $X>2Y$ را جدا می‌کند.}
+\end{center}
+
+\begin{example}[احتمال $X+Y\le1$]
+برای چگالی $f(x,y)=x+y$ روی مربع واحد (مثال بخش فوبینی)، $\Prob(X+Y\le1)$ را حساب کنید.
+\begin{solution}
+ناحیه: مثلث پایین خط $x+y=1$ در مربع. برش عمودی: $y$ از $0$ تا $1-x$:
+\[
+\int_0^1\!\!\int_0^{1-x}(x+y)\dd y\dd x=\int_0^1\Big[x(1-x)+\frac{(1-x)^2}{2}\Big]\dd x=\int_0^1\frac{(1-x)(1+x)}{2}\dd x=\frac12\int_0^1(1-x^2)\dd x=\frac13 .
+\]
+(در قدم دوم $(1-x)$ را فاکتور گرفتیم: $(1-x)\big(x+\frac{1-x}{2}\big)=(1-x)\frac{1+x}{2}$.)
+\end{solution}
+\end{example}
+
+\section{تغییر ترتیب انتگرال‌گیری}
+یک ناحیه را می‌توان هم با برش عمودی و هم با برش افقی توصیف کرد. گاهی انتگرال در یک ترتیب ناممکن یا دشوار و در ترتیب دیگر ساده است.
+
+\begin{example}[انتگرالی که فقط با تغییر ترتیب حل می‌شود]
+$I=\int_0^1\int_x^1e^{-y^2}\dd y\dd x$ را حساب کنید.
+\begin{solution}
+انتگرال درونی $\int e^{-y^2}\dd y$ تابع اولیه مقدماتی ندارد؛ پس ترتیب را عوض می‌کنیم. \textbf{ناحیه:} $0\le x\le1$ و $x\le y\le1$، یعنی مثلث $0\le x\le y\le1$. \textbf{برش افقی:} به ازای $y$ ثابت در $[0,1]$، $x$ از $0$ تا $y$:
+\[
+I=\int_0^1\!\!\int_0^ye^{-y^2}\dd x\dd y=\int_0^1ye^{-y^2}\dd y=\Big[-\frac12e^{-y^2}\Big]_0^1=\frac{1-e^{-1}}{2}\approx0.316 .
+\]
+انتگرال درونی جدید ساده بود، چون انتگرالده به $x$ وابسته نیست و فقط طول بازه ($y$) ضرب می‌شود؛ این طول دقیقاً همان ضریب $y$ لازم برای جانشانی است.
+\end{solution}
+\end{example}
+
+\begin{center}
+\begin{tikzpicture}
+\end{tikzpicture}\\
+{\small یک ناحیه، دو توصیف: برش عمودی ($x$ ثابت، $y$ از $x$ تا ۱) و برش افقی ($y$ ثابت، $x$ از ۰ تا $y$). هر دو همان مثلث را می‌پوشانند.}
+\end{center}
+
+\begin{example}[اثبات دوم فرمول دم]
+با تغییر ترتیب انتگرال، نشان دهید برای $X\ge0$: $\E X=\int_0^\infty\Prob(X>t)\dd t$.
+\begin{solution}
+ایده: $x=\int_0^x\dd t$. پس
+\[
+\E X=\int_0^\infty xf(x)\dd x=\int_0^\infty\Big(\int_0^x\dd t\Big)f(x)\dd x=\iint_{0\le t\le x}f(x)\dd t\dd x .
+\]
+ناحیه $0\le t\le x<\infty$ را با برش در جهت دیگر توصیف می‌کنیم: به ازای $t$ ثابت، $x$ از $t$ تا $\infty$:
+\[
+\E X=\int_0^\infty\Big(\int_t^\infty f(x)\dd x\Big)\dd t=\int_0^\infty\Prob(X>t)\dd t .
+\]
+(تغییر ترتیب برای توابع نامنفی همواره مجاز است؛ قضیه تونلی.) نسخه گسسته: برای $X$ با مقادیر صحیح نامنفی، $\E X=\sum_{k=1}^\infty\Prob(X\ge k)$، که با همین ترفند روی مجموع‌ها ثابت می‌شود.
+\end{solution}
+\end{example}
+
+\section{مثال‌های کلاسیک احتمال}
+
+\begin{example}[مسابقه دو ساعت نمایی]
+$X\sim\mathrm{Exp}(\lambda)$ و $Y\sim\mathrm{Exp}(\mu)$ مستقل‌اند. $\Prob(X<Y)$ را بیابید.
+\begin{solution}
+چگالی مشترک (به دلیل استقلال) حاصل‌ضرب است: $\lambda e^{-\lambda x}\mu e^{-\mu y}$ برای $x,y\ge0$. ناحیه $x<y$: به ازای $x$ ثابت، $y$ از $x$ تا $\infty$:
+\[
+\Prob(X<Y)=\int_0^\infty\lambda e^{-\lambda x}\Big(\int_x^\infty\mu e^{-\mu y}\dd y\Big)\dd x=\int_0^\infty\lambda e^{-\lambda x}e^{-\mu x}\dd x=\frac{\lambda}{\lambda+\mu}.
+\]
+شهود: اگر دو رویداد با نرخ‌های $\lambda$ و $\mu$ «در رقابت» باشند، احتمال اینکه اولی زودتر رخ دهد متناسب با نرخ آن است. انتگرال درونی همان $\Prob(Y>x)=e^{-\mu x}$ است.
+\end{solution}
+\end{example}
+
+\begin{example}[مسئله قرار ملاقات]
+دو نفر مستقل از هم و به طور یکنواخت در یک ساعت (بازه $[0,1]$) به محل قرار می‌رسند و هر کدام فقط ۱۵ دقیقه منتظر می‌ماند. احتمال ملاقات چقدر است؟
+\begin{solution}
+$X,Y\sim\mathcal U(0,1)$ مستقل، با چگالی مشترک $1$ روی مربع واحد؛ پس احتمال هر ناحیه برابر \textbf{مساحت} آن است. ملاقات یعنی $|X-Y|\le\frac14$: نواری حول قطر. متمم آن دو مثلث قائم‌الزاویه در گوشه‌هاست ($y>x+\frac14$ و $x>y+\frac14$)، هر کدام با ساق‌های $\frac34$:
+\[
+\Prob\Big(|X-Y|\le\frac14\Big)=1-2\cdot\frac12\Big(\frac34\Big)^2=1-\frac{9}{16}=\frac{7}{16}.
+\]
+\end{solution}
+\end{example}
+
+\begin{center}
+\begin{tikzpicture}
+\end{tikzpicture}\\
+{\small مسئله قرار ملاقات: نوار $|x-y|\le\frac14$ حول قطر مربع واحد. مساحت نوار برابر یک منهای مساحت دو مثلث گوشه است.}
+\end{center}
+
+\begin{example}[جمع دو متغیر یکنواخت مستقل]
+$X,Y\sim\mathcal U(0,1)$ مستقل‌اند. تابع توزیع و چگالی $Z=X+Y$ را بیابید.
+\begin{solution}
+$F_Z(z)=\Prob(X+Y\le z)$ = مساحت بخشی از مربع واحد که زیر خط $x+y=z$ است. شکل ناحیه با $z$ عوض می‌شود، پس دو حالت داریم:
+\begin{itemize}
+\item $0\le z\le1$: مثلثی با ساق‌های $z$؛ پس $F_Z(z)=\frac{z^2}{2}$.
+\item $1\le z\le2$: کل مربع منهای مثلث بالایی با ساق‌های $2-z$؛ پس $F_Z(z)=1-\frac{(2-z)^2}{2}$.
+\end{itemize}
+با مشتق‌گیری: $f_Z(z)=z$ برای $0\le z\le1$ و $f_Z(z)=2-z$ برای $1\le z\le2$؛ یعنی \textbf{توزیع مثلثی} (همان نتیجه کانولوشن جلسه ۱۶).
+\end{solution}
+\end{example}
+
+\begin{center}
+\begin{tikzpicture}
+\end{tikzpicture}\\
+{\small ناحیه $x+y\le z$ داخل مربع واحد برای $z=0.6$ (یک مثلث) و $z=1.4$ (مربع منهای یک مثلث). تغییر شکل ناحیه دلیل چندضابطه‌ای بودن جواب است.}
+\end{center}
+
+\begin{example}[جمع دو نمایی مستقل]
+$X,Y\sim\mathrm{Exp}(\lambda)$ مستقل‌اند. چگالی $Z=X+Y$ را بیابید.
+\begin{solution}
+برای $z\ge0$، ناحیه $x,y\ge0$ و $x+y\le z$: به ازای $x\in[0,z]$، $y$ از $0$ تا $z-x$:
+\[
+F_Z(z)=\int_0^z\lambda e^{-\lambda x}\Big(\int_0^{z-x}\lambda e^{-\lambda y}\dd y\Big)\dd x=\int_0^z\lambda e^{-\lambda x}\big(1-e^{-\lambda(z-x)}\big)\dd x=\big(1-e^{-\lambda z}\big)-\lambda ze^{-\lambda z}.
+\]
+(در جمله دوم، $e^{-\lambda x}e^{-\lambda(z-x)}=e^{-\lambda z}$ ثابت است و انتگرالش $\lambda ze^{-\lambda z}$ می‌شود.) با مشتق‌گیری:
+\[
+f_Z(z)=\lambda e^{-\lambda z}-\lambda e^{-\lambda z}+\lambda^2ze^{-\lambda z}=\lambda^2ze^{-\lambda z},\qquad z\ge0,
+\]
+که چگالی گامای $(2,\lambda)$ است.
+\end{solution}
+\end{example}
+
+\begin{example}[میانگین بیشینه دو یکنواخت با تقارن]
+برای $X,Y\sim\mathcal U(0,1)$ مستقل، $\E\max(X,Y)$ را حساب کنید.
+\begin{solution}
+$\max(x,y)$ روی دو نیمه مربع ضابطه متفاوت دارد؛ پس انتگرال را روی قطر می‌شکنیم. به دلیل تقارن، دو نیمه سهم برابر دارند:
+\[
+\E\max(X,Y)=\iint_{y<x}x\dd y\dd x+\iint_{x<y}y\dd x\dd y=2\int_0^1\!\!\int_0^xx\dd y\dd x=2\int_0^1x^2\dd x=\frac23 .
+\]
+(بررسی: با فرمول $\frac{n}{n+1}$ برای $n=2$ یکی است.)
+\end{solution}
+\end{example}
+
+\section{مختصات قطبی}
+وقتی ناحیه یا انتگرالده به $x^2+y^2$ (فاصله تا مبدأ) وابسته است، مختصات قطبی کار را بسیار ساده می‌کند:
+\[
+x=r\cos\theta,\qquad y=r\sin\theta,\qquad r\ge0,\ \ 0\le\theta<2\pi,\qquad x^2+y^2=r^2 .
+\]
+\begin{theorem}[عنصر مساحت قطبی]
+\[
+\dd x\dd y=r\dd r\dd\theta .
+\]
+\end{theorem}
+\textbf{شهود:} یک «مستطیل قطبی» کوچک بین شعاع‌های $r$ و $r+\dd r$ و زاویه‌های $\theta$ و $\theta+\dd\theta$ تقریباً یک مستطیل با ضلع شعاعی $\dd r$ و ضلع کمانی $r\dd\theta$ است (طول کمان = شعاع × زاویه). پس مساحتش $r\dd r\dd\theta$ است. ضریب $r$ می‌گوید: سلول‌های دورتر از مبدأ، با همان $\dd r$ و $\dd\theta$، بزرگ‌ترند.
+
+\begin{center}
+\begin{tikzpicture}
+\end{tikzpicture}\\
+{\small عنصر مساحت در مختصات قطبی: ضلع شعاعی $\dd r$ و ضلع کمانی $r\,\dd\theta$؛ پس مساحت سلول $r\,\dd r\,\dd\theta$ است.}
+\end{center}
+
+\begin{theorem}[اثبات انتگرال گاوسی]
+$I=\int_{-\infty}^{\infty}e^{-x^2/2}\dd x=\sqrt{2\pi}$.
+\end{theorem}
+\begin{proof}
+ترفند: به جای $I$، مربع آن را حساب می‌کنیم و آن را یک انتگرال دوگانه می‌نویسیم (فوبینی، حالت جداپذیر):
+\[
+I^2=\int_{-\infty}^{\infty}e^{-x^2/2}\dd x\int_{-\infty}^{\infty}e^{-y^2/2}\dd y=\iint_{\R^2}e^{-(x^2+y^2)/2}\dd x\dd y .
+\]
+انتگرالده فقط به $r^2=x^2+y^2$ وابسته است؛ به قطبی می‌رویم (کل صفحه: $r\in[0,\infty)$ و $\theta\in[0,2\pi)$):
+\[
+I^2=\int_0^{2\pi}\!\!\int_0^\infty e^{-r^2/2}\,r\dd r\dd\theta=2\pi\cdot\Big[-e^{-r^2/2}\Big]_0^\infty=2\pi\cdot1 .
+\]
+ضریب $r$ از عنصر مساحت، دقیقاً همان چیزی است که جانشانی $u=\frac{r^2}{2}$ لازم دارد! چون $I>0$، $I=\sqrt{2\pi}$.
+\end{proof}
+
+\begin{example}[فاصله یک نقطه گاوسی از مبدأ]
+$X,Y\sim\mathcal N(0,1)$ مستقل‌اند و $R=\sqrt{X^2+Y^2}$. توزیع $R$ و $R^2$ را بیابید.
+\begin{solution}
+چگالی مشترک $\frac{1}{2\pi}e^{-(x^2+y^2)/2}$ است. ناحیه $R\le\rho$ یک دایره است که در قطبی یعنی $0\le r\le\rho$ و هر $\theta$:
+\[
+\Prob(R\le\rho)=\int_0^{2\pi}\!\!\int_0^\rho\frac{1}{2\pi}e^{-r^2/2}\,r\dd r\dd\theta=1-e^{-\rho^2/2},\qquad\rho\ge0 .
+\]
+با مشتق‌گیری: $f_R(\rho)=\rho e^{-\rho^2/2}$ (توزیع \textbf{رایلی}). همچنین $\Prob(R^2\le s)=\Prob(R\le\sqrt s)=1-e^{-s/2}$، یعنی $R^2=X^2+Y^2\sim\mathrm{Exp}(\frac12)$ که همان $\chi^2(2)$ است (جلسه ۱۷).
+\end{solution}
+\end{example}
+
+\begin{example}[تقارن چرخشی]
+برای $X,Y\sim\mathcal N(0,1)$ مستقل، $\Prob(0<Y<X)$ را بدون انتگرال‌گیری مستقیم بیابید.
+\begin{solution}
+چگالی فقط به $r$ وابسته است، پس زاویه $\theta$ نقطه $(X,Y)$ روی $[0,2\pi)$ \textbf{یکنواخت} است (از انتگرال قطبی: سهم هر بازه زاویه‌ای متناسب با طول آن است). ناحیه $0<y<x$ یعنی $0<\theta<\frac\pi4$:
+\[
+\Prob(0<Y<X)=\frac{\pi/4}{2\pi}=\frac18 .
+\]
+\end{solution}
+\end{example}
+
+\section{تغییر متغیر کلی و ژاکوبین}
+
+\begin{theorem}[تغییر متغیر در انتگرال دوگانه]
+فرض کنید نگاشت $(u,v)\mapsto\big(x(u,v),y(u,v)\big)$ یک‌به‌یک و مشتق‌پذیر باشد و ناحیه $B$ در صفحه $(u,v)$ را به ناحیه $A$ در صفحه $(x,y)$ ببرد. آنگاه
+\[
+\iint_Af(x,y)\dd x\dd y=\iint_Bf\big(x(u,v),y(u,v)\big)\,|J|\dd u\dd v,\qquad
+J=\det\begin{bmatrix}\dfrac{\partial x}{\partial u}&\dfrac{\partial x}{\partial v}\\[3mm]\dfrac{\partial y}{\partial u}&\dfrac{\partial y}{\partial v}\end{bmatrix}.
+\]
+\end{theorem}
+\textbf{یادآوری:} $\det\begin{bmatrix}a&b\\c&d\end{bmatrix}=ad-bc$.
+
+\textbf{شهود:} $|J|$ \textbf{ضریب تغییر مساحت} نگاشت است: یک مستطیل کوچک $\dd u\times\dd v$ در صفحه $(u,v)$ به یک متوازی‌الاضلاع کوچک در صفحه $(x,y)$ نگاشته می‌شود که مساحتش $|J|\dd u\dd v$ است. (دترمینان، مساحت متوازی‌الاضلاعی است که دو بردار ستونی ماتریس می‌سازند.) در حالت یک‌بعدی این همان $|\frac{\dd x}{\dd u}|$ در جانشانی است. برای قطبی: $J=\det\begin{bmatrix}\cos\theta&-r\sin\theta\\\sin\theta&r\cos\theta\end{bmatrix}=r\cos^2\theta+r\sin^2\theta=r$؛ همان عنصر مساحت بخش قبل.
+
+\subsection{کاربرد اصلی: چگالی تبدیل دو متغیر تصادفی}
+اگر $(U,V)=g(X,Y)$ یک‌به‌یک باشد و وارون آن $x=x(u,v)$، $y=y(u,v)$ باشد، آنگاه (با همان استدلال حفظ احتمال هر ناحیه کوچک):
+\[
+\boxed{\ f_{U,V}(u,v)=f_{X,Y}\big(x(u,v),y(u,v)\big)\,\big|J\big|,\qquad J=\frac{\partial(x,y)}{\partial(u,v)}\ }
+\]
+معادلاً $|J|=\Big|\det\frac{\partial(u,v)}{\partial(x,y)}\Big|^{-1}$، یعنی می‌توان ژاکوبین نگاشت مستقیم را حساب کرد و وارونش را گرفت (گاهی آسان‌تر است). این تعمیم دوبعدی فرمول $f_Y(y)=f_X(x)\big|\frac{\dd x}{\dd y}\big|$ جلسه ۱۲ است.
+
+\begin{example}[جمع و تفاضل دو گاوسی مستقل]
+$X,Y\sim\mathcal N(0,1)$ مستقل‌اند، $U=X+Y$ و $V=X-Y$. چگالی مشترک $(U,V)$ را بیابید.
+\begin{solution}
+\textbf{وارون:} $x=\frac{u+v}{2}$ و $y=\frac{u-v}{2}$.
+\textbf{ژاکوبین:}
+\[
+J=\det\begin{bmatrix}\frac12&\frac12\\[1mm]\frac12&-\frac12\end{bmatrix}=-\frac14-\frac14=-\frac12,\qquad|J|=\frac12 .
+\]
+\textbf{جایگذاری:} $x^2+y^2=\frac{(u+v)^2+(u-v)^2}{4}=\frac{u^2+v^2}{2}$؛ پس
+\[
+f_{U,V}(u,v)=\frac{1}{2\pi}e^{-\frac{u^2+v^2}{4}}\cdot\frac12=\Big(\frac{1}{\sqrt{4\pi}}e^{-u^2/4}\Big)\Big(\frac{1}{\sqrt{4\pi}}e^{-v^2/4}\Big).
+\]
+چگالی جداپذیر شد: $U$ و $V$ \textbf{مستقل} و هر دو $\mathcal N(0,2)$ هستند. (برای گاوسی‌ها ناهمبستگی معادل استقلال است: $\Cov(X+Y,X-Y)=\Var X-\Var Y=0$؛ جلسه ۱۴.)
+\end{solution}
+\end{example}
+
+\begin{example}[جمع و نسبت دو نمایی]
+$X,Y\sim\mathrm{Exp}(1)$ مستقل‌اند، $U=X+Y$ و $V=\frac{X}{X+Y}$. چگالی مشترک $(U,V)$ را بیابید.
+\begin{solution}
+\textbf{وارون:} $x=uv$ و $y=u-x=u(1-v)$، با $u>0$ و $0<v<1$.
+\textbf{ژاکوبین:}
+\[
+J=\det\begin{bmatrix}v&u\\1-v&-u\end{bmatrix}=-uv-u(1-v)=-u,\qquad|J|=u .
+\]
+\textbf{جایگذاری:} $f_{X,Y}(x,y)=e^{-x-y}=e^{-u}$:
+\[
+f_{U,V}(u,v)=e^{-u}\cdot u=\underbrace{ue^{-u}}_{u>0}\cdot\underbrace{1}_{0<v<1}.
+\]
+پس $U\sim\mathrm{Gamma}(2,1)$ (همان نتیجه جمع دو نمایی)، $V\sim\mathcal U(0,1)$ و این دو مستقل‌اند! یعنی «سهم $X$ از کل زمان» مستقل از کل زمان و یکنواخت است.
+\end{solution}
+\end{example}
+
+\begin{theorem}[رابطه بتا و گاما]
+برای $a,b>0$: $B(a,b)=\dfrac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)}$.
+\end{theorem}
+\begin{proof}
+حاصل‌ضرب دو گاما را یک انتگرال دوگانه می‌نویسیم و همان تغییر متغیر مثال قبل ($x=uv$، $y=u(1-v)$، $|J|=u$) را اعمال می‌کنیم:
+\[
+\Gamma(a)\Gamma(b)=\int_0^\infty\!\!\int_0^\infty x^{a-1}y^{b-1}e^{-(x+y)}\dd x\dd y
+=\int_0^\infty\!\!\int_0^1(uv)^{a-1}\big(u(1-v)\big)^{b-1}e^{-u}\,u\dd v\dd u .
+\]
+توان‌های $u$: $(a-1)+(b-1)+1=a+b-1$. پس انتگرال جداپذیر می‌شود:
+\[
+\Gamma(a)\Gamma(b)=\int_0^\infty u^{a+b-1}e^{-u}\dd u\cdot\int_0^1v^{a-1}(1-v)^{b-1}\dd v=\Gamma(a+b)\,B(a,b).
+\]
+\end{proof}
+
+\section{انتگرال سه‌گانه (اشاره)}
+همه ایده‌ها به سه بعد (و بیشتر) تعمیم می‌یابند: $\iiint f\dd x\dd y\dd z$ به صورت سه انتگرال تکراری حساب می‌شود و ژاکوبین یک دترمینان $3\times3$ است.
+
+\begin{example}[حجم سادک]
+$X,Y,Z\sim\mathcal U(0,1)$ مستقل‌اند. (الف) $\Prob(X+Y+Z\le1)$ و (ب) $\Prob(X<Y<Z)$ را حساب کنید.
+\begin{solution}
+چگالی مشترک روی مکعب واحد برابر ۱ است؛ پس احتمال‌ها \textbf{حجم}اند.
+
+(الف) به ازای $x$ و $y$ ثابت، $z$ از $0$ تا $1-x-y$؛ به ازای $x$ ثابت، $y$ از $0$ تا $1-x$:
+\[
+\int_0^1\!\!\int_0^{1-x}(1-x-y)\dd y\dd x=\int_0^1\frac{(1-x)^2}{2}\dd x=\frac16 .
+\]
+(انتگرال درونی: مساحت مثلثی با ساق‌های $1-x$.) به طور کلی برای $n$ متغیر، $\Prob(X_1+\cdots+X_n\le1)=\frac{1}{n!}$.
+
+(ب) $\int_0^1\int_0^z\int_0^y\dd x\dd y\dd z=\int_0^1\int_0^zy\dd y\dd z=\int_0^1\frac{z^2}{2}\dd z=\frac16$. با تقارن هم واضح است: هر یک از $3!=6$ ترتیب ممکن هم‌احتمال است.
+\end{solution}
+\end{example}
+
+\begin{summarybox}[جمع‌بندی: نقشه راه انتگرال دوگانه در احتمال]
+\begin{enumerate}
+\item همه شرط‌ها (تکیه‌گاه چگالی + رویداد) را روی صفحه رسم و اشتراک را سایه بزنید.
+\item اگر ناحیه دایره‌ای یا انتگرالده تابعی از $x^2+y^2$ است: قطبی با $\dd x\dd y=r\dd r\dd\theta$.
+\item وگرنه یک ترتیب انتخاب کنید؛ حدود درونی تابعی از متغیر بیرونی، حدود بیرونی عدد ثابت.
+\item اگر انتگرال درونی سخت است، ترتیب را عوض کنید. اگر شکل ناحیه با پارامتر ($z$) عوض می‌شود، حالت‌بندی کنید.
+\item برای چگالی یک تبدیل یک‌به‌یک: وارون را بنویسید، $|J|$ را حساب کنید و $f_{U,V}=f_{X,Y}\cdot|J|$؛ حتماً ناحیه جدید $(u,v)$ را هم مشخص کنید.
+\item چگالی جداپذیر روی ناحیه مستطیلی (حاصل‌ضربی) یعنی استقلال.
+\end{enumerate}
+\end{summarybox}
+
+\section{تمرین‌های تکمیلی}
+
+\begin{exercise}[نمایی‌های مستقل]
+$f(x,y)=ce^{-x-2y}$ برای $x,y\ge0$. (الف) $c$ را بیابید. (ب) آیا $X,Y$ مستقل‌اند؟ (ج) $\Prob(X<Y)$ را حساب کنید.
+\end{exercise}
+\begin{solution}
+(الف) جداپذیر روی ناحیه حاصل‌ضربی: $\int_0^\infty e^{-x}\dd x\int_0^\infty e^{-2y}\dd y=1\cdot\frac12$؛ پس $c=2$.
+(ب) بله: $f=\big(e^{-x}\big)\big(2e^{-2y}\big)$، یعنی $X\sim\mathrm{Exp}(1)$ و $Y\sim\mathrm{Exp}(2)$ مستقل.
+(ج) با فرمول مسابقه: $\frac{1}{1+2}=\frac13$. مستقیم: $\int_0^\infty e^{-x}\int_x^\infty2e^{-2y}\dd y\dd x=\int_0^\infty e^{-3x}\dd x=\frac13$.
+\end{solution}
+
+\begin{exercise}[تکیه‌گاه غیرمستطیلی]
+$f(x,y)=8xy$ برای $0<y<x<1$. (الف) نرمال بودن را بررسی و حاشیه‌ای‌ها را حساب کنید. (ب) با اینکه $8xy$ ظاهراً جداپذیر است، آیا $X,Y$ مستقل‌اند؟
+\end{exercise}
+\begin{solution}
+(الف) $\int_0^1\int_0^x8xy\dd y\dd x=\int_0^14x^3\dd x=1$. $f_X(x)=\int_0^x8xy\dd y=4x^3$ و $f_Y(y)=\int_y^18xy\dd x=4y(1-y^2)$.
+(ب) خیر: $f_X(x)f_Y(y)=16x^3y(1-y^2)\neq8xy$. دلیل عمیق‌تر: تکیه‌گاه مثلث است نه مستطیل؛ دانستن $X=0.2$ می‌گوید $Y<0.2$، پس $Y$ به $X$ وابسته است. چگالی در واقع $8xy\,\ind_{y<x}$ است و نشانگر $\ind_{y<x}$ جداپذیر نیست.
+\end{solution}
+
+\begin{exercise}[تغییر ترتیب]
+$\int_0^1\int_y^1\frac{\sin x}{x}\dd x\dd y$ را حساب کنید.
+\end{exercise}
+\begin{solution}
+$\frac{\sin x}{x}$ تابع اولیه مقدماتی ندارد. ناحیه $0\le y\le x\le1$؛ با برش عمودی ($x$ ثابت، $y$ از $0$ تا $x$):
+\[
+\int_0^1\!\!\int_0^x\frac{\sin x}{x}\dd y\dd x=\int_0^1\frac{\sin x}{x}\cdot x\dd x=\int_0^1\sin x\dd x=1-\cos1\approx0.460 .
+\]
+\end{solution}
+
+\begin{exercise}[ملاقات با ۱۰ دقیقه انتظار]
+در مسئله قرار ملاقات، اگر هر نفر ۱۰ دقیقه منتظر بماند، احتمال ملاقات چقدر است؟ به طور کلی با زمان انتظار $w$ (کسری از ساعت)؟
+\end{exercise}
+\begin{solution}
+$1-(1-w)^2$. برای $w=\frac16$: $1-\frac{25}{36}=\frac{11}{36}\approx0.306$.
+\end{solution}
+
+\begin{exercise}[نقطه یکنواخت در دایره]
+نقطه $(X,Y)$ به طور یکنواخت در دایره واحد انتخاب می‌شود (چگالی $\frac1\pi$). توزیع فاصله $R$ از مرکز و $\E R$ را بیابید.
+\end{exercise}
+\begin{solution}
+$\Prob(R\le r)=\frac{\pi r^2}{\pi}=r^2$ (نسبت مساحت‌ها)، پس $f_R(r)=2r$ برای $0\le r\le1$ و $\E R=\int_0^12r^2\dd r=\frac23$. توجه: $R$ یکنواخت نیست؛ نقاط دور از مرکز بیشترند، چون عنصر مساحت $r\dd r\dd\theta$ با $r$ رشد می‌کند.
+\end{solution}
+
+\begin{exercise}[نسبت دو گاوسی]
+$X,Y\sim\mathcal N(0,1)$ مستقل‌اند. با استفاده از یکنواخت بودن زاویه قطبی، نشان دهید $V=\frac YX$ توزیع کوشی دارد.
+\end{exercise}
+\begin{solution}
+$V=\frac{R\sin\Theta}{R\cos\Theta}=\tan\Theta$ با $\Theta\sim\mathcal U[0,2\pi)$. $\tan$ با دوره $\pi$ تکرار می‌شود، پس می‌توان $\Theta$ را یکنواخت روی $(-\frac\pi2,\frac\pi2)$ گرفت. آنگاه
+\[
+\Prob(V\le v)=\Prob(\Theta\le\arctan v)=\frac{\arctan v+\frac\pi2}{\pi}=\frac12+\frac{\arctan v}{\pi},
+\]
+که همان تابع توزیع کوشی (ریاضی ۱) است.
+\end{solution}
+
+\begin{exercise}[جمع و تفاضل دو یکنواخت]
+$X,Y\sim\mathcal U(0,1)$ مستقل، $U=X+Y$ و $V=X-Y$. چگالی مشترک $(U,V)$ و ناحیه آن را بیابید و از آن چگالی $U$ را به دست آورید.
+\end{exercise}
+\begin{solution}
+مانند مثال گاوسی، $|J|=\frac12$؛ پس $f_{U,V}=1\cdot\frac12=\frac12$ روی تصویر مربع. شرط‌های $0<x,y<1$ با $x=\frac{u+v}{2}$ و $y=\frac{u-v}{2}$ یعنی $|v|<u$ و $|v|<2-u$: یک \textbf{مربع چرخیده} (لوزی) با رئوس $(0,0)$، $(1,1)$، $(2,0)$ و $(1,-1)$. حاشیه‌ای: برای $0<u<1$، $v$ از $-u$ تا $u$، پس $f_U(u)=\frac12\cdot2u=u$؛ برای $1<u<2$، $v$ از $-(2-u)$ تا $2-u$، پس $f_U(u)=2-u$. همان توزیع مثلثی.
+\end{solution}

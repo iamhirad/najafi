@@ -1,0 +1,436 @@
+% ===============================================================
+%  جعبه‌ابزار ریاضی ۳
+% ===============================================================
+\chapter{سری‌ها، حد و تقریب، بهینه‌سازی و ماتریس‌ها}
+
+این بخش ابزارهای ریاضی غیرانتگرالی درس را مرور می‌کند: \textbf{مجموع‌ها و سری‌ها} (که در توزیع‌های گسسته جای انتگرال را می‌گیرند)، \textbf{حدهای مهم} (مثل حد پواسون و قضیه حد مرکزی)، \textbf{بسط تیلور و تقریب‌ها}، \textbf{تحدب و نامساوی‌ها} (ینسن و کوشی--شوارتز)، \textbf{بهینه‌سازی} (پایه \lr{MLE}، \lr{MAP} و تخمین \lr{MMSE}) و در پایان \textbf{بردار و ماتریس $2\times2$} برای کوواریانس و توزیع گاوسی دومتغیره. مانند دو بخش قبل، همه مثال‌ها از خود درس انتخاب شده‌اند.
+
+\section{نماد $\Sigma$ و مجموع‌های پایه}
+
+\subsection{قواعد}
+\[
+\sum_{k=1}^n(\alpha a_k+\beta b_k)=\alpha\sum_ka_k+\beta\sum_kb_k,\qquad
+\sum_{i=1}^n\sum_{j=1}^ma_ib_j=\Big(\sum_ia_i\Big)\Big(\sum_jb_j\Big),
+\]
+\[
+\Big(\sum_{i=1}^na_i\Big)^2=\sum_{i=1}^na_i^2+2\sum_{i<j}a_ia_j .
+\]
+قاعده آخر (بسط مربع مجموع) دلیل فرمول واریانس مجموع است: $\Var\big(\sum_iX_i\big)=\sum_i\Var X_i+2\sum_{i<j}\Cov(X_i,X_j)$. تعداد جملات $\sum_{i<j}$ برابر $\binom n2=\frac{n(n-1)}{2}$ است.
+
+\subsection{مجموع‌های حسابی}
+\[
+\sum_{k=1}^nk=\frac{n(n+1)}{2},\qquad\sum_{k=1}^nk^2=\frac{n(n+1)(2n+1)}{6}.
+\]
+\textbf{اثبات اولی (ترفند گاوس):} مجموع را یک بار از ابتدا و یک بار از انتها بنویسید و جمع کنید: هر جفت $k+(n+1-k)=n+1$ است و $n$ جفت داریم؛ پس $2S=n(n+1)$. (دومی با استقرا ثابت می‌شود.)
+
+\begin{example}[توزیع یکنواخت گسسته]
+$X$ با احتمال برابر یکی از اعداد $1,2,\ldots,n$ است (مانند کارت‌های جعبه در جلسه ۲۱). $\E X$ و $\Var X$ را بیابید.
+\begin{solution}
+\[
+\E X=\frac1n\sum_{k=1}^nk=\frac{n+1}{2},\qquad\E X^2=\frac1n\sum_{k=1}^nk^2=\frac{(n+1)(2n+1)}{6},
+\]
+\[
+\Var X=\frac{(n+1)(2n+1)}{6}-\frac{(n+1)^2}{4}=\frac{(n+1)\big[2(2n+1)-3(n+1)\big]}{12}=\frac{(n+1)(n-1)}{12}=\frac{n^2-1}{12}.
+\]
+(مقایسه کنید با $\frac{(b-a)^2}{12}$ برای یکنواخت پیوسته.)
+\end{solution}
+\end{example}
+
+\section{سری هندسی و مشتق آن}
+
+\begin{theorem}[سری هندسی]
+\[
+\sum_{k=0}^{n-1}r^k=\frac{1-r^n}{1-r}\ \ (r\neq1),\qquad\sum_{k=0}^{\infty}r^k=\frac{1}{1-r}\ \ (|r|<1).
+\]
+\end{theorem}
+\begin{proof}
+اگر $S=1+r+\cdots+r^{n-1}$، آنگاه $rS=r+r^2+\cdots+r^n$. با تفریق، همه جملات میانی حذف می‌شوند: $S-rS=1-r^n$. برای $|r|<1$، $r^n\to0$.
+\end{proof}
+
+\textbf{ترفند مشتق‌گیری.} درون شعاع همگرایی می‌توان سری توانی را جمله به جمله مشتق گرفت:
+\[
+\sum_{k=1}^\infty kr^{k-1}=\frac{\dd}{\dd r}\frac{1}{1-r}=\frac{1}{(1-r)^2},\qquad
+\sum_{k=2}^\infty k(k-1)r^{k-2}=\frac{\dd^2}{\dd r^2}\frac{1}{1-r}=\frac{2}{(1-r)^3}.
+\]
+
+\begin{example}[میانگین و واریانس توزیع هندسی]
+$P(X=k)=(1-p)^{k-1}p$ برای $k=1,2,\ldots$ (تعداد پرتاب تا اولین موفقیت). نرمال بودن، $\E X$ و $\Var X$ را ثابت کنید. ($q=1-p$.)
+\begin{solution}
+\textbf{نرمال بودن:} $\sum_{k\ge1}q^{k-1}p=p\cdot\frac{1}{1-q}=\frac pp=1$.
+
+\textbf{میانگین:} $\E X=p\sum_{k\ge1}kq^{k-1}=p\cdot\frac{1}{(1-q)^2}=\frac{p}{p^2}=\frac1p$.
+
+\textbf{گشتاور فاکتوریلی:} $\E[X(X-1)]=p\sum_{k\ge2}k(k-1)q^{k-1}=pq\sum_{k\ge2}k(k-1)q^{k-2}=pq\cdot\frac{2}{p^3}=\frac{2q}{p^2}$.
+
+\textbf{واریانس:} $\E X^2=\E[X(X-1)]+\E X=\frac{2q}{p^2}+\frac1p$، پس
+\[
+\Var X=\frac{2q}{p^2}+\frac1p-\frac1{p^2}=\frac{2q+p-1}{p^2}=\frac{q}{p^2}=\frac{1-p}{p^2}.
+\]
+چرا $\E[X(X-1)]$؟ چون $k(k-1)$ دقیقاً همان چیزی است که مشتق دوم $r^k$ پایین می‌آورد؛ این ترفند برای پواسون و دوجمله‌ای هم کار می‌کند.
+\end{solution}
+\end{example}
+
+\section{سری نمایی و قضیه دوجمله‌ای}
+
+\begin{theorem}[دو سری کلیدی]
+\[
+e^\lambda=\sum_{k=0}^\infty\frac{\lambda^k}{k!}\quad(\text{هر}\ \lambda),\qquad
+(a+b)^n=\sum_{k=0}^n\binom nka^kb^{n-k}.
+\]
+\end{theorem}
+اولی بسط تیلور $e^x$ (بخش بعد) و دومی قضیه دوجمله‌ای است (هر جمله حاصل‌ضرب، از هر یک از $n$ پرانتز یا $a$ یا $b$ را برمی‌دارد؛ $\binom nk$ تعداد راه‌های انتخاب $k$ پرانتز برای $a$ است).
+
+\begin{example}[پواسون: نرمال بودن، میانگین، واریانس و \lr{MGF}]
+$P(X=k)=e^{-\lambda}\frac{\lambda^k}{k!}$ برای $k=0,1,\ldots$
+\begin{solution}
+\textbf{نرمال بودن:} $e^{-\lambda}\sum_k\frac{\lambda^k}{k!}=e^{-\lambda}e^\lambda=1$.
+
+\textbf{میانگین} (با ساده کردن $k$ با $k!$ و جابه‌جایی اندیس $j=k-1$):
+\[
+\E X=e^{-\lambda}\sum_{k\ge1}k\frac{\lambda^k}{k!}=e^{-\lambda}\sum_{k\ge1}\frac{\lambda^k}{(k-1)!}=\lambda e^{-\lambda}\sum_{j\ge0}\frac{\lambda^j}{j!}=\lambda .
+\]
+\textbf{واریانس:} به همین ترتیب $\E[X(X-1)]=\lambda^2e^{-\lambda}\sum_{j\ge0}\frac{\lambda^j}{j!}=\lambda^2$؛ پس $\Var X=\lambda^2+\lambda-\lambda^2=\lambda$.
+
+\textbf{\lr{MGF}:} $\E e^{tX}=e^{-\lambda}\sum_k\frac{(\lambda e^t)^k}{k!}=e^{-\lambda}e^{\lambda e^t}=e^{\lambda(e^t-1)}$.
+\end{solution}
+\end{example}
+
+\begin{example}[جمع دو پواسون مستقل]
+اگر $X\sim\mathrm{Poisson}(\lambda)$ و $Y\sim\mathrm{Poisson}(\mu)$ مستقل باشند، نشان دهید $X+Y\sim\mathrm{Poisson}(\lambda+\mu)$.
+\begin{solution}
+با کانولوشن گسسته (جلسه ۱۶) و قضیه دوجمله‌ای:
+\[
+\Prob(X+Y=n)=\sum_{k=0}^ne^{-\lambda}\frac{\lambda^k}{k!}e^{-\mu}\frac{\mu^{n-k}}{(n-k)!}=\frac{e^{-(\lambda+\mu)}}{n!}\sum_{k=0}^n\binom nk\lambda^k\mu^{n-k}=e^{-(\lambda+\mu)}\frac{(\lambda+\mu)^n}{n!}.
+\]
+(در قدم دوم در $\frac{n!}{n!}$ ضرب کردیم تا $\binom nk=\frac{n!}{k!(n-k)!}$ ظاهر شود.)
+\end{solution}
+\end{example}
+
+\section{حدهای مهم}
+
+\subsection{حد نمایی}
+\begin{theorem}[حد نمایی]
+برای هر $x$: $\displaystyle\lim_{n\to\infty}\Big(1+\frac xn\Big)^n=e^x$؛ و به طور کلی اگر $x_n\to x$، آنگاه $\big(1+\frac{x_n}{n}\big)^n\to e^x$.
+\end{theorem}
+\begin{proof}
+لگاریتم می‌گیریم: $n\ln\big(1+\frac xn\big)$. با تقریب $\ln(1+u)=u+O(u^2)$ برای $u$ کوچک (بخش تیلور): $n\big(\frac xn+O(\frac1{n^2})\big)=x+O(\frac1n)\to x$. چون $e^{(\cdot)}$ پیوسته است، حد خود عبارت $e^x$ است.
+\end{proof}
+
+\begin{example}[حد پواسون برای دوجمله‌ای]
+نشان دهید اگر $p=\frac\lambda n$، آنگاه برای $k$ ثابت: $\binom nkp^k(1-p)^{n-k}\to e^{-\lambda}\frac{\lambda^k}{k!}$.
+\begin{solution}
+عبارت را به سه عامل می‌شکنیم:
+\[
+\binom nk\frac{\lambda^k}{n^k}\Big(1-\frac\lambda n\Big)^{n}\Big(1-\frac\lambda n\Big)^{-k}
+=\frac{\lambda^k}{k!}\cdot\underbrace{\frac{n(n-1)\cdots(n-k+1)}{n^k}}_{\to1}\cdot\underbrace{\Big(1-\frac\lambda n\Big)^n}_{\to e^{-\lambda}}\cdot\underbrace{\Big(1-\frac\lambda n\Big)^{-k}}_{\to1}.
+\]
+عامل دوم حاصل‌ضرب $k$ کسر $\frac nn,\frac{n-1}{n},\ldots$ است که هر کدام (با $k$ ثابت) به ۱ میل می‌کند. عامل سوم طبق حد نمایی با $x=-\lambda$.
+\end{solution}
+\end{example}
+
+\subsection{قاعده هوپیتال و سلسله‌مراتب رشد}
+اگر $\frac{f(x)}{g(x)}$ به شکل $\frac00$ یا $\frac\infty\infty$ باشد، $\lim\frac{f}{g}=\lim\frac{f'}{g'}$ (اگر حد دوم وجود داشته باشد). نتیجه‌های پرکاربرد:
+\[
+\lim_{x\to\infty}x^ne^{-x}=0,\qquad\lim_{x\to\infty}\frac{\ln x}{x^a}=0\ (a>0),\qquad\lim_{x\to0^+}x\ln x=0 .
+\]
+(سومی دلیل قرارداد $0\log0=0$ در آنتروپی است: $x\ln x=\frac{\ln x}{1/x}$ و با هوپیتال $\frac{1/x}{-1/x^2}=-x\to0$.) سلسله‌مراتب رشد برای $n\to\infty$:
+\[
+\ln n\ \ll\ n^a\ \ll\ e^{bn}\ \ll\ n!\ \ll\ n^n\qquad(a,b>0).
+\]
+
+\subsection{تقریب استرلینگ}
+\[
+n!\approx\sqrt{2\pi n}\Big(\frac ne\Big)^n\qquad(\text{نسبت دو طرف به ۱ میل می‌کند}).
+\]
+\begin{example}[احتمال دقیقاً نصف شیر]
+با استرلینگ، $\Prob(\text{دقیقاً}\ n\ \text{شیر در}\ 2n\ \text{پرتاب})=\binom{2n}{n}4^{-n}$ را تقریب بزنید.
+\begin{solution}
+\[
+\binom{2n}{n}=\frac{(2n)!}{(n!)^2}\approx\frac{\sqrt{4\pi n}(2n/e)^{2n}}{2\pi n\,(n/e)^{2n}}=\frac{4^n}{\sqrt{\pi n}}
+\quad\Rightarrow\quad\binom{2n}{n}4^{-n}\approx\frac{1}{\sqrt{\pi n}} .
+\]
+برای $n=10$: مقدار دقیق $0.1762$ و تقریب $0.1784$. نکته: با زیاد شدن پرتاب‌ها، احتمال «دقیقاً نصف» به صفر میل می‌کند (مانند $\frac1{\sqrt n}$)، هرچند نسبت شیرها به $\frac12$ میل می‌کند (قانون اعداد بزرگ).
+\end{solution}
+\end{example}
+
+\section{بسط تیلور و تقریب‌ها}
+\begin{theorem}[بسط تیلور]
+برای تابع به‌اندازه کافی مشتق‌پذیر، حول نقطه $a$:
+\[
+f(x)=f(a)+f'(a)(x-a)+\frac{f''(a)}{2}(x-a)^2+\cdots+\frac{f^{(k)}(a)}{k!}(x-a)^k+o\big((x-a)^k\big).
+\]
+\end{theorem}
+\textbf{شهود:} نزدیک $a$، تابع را با چندجمله‌ای‌ای تقریب می‌زنیم که مقدار، شیب، انحنا و \ldots{} آن در $a$ با تابع یکی باشد. هرچه جملات بیشتر، تقریب در بازه بزرگ‌تری خوب است.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.6}
+\begin{tabular}{c|c}
+تابع (حول $0$) & بسط\\\hline
+$e^x$ & $1+x+\frac{x^2}{2}+\frac{x^3}{6}+\cdots$\\
+$\ln(1+x)$ & $x-\frac{x^2}{2}+\frac{x^3}{3}-\cdots\quad(|x|<1)$\\
+$(1+x)^a$ & $1+ax+\frac{a(a-1)}{2}x^2+\cdots$\\
+$\frac{1}{1-x}$ & $1+x+x^2+\cdots\quad(|x|<1)$
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tikzpicture}
+\end{tikzpicture}\\
+{\small تابع $e^x$ و چندجمله‌ای‌های تیلور آن از درجه ۱، ۲ و ۳ حول صفر. نزدیک صفر همه تقریب‌ها خوب‌اند؛ با دور شدن، جملات بیشتری لازم است.}
+\end{center}
+
+\begin{example}[مسئله روز تولد با تقریب نمایی]
+احتمال اینکه در گروهی $n$ نفره هیچ دو نفری روز تولد یکسان نداشته باشند $\prod_{k=1}^{n-1}\big(1-\frac{k}{365}\big)$ است. آن را برای $n=23$ تقریب بزنید.
+\begin{solution}
+با $1-x\approx e^{-x}$ برای $x$ کوچک (بسط تیلور درجه ۱):
+\[
+\prod_{k=1}^{n-1}\Big(1-\frac{k}{365}\Big)\approx\exp\Big(-\sum_{k=1}^{n-1}\frac{k}{365}\Big)=\exp\Big(-\frac{n(n-1)}{730}\Big).
+\]
+برای $n=23$: $\exp(-\frac{506}{730})=e^{-0.693}\approx0.50$ (مقدار دقیق $0.493$). پس با فقط ۲۳ نفر، احتمال وجود دو تولد یکسان حدود ۵۰٪ است. (در واقع $1-x\le e^{-x}$ همیشه برقرار است؛ بخش تحدب.)
+\end{solution}
+\end{example}
+
+\begin{example}[روش دلتا]
+اگر $X$ حول $\mu$ متمرکز باشد (واریانس کوچک)، با تیلور درجه ۱:
+\[
+g(X)\approx g(\mu)+g'(\mu)(X-\mu)\quad\Rightarrow\quad\E g(X)\approx g(\mu),\qquad\Var g(X)\approx g'(\mu)^2\Var X .
+\]
+آن را برای واریانس تخمین $\hat\lambda=\frac{1}{\bar X_n}$ (نمونه‌های $\mathrm{Exp}(\lambda)$) به کار ببرید.
+\begin{solution}
+$g(x)=\frac1x$، $\mu=\E\bar X_n=\frac1\lambda$ و $\Var\bar X_n=\frac{1}{n\lambda^2}$. $g'(\mu)=-\frac{1}{\mu^2}=-\lambda^2$؛ پس
+\[
+\Var\hat\lambda\approx\lambda^4\cdot\frac{1}{n\lambda^2}=\frac{\lambda^2}{n},
+\]
+که دقیقاً کران کرامر--رائو $\frac{1}{nI(\lambda)}$ با $I(\lambda)=\frac{1}{\lambda^2}$ است (جلسه ۲۱): \lr{MLE} مجانباً کاراست.
+\end{solution}
+\end{example}
+
+\begin{example}[اسکلت اثبات قضیه حد مرکزی با تیلور]
+اگر $X_i$ مستقل با میانگین ۰ و واریانس ۱ باشند و $Z_n=\frac{1}{\sqrt n}\sum_iX_i$، نشان دهید $M_{Z_n}(t)\to e^{t^2/2}$ (تابع مولد گشتاور $\mathcal N(0,1)$).
+\begin{solution}
+به دلیل استقلال، \lr{MGF} مجموع حاصل‌ضرب است: $M_{Z_n}(t)=M\big(\frac{t}{\sqrt n}\big)^n$. بسط تیلور $M$ حول صفر (با $M(0)=1$، $M'(0)=\E X=0$، $M''(0)=\E X^2=1$):
+\[
+M(s)=1+0\cdot s+\frac{s^2}{2}+o(s^2)\quad\Rightarrow\quad M\Big(\frac{t}{\sqrt n}\Big)^n=\Big(1+\frac{t^2/2+o(1)}{n}\Big)^n\to e^{t^2/2},
+\]
+طبق حد نمایی (نسخه $x_n\to x$). این همان دلیل «جهانی» بودن توزیع گاوسی است: فقط دو گشتاور اول در حد باقی می‌مانند.
+\end{solution}
+\end{example}
+
+\section{تحدب و نامساوی‌ها}
+
+\subsection{توابع محدب}
+تابع $f$ \textbf{محدب} است اگر برای هر دو نقطه، وتر میان آن‌ها بالای نمودار باشد. برای توابع دوبار مشتق‌پذیر معادل است با $f''\ge0$. دو ویژگی هندسی:
+\begin{itemize}
+\item \textbf{وتر بالای نمودار:} $f\big(tx+(1-t)y\big)\le tf(x)+(1-t)f(y)$ برای $t\in[0,1]$.
+\item \textbf{مماس زیر نمودار:} $f(x)\ge f(a)+f'(a)(x-a)$ برای هر $a$ و $x$.
+\end{itemize}
+مثال‌ها: $x^2$، $e^x$، $\frac1x$ (برای $x>0$) و $-\ln x$ محدب‌اند؛ $\ln x$ و $\sqrt x$ \textbf{مقعر}اند (منفیشان محدب است). نامساوی $1-x\le e^{-x}$ همان «مماس زیر نمودار» برای $e^{-x}$ در $a=0$ است، و $\ln x\le x-1$ همان «مماس بالای نمودار» برای تابع مقعر $\ln$ در $a=1$.
+
+\begin{theorem}[نامساوی ینسن]
+اگر $f$ محدب باشد: $\E f(X)\ge f(\E X)$. اگر مقعر باشد، جهت نامساوی برعکس است.
+\end{theorem}
+\begin{proof}
+مماس در $a=\mu=\E X$: برای هر مقدار $X$، $f(X)\ge f(\mu)+f'(\mu)(X-\mu)$. از دو طرف امید می‌گیریم؛ چون $\E(X-\mu)=0$: $\E f(X)\ge f(\mu)$.
+\end{proof}
+
+\begin{center}
+\begin{tikzpicture}
+\end{tikzpicture}\\
+{\small نامساوی ینسن برای متغیری که دو مقدار $x_1$ و $x_2$ را با احتمال برابر می‌گیرد: $\E f(X)$ وسط وتر (بالا) و $f(\E X)$ نقطه روی منحنی (پایین) است؛ در تابع محدب، وتر همیشه بالای منحنی است.}
+\end{center}
+
+\textbf{کاربردهای درس:}
+\begin{itemize}
+\item $f(x)=x^2$: $\E X^2\ge(\E X)^2$، یعنی $\Var X\ge0$.
+\item $f(x)=\sqrt x$ (مقعر): $\E\sqrt W\le\sqrt{\E W}$؛ دلیل گرایش $\hat\sigma_\ML$ به سمت پایین (جلسه ۲۱).
+\item $f(x)=\frac1x$ (محدب): $\E\frac{1}{\bar X_n}\ge\frac{1}{\E\bar X_n}=\lambda$؛ دلیل گرایش \lr{MLE} نمایی به سمت بالا.
+\item $f(x)=e^{x}$: $\E e^{tX}\ge e^{t\E X}$؛ یعنی $M_X(t)\ge e^{t\mu}$.
+\end{itemize}
+
+\begin{theorem}[نامساوی کوشی--شوارتز]
+$\big(\E XY\big)^2\le\E X^2\,\E Y^2$؛ و در نتیجه $|\Cov(X,Y)|\le\sigma_X\sigma_Y$، یعنی $|\rho_{XY}|\le1$.
+\end{theorem}
+\begin{proof}
+برای هر عدد $t$: $0\le\E(X-tY)^2=\E X^2-2t\E XY+t^2\E Y^2$. این یک چندجمله‌ای درجه دوم نامنفی برحسب $t$ است؛ پس نمی‌تواند دو ریشه حقیقی متمایز داشته باشد و مبین آن نامثبت است: $4(\E XY)^2-4\E X^2\E Y^2\le0$. با اعمال این نتیجه بر $X-\mu_X$ و $Y-\mu_Y$، حکم کوواریانس به دست می‌آید. تساوی وقتی است که $X-tY$ با احتمال ۱ صفر باشد، یعنی رابطه خطی (جلسه ۱۵).
+\end{proof}
+
+\begin{example}[نامنفی بودن واگرایی کولبک--لایبلر]
+برای دو توزیع گسسته $p$ و $q$، نشان دهید $D(p\|q)=\sum_xp(x)\ln\frac{p(x)}{q(x)}\ge0$ (جلسه ۲۶).
+\begin{solution}
+با $\ln u\le u-1$:
+\[
+-D(p\|q)=\sum_xp(x)\ln\frac{q(x)}{p(x)}\le\sum_xp(x)\Big(\frac{q(x)}{p(x)}-1\Big)=\sum_xq(x)-\sum_xp(x)\le1-1=0 .
+\]
+(جمع روی نقاطی با $p(x)>0$ است؛ پس $\sum q\le1$.) تساوی فقط وقتی است که $q=p$.
+\end{solution}
+\end{example}
+
+\section{بهینه‌سازی}
+
+\subsection{یک متغیر}
+برای یافتن بیشینه (یا کمینه) سراسری $f$ روی یک بازه:
+\begin{enumerate}
+\item \textbf{نقاط بحرانی:} جواب‌های $f'(x)=0$.
+\item \textbf{آزمون مشتق دوم:} اگر $f''(x^*)<0$ بیشینه محلی و اگر $f''(x^*)>0$ کمینه محلی است.
+\item \textbf{مرزها و نقاط مشتق‌ناپذیر} را جداگانه بررسی کنید (مثل $\mathcal U(0,\theta)$ در جلسه ۲۲ که بیشینه روی ناپیوستگی بود).
+\item اگر $f$ روی کل بازه \textbf{مقعر} باشد، هر نقطه بحرانی، بیشینه \textbf{سراسری} است.
+\end{enumerate}
+\textbf{تبدیل یکنوا:} اگر $h$ اکیداً صعودی باشد، $\argmax f=\argmax h(f)$. به همین دلیل به جای درست‌نمایی، لگاریتم آن را بیشینه می‌کنیم (حاصل‌ضرب به مجموع تبدیل می‌شود).
+
+\begin{example}[\lr{MLE} برنولی با همه جزئیات]
+در $n$ پرتاب، $k$ شیر دیده‌ایم. $L(p)=p^k(1-p)^{n-k}$ را روی $[0,1]$ بیشینه کنید.
+\begin{solution}
+\textbf{حالت میانی} ($0<k<n$): $LL(p)=k\ln p+(n-k)\ln(1-p)$.
+\[
+LL'(p)=\frac kp-\frac{n-k}{1-p}=0\iff k(1-p)=(n-k)p\iff p=\frac kn .
+\]
+$LL''(p)=-\frac{k}{p^2}-\frac{n-k}{(1-p)^2}<0$ همه جا؛ پس $LL$ مقعر است و $\hat p=\frac kn$ بیشینه سراسری است.
+
+\textbf{حالت‌های مرزی:} اگر $k=0$، $L(p)=(1-p)^n$ نزولی است و بیشینه در مرز $p=0$؛ اگر $k=n$، $L=p^n$ صعودی و بیشینه در $p=1$. در هر دو حالت هم $\hat p=\frac kn$ (ولی از مرز به دست آمد، نه از مشتق صفر؛ چون $\ln0$ تعریف نشده است).
+\end{solution}
+\end{example}
+
+\subsection{چند متغیر: گرادیان و ماتریس هسین}
+برای $f(x,y)$: \textbf{مشتق جزئی} $\frac{\partial f}{\partial x}$ یعنی مشتق نسبت به $x$ با ثابت گرفتن $y$. نقاط بحرانی جایی‌اند که \textbf{گرادیان} صفر است: $\frac{\partial f}{\partial x}=\frac{\partial f}{\partial y}=0$. برای تشخیص نوع نقطه، \textbf{ماتریس هسین}:
+\[
+H=\begin{bmatrix}f_{xx}&f_{xy}\\f_{xy}&f_{yy}\end{bmatrix},\qquad
+\begin{cases}
+f_{xx}<0\ \text{و}\ \det H>0 & \Rightarrow\ \text{بیشینه محلی}\\
+f_{xx}>0\ \text{و}\ \det H>0 & \Rightarrow\ \text{کمینه محلی}\\
+\det H<0 & \Rightarrow\ \text{نقطه زینی}
+\end{cases}
+\]
+
+\begin{example}[بهترین تخمین‌گر خطی (جلسه ۲۰)]
+$a$ و $b$ را طوری بیابید که $g(a,b)=\E\big(Y-aX-b\big)^2$ کمینه شود.
+\begin{solution}
+با بسط و خطی بودن امید، $g$ یک چندجمله‌ای درجه دوم برحسب $a,b$ است. مشتق‌های جزئی (مشتق را از داخل امید عبور می‌دهیم):
+\[
+\frac{\partial g}{\partial b}=-2\E(Y-aX-b)=0\ \Rightarrow\ b=\E Y-a\E X,
+\]
+\[
+\frac{\partial g}{\partial a}=-2\E\big[X(Y-aX-b)\big]=0\ \Rightarrow\ \E XY-a\E X^2-b\E X=0 .
+\]
+با جایگذاری $b$: $\E XY-\E X\E Y=a\big(\E X^2-(\E X)^2\big)$، یعنی
+\[
+a=\frac{\Cov(X,Y)}{\Var X},\qquad b=\E Y-a\E X .
+\]
+\textbf{هسین:} $g_{aa}=2\E X^2$، $g_{bb}=2$، $g_{ab}=2\E X$؛ $\det H=4\big(\E X^2-(\E X)^2\big)=4\Var X>0$ و $g_{aa}>0$؛ پس کمینه است.
+\end{solution}
+\end{example}
+
+\subsection{بهینه‌سازی مقید: ضرایب لاگرانژ}
+برای بیشینه کردن $f(\mathbf p)$ با قید $g(\mathbf p)=c$: در نقطه بهینه، گرادیان $f$ موازی گرادیان قید است، $\nabla f=\lambda\nabla g$. عملاً تابع $\mathcal L=f-\lambda(g-c)$ را می‌سازیم و مشتق‌های جزئی آن را (نسبت به همه متغیرها) صفر می‌کنیم. شهود: اگر $\nabla f$ مؤلفه‌ای در امتداد سطح قید داشت، می‌شد با حرکت روی قید $f$ را بیشتر کرد.
+
+\begin{example}[\lr{MLE} توزیع دسته‌ای]
+نتیجه $n$ آزمایش مستقل با $k$ نتیجه ممکن، شمارش‌های $x_1,\ldots,x_k$ ($\sum x_i=n$) است. \lr{MLE} احتمال‌ها $p_1,\ldots,p_k$ را با قید $\sum p_i=1$ بیابید.
+\begin{solution}
+$LL=\sum_ix_i\ln p_i$. لاگرانژی: $\mathcal L=\sum_ix_i\ln p_i-\lambda\big(\sum_ip_i-1\big)$.
+\[
+\frac{\partial\mathcal L}{\partial p_i}=\frac{x_i}{p_i}-\lambda=0\ \Rightarrow\ p_i=\frac{x_i}{\lambda}.
+\]
+با قید: $\sum_i\frac{x_i}{\lambda}=\frac n\lambda=1$، پس $\lambda=n$ و $\hat p_i=\frac{x_i}{n}$: نسبت‌های مشاهده‌شده (تعمیم \lr{MLE} برنولی). بدون قید، $LL$ با بزرگ کردن همه $p_i$ بی‌نهایت می‌شد؛ قید است که جواب را معنادار می‌کند.
+\end{solution}
+\end{example}
+
+\section{بردار و ماتریس $2\times2$}
+
+\subsection{مرور}
+برای ماتریس $A=\begin{bmatrix}a&b\\c&d\end{bmatrix}$:
+\[
+\det A=ad-bc,\qquad A^{-1}=\frac{1}{ad-bc}\begin{bmatrix}d&-b\\-c&a\end{bmatrix}\quad(\det A\neq0),\qquad A^T=\begin{bmatrix}a&c\\b&d\end{bmatrix}.
+\]
+(وارون: قطر اصلی جابه‌جا، قطر فرعی قرینه، تقسیم بر دترمینان؛ با ضرب در $A$ بررسی کنید.) \textbf{شکل درجه دوم} یک بردار $\mathbf x=(x_1,x_2)^T$:
+\[
+\mathbf x^TA\mathbf x=ax_1^2+(b+c)x_1x_2+dx_2^2 .
+\]
+ماتریس متقارن $A$ \textbf{معین مثبت} است اگر $\mathbf x^TA\mathbf x>0$ برای هر $\mathbf x\neq0$؛ برای $2\times2$ معادل است با $a>0$ و $\det A>0$ (همان آزمون هسین برای کمینه).
+
+\subsection{ماتریس کوواریانس}
+برای بردار تصادفی $\mathbf X=(X,Y)^T$:
+\[
+\Sigma=\begin{bmatrix}\sigma_X^2&\rho\sigma_X\sigma_Y\\\rho\sigma_X\sigma_Y&\sigma_Y^2\end{bmatrix},\qquad\det\Sigma=\sigma_X^2\sigma_Y^2(1-\rho^2).
+\]
+\begin{itemize}
+\item $\Sigma$ متقارن و نیمه‌معین مثبت است: برای هر بردار ثابت $\mathbf a$، $\Var(\mathbf a^T\mathbf X)=\mathbf a^T\Sigma\mathbf a\ge0$. (اثبات دیگری برای $|\rho|\le1$: $\det\Sigma\ge0$.)
+\item \textbf{تبدیل خطی:} اگر $\mathbf Y=A\mathbf X$، آنگاه $\E\mathbf Y=A\E\mathbf X$ و $\mathrm{Cov}(\mathbf Y)=A\Sigma A^T$.
+\end{itemize}
+
+\begin{example}[کوواریانس جمع و تفاضل]
+اگر $\Sigma=\begin{bmatrix}\sigma^2&0\\0&\sigma^2\end{bmatrix}$ و $U=X+Y$، $V=X-Y$، ماتریس کوواریانس $(U,V)$ را بیابید.
+\begin{solution}
+$A=\begin{bmatrix}1&1\\1&-1\end{bmatrix}$ و
+\[
+A\Sigma A^T=\sigma^2AA^T=\sigma^2\begin{bmatrix}1&1\\1&-1\end{bmatrix}\begin{bmatrix}1&1\\1&-1\end{bmatrix}=\sigma^2\begin{bmatrix}2&0\\0&2\end{bmatrix}.
+\]
+پس $\Var U=\Var V=2\sigma^2$ و $\Cov(U,V)=0$ (سازگار با مثال ژاکوبین در ریاضی ۲).
+\end{solution}
+\end{example}
+
+\subsection{چگالی گاوسی دومتغیره به شکل ماتریسی}
+\[
+f(\mathbf x)=\frac{1}{2\pi\sqrt{\det\Sigma}}\exp\Big(-\frac12(\mathbf x-\boldsymbol\mu)^T\Sigma^{-1}(\mathbf x-\boldsymbol\mu)\Big).
+\]
+برای دیدن هم‌ارزی با فرم اسکالر جلسه ۱۴، $\Sigma^{-1}$ را با فرمول وارون $2\times2$ حساب می‌کنیم:
+\[
+\Sigma^{-1}=\frac{1}{\sigma_X^2\sigma_Y^2(1-\rho^2)}\begin{bmatrix}\sigma_Y^2&-\rho\sigma_X\sigma_Y\\-\rho\sigma_X\sigma_Y&\sigma_X^2\end{bmatrix}.
+\]
+با نماد $u=\frac{x-\mu_X}{\sigma_X}$ و $v=\frac{y-\mu_Y}{\sigma_Y}$، شکل درجه دوم برابر است با
+\[
+(\mathbf x-\boldsymbol\mu)^T\Sigma^{-1}(\mathbf x-\boldsymbol\mu)=\frac{u^2-2\rho uv+v^2}{1-\rho^2},
+\]
+و $2\pi\sqrt{\det\Sigma}=2\pi\sigma_X\sigma_Y\sqrt{1-\rho^2}$؛ دقیقاً فرم آشنای جلسه ۱۴. برای $\rho=0$، ماتریس قطری و چگالی حاصل‌ضرب دو گاوسی است (استقلال).
+
+\section{تمرین‌های تکمیلی}
+
+\begin{exercise}[زوج بودن در هندسی و پواسون]
+احتمال زوج بودن $X$ را برای (الف) $X$ هندسی با پارامتر $p$ و (ب) $X$ پواسون با پارامتر $\lambda$ بیابید.
+\end{exercise}
+\begin{solution}
+(الف) $\sum_{j\ge1}q^{2j-1}p=pq\sum_{j\ge0}(q^2)^j=\frac{pq}{1-q^2}=\frac{pq}{(1-q)(1+q)}=\frac{q}{1+q}=\frac{1-p}{2-p}$.
+(ب) با $e^\lambda+e^{-\lambda}=2\sum_{k\ \text{زوج}}\frac{\lambda^k}{k!}$ (جملات فرد حذف می‌شوند): $\Prob(\text{زوج})=e^{-\lambda}\cdot\frac{e^\lambda+e^{-\lambda}}{2}=\frac{1+e^{-2\lambda}}{2}$.
+\end{solution}
+
+\begin{exercise}[نمونه‌گیری با جایگذاری و عدد $1/e$]
+از $n$ شیء، $n$ بار با جایگذاری به تصادف انتخاب می‌کنیم. احتمال اینکه یک شیء مشخص هرگز انتخاب نشود چقدر است و وقتی $n\to\infty$ به چه میل می‌کند؟
+\end{exercise}
+\begin{solution}
+$\big(1-\frac1n\big)^n\to e^{-1}\approx0.368$ (حد نمایی با $x=-1$). برای $n=100$: $0.366$. پس به طور متوسط حدود ۶۳٫۲٪ اشیا حداقل یک بار انتخاب می‌شوند (پایه روش \lr{bootstrap}).
+\end{solution}
+
+\begin{exercise}[استرلینگ برای ۱۰۰ پرتاب]
+احتمال دقیقاً ۵۰ شیر در ۱۰۰ پرتاب سکه سالم را با استرلینگ تقریب بزنید.
+\end{exercise}
+\begin{solution}
+با $n=50$: $\frac{1}{\sqrt{50\pi}}=0.0798$؛ مقدار دقیق $0.0796$.
+\end{solution}
+
+\begin{exercise}[پایدارسازی واریانس]
+برای میانگین $n$ نمونه پواسون با پارامتر $\lambda$، با روش دلتا $\Var\sqrt{\bar X_n}$ را تقریب بزنید.
+\end{exercise}
+\begin{solution}
+$g(x)=\sqrt x$، $g'(\lambda)=\frac{1}{2\sqrt\lambda}$ و $\Var\bar X_n=\frac\lambda n$: $\Var\sqrt{\bar X_n}\approx\frac{1}{4\lambda}\cdot\frac{\lambda}{n}=\frac{1}{4n}$. جالب اینکه به $\lambda$ وابسته نیست؛ به همین دلیل تبدیل جذر را «پایدارساز واریانس» داده‌های شمارشی می‌نامند.
+\end{solution}
+
+\begin{exercise}[بیشینه واریانس برنولی]
+با ضرایب لاگرانژ، $xy$ را با قید $x+y=1$ ($x,y\ge0$) بیشینه کنید و نتیجه را برای $\Var$ برنولی تفسیر کنید.
+\end{exercise}
+\begin{solution}
+$\mathcal L=xy-\lambda(x+y-1)$: $y=\lambda$ و $x=\lambda$؛ با قید $x=y=\frac12$ و بیشینه $\frac14$. چون $\Var X=p(1-p)$ با $x=p$ و $y=1-p$، بیشترین واریانس برنولی $\frac14$ در $p=\frac12$ است (کران مورد استفاده در نظرسنجی‌های جلسه ۲۳).
+\end{solution}
+
+\begin{exercise}[ماتریس کوواریانس]
+$\Sigma=\begin{bmatrix}4&2\\2&9\end{bmatrix}$. (الف) $\rho$، (ب) $\Var(X-Y)$ و (ج) $\Sigma^{-1}$ را بیابید.
+\end{exercise}
+\begin{solution}
+(الف) $\rho=\frac{2}{\sqrt4\sqrt9}=\frac13$.
+(ب) با $\mathbf a=(1,-1)^T$: $\mathbf a^T\Sigma\mathbf a=4-2\cdot2+9=9$.
+(ج) $\det\Sigma=36-4=32$ و $\Sigma^{-1}=\frac{1}{32}\begin{bmatrix}9&-2\\-2&4\end{bmatrix}$.
+\end{solution}
+
+\begin{exercise}[ینسن و گرایش]
+با ینسن نشان دهید برای $X>0$ غیرثابت $\E\frac1X>\frac{1}{\E X}$، و نتیجه را با فرمول دقیق $\E\hat\lambda_\ML=\frac{n\lambda}{n-1}$ (جلسه ۲۱) مقایسه کنید.
+\end{exercise}
+\begin{solution}
+$\frac1x$ روی $(0,\infty)$ اکیداً محدب است ($f''=\frac{2}{x^3}>0$)، پس برای $X$ غیرثابت نامساوی اکید است. برای $\hat\lambda=\frac{1}{\bar X_n}$: $\E\hat\lambda>\frac{1}{\E\bar X_n}=\lambda$، یعنی گرایش به سمت بالا؛ سازگار با $\frac{n\lambda}{n-1}>\lambda$. ینسن «جهت» گرایش را بدون هیچ محاسبه‌ای می‌دهد.
+\end{solution}

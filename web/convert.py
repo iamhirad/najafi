@@ -16,6 +16,26 @@ def fa(n):
     return str(n).translate(FA_DIGITS)
 
 
+# chapters above MATH_BASE are the math toolbox ("ریاضی ۱" ...), shown with the prefix "ر"
+MATH_BASE = 100
+
+
+def is_math(chap):
+    return chap > MATH_BASE
+
+
+def tag(chap):
+    return ('ر' + fa(chap - MATH_BASE)) if is_math(chap) else fa(chap)
+
+
+def chap_label(chap):
+    if chap == 0:
+        return 'پیش‌درآمد'
+    if is_math(chap):
+        return 'ریاضی %s' % fa(chap - MATH_BASE)
+    return 'جلسه %s' % fa(chap)
+
+
 # ---------------------------------------------------------------- helpers
 def read_group(s, i, open_ch='{', close_ch='}'):
     """s[i] == open_ch; return (content, index after the closing char)."""
@@ -424,11 +444,11 @@ def restructure(html, chap, labels, fig_render):
             si += 1
             sj = 0
             hid = 's%d' % si
-            num = ('%s.%s' % (fa(chap), fa(si))) if chap else fa(si)
+            num = ('%s.%s' % (tag(chap), fa(si))) if chap else fa(si)
         elif h.name == 'h3':
             sj += 1
             hid = 's%d-%d' % (si, sj)
-            num = ('%s.%s.%s' % (fa(chap), fa(si), fa(sj))) if chap else '%s.%s' % (fa(si), fa(sj))
+            num = ('%s.%s.%s' % (tag(chap), fa(si), fa(sj))) if chap else '%s.%s' % (fa(si), fa(sj))
         else:
             hid = 's%d-%d-x%d' % (si, sj, len(sections))
             num = ''
@@ -459,7 +479,7 @@ def restructure(html, chap, labels, fig_render):
             bid = None
             if numbered:
                 counter += 1
-                num = '%s-%s' % (fa(chap), fa(counter))
+                num = '%s-%s' % (tag(chap), fa(counter))
                 bid = 'b%d' % counter
             sec = soup.new_tag('section')
             sec['class'] = ['box', 'box-' + short]

@@ -92,7 +92,7 @@ def rewrite_ids(body, n):
     pat = r'(s\d[^"]*|b\d+|fig-[^"]*)'
     body = re.sub(r'id="%s"' % pat, lambda m: 'id="c%d-%s"' % (n, m.group(1)), body)
     body = re.sub(r'href="#%s"' % pat, lambda m: 'href="#c%d-%s"' % (n, m.group(1)), body)
-    body = re.sub(r'href="ch(\d\d)\.html#([^"]+)"', lambda m: 'href="#c%d-%s"' % (int(m.group(1)), m.group(2)), body)
+    body = re.sub(r'href="ch(\d+)\.html#([^"]+)"', lambda m: 'href="#c%d-%s"' % (int(m.group(1)), m.group(2)), body)
     return body
 
 
@@ -103,10 +103,10 @@ def toc_html(chapters, pages):
     out = ['<section class="ptoc"><h2>فهرست مطالب</h2>']
     for ch in chapters:
         n = ch['num']
-        label = 'پیش‌درآمد' if n == 0 else 'جلسه %s' % FA(n)
+        label = convert.chap_label(n)
         out.append('<div class="ptoc-ch"><a class="ptoc-row" href="#c%d"><span class="n">%s</span>'
                    '<span class="t">%s</span><span class="dots"></span><span class="p">%s</span></a>' % (
-                       n, '' if n == 0 else FA(n), ch['title_html'] if n else label + ': ' + ch['title_html'],
+                       n, '' if n == 0 else convert.tag(n), ch['title_html'] if n else label + ': ' + ch['title_html'],
                        pg('c%d' % n)))
         out.append('<div class="ptoc-sec">')
         for s in ch['sections']:
@@ -127,14 +127,14 @@ def cover_html(chapters):
         '<section class="cover"><div class="cover-top">'
         '<div class="k">دانشکده مهندسی کامپیوتر · دانشگاه صنعتی شریف</div>'
         '<h1>آمار و احتمال مهندسی</h1>'
-        '<p class="sub">جزوه کامل درس بر اساس اسلایدهای جلسات سوم تا بیست‌وهفتم: توضیح کامل هر مبحث، همه مثال‌ها و پرسش‌های اسلایدها با حل قدم‌به‌قدم، و تمرین‌های تکمیلی حل‌شده.</p>'
+        '<p class="sub">جزوه کامل درس بر اساس اسلایدهای جلسات سوم تا بیست‌وهفتم: توضیح کامل هر مبحث، همه مثال‌ها و پرسش‌های اسلایدها با حل قدم‌به‌قدم، و تمرین‌های تکمیلی حل‌شده؛ به همراه «جعبه‌ابزار ریاضی» برای مرور انتگرال‌ها، سری‌ها و بهینه‌سازی.</p>'
         '</div>'
         '<figure class="cover-fig">%s<figcaption>توزیع دوجمله‌ای: احتمال <span class="math inline">\\(k\\)</span> شیر در '
         '<span class="math inline">\\(n=20\\)</span> پرتاب سکه سالم، و منحنی گاوسی که قضیه حد مرکزی پیش‌بینی می‌کند</figcaption></figure>'
         '<div class="cover-meta"><div><b>مدرس: دکتر امیر نجفی</b>زمستان ۱۴۰۴ و بهار ۱۴۰۵</div>'
         '<div class="cover-stats"><div><b>%s</b><br><span>جلسه</span></div><div><b>%s</b><br><span>مثال حل‌شده</span></div>'
         '<div><b>%s</b><br><span>تمرین با حل</span></div><div><b>%s</b><br><span>شکل</span></div></div></div>'
-        '</section>') % (figs.hero_binomial(), FA(len(chapters)), FA(tot['ex']), FA(tot['exr']), FA(tot['fig']))
+        '</section>') % (figs.hero_binomial(), FA(len([c for c in chapters if not convert.is_math(c['num'])]) + 1), FA(tot['ex']), FA(tot['exr']), FA(tot['fig']))
 
 
 def assemble(chapters, labels, pages):
